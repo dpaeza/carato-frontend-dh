@@ -1,0 +1,36 @@
+.search-component{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-family: var(--lato);
+    background-color: var(--white);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.search-component .form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+}
+
+.search-component h2{
+    font-size: 24px;
+    color: var(--darkBlue);
+    font-family: var(--openSans);
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.search-component .form .searchButton{
+    background-color: var(--lightBlue);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+}

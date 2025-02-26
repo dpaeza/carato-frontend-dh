@@ -1,0 +1,90 @@
+import React, { useState,  useEffect} from 'react'
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import { DateTimePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import '../Styles/search.css';
+import Button from '@mui/material/Button';
+
+const cities = [
+    'Buenos Aires',
+    'Córdoba',
+    'Rosario',
+    'Mendoza',
+    'La Plata',
+    'San Miguel de Tucumán',
+    'Mar del Plata',
+    'Salta',
+    'Santa Fe',
+    'San Juan',
+    'Resistencia',
+    'Neuquén',
+    'Santiago del Estero',
+    'Corrientes',
+    'Posadas',
+    'San Salvador de Jujuy',
+    'Bahía Blanca',
+    'Paraná',
+];
+
+export default function Search() {
+    const [location, setLocation] = useState(cities[0]);
+    const [startDate, setStartDate] = useState(dayjs());
+    const [endDate, setEndDate] = useState(dayjs().add(4, 'day'));
+
+    const handleChange = (event) => {
+        setLocation( event.target.value);
+    }
+
+    useEffect(() => {   
+        console.log(location);
+    }, [location]);
+
+    useEffect(() => {
+        console.log(startDate);
+    }, [startDate]);
+
+    useEffect(() => {
+        console.log(endDate);
+    }, [endDate]);
+
+    return (
+        <section className='search-component'>
+            <h2>Alquila tu vehiculo</h2>
+            <div className='form'>
+                <FormControl>
+                    <Select
+                        displayEmpty
+                        value={location}
+                        onChange={handleChange}
+                        sx={{ fontFamily: 'var(--lato)'}}
+                    >
+                        {cities.map((name) => (
+                            <MenuItem key={name} value={name}>
+                                {name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DateTimePicker
+                        label="Fecha de retiro"
+                        value={startDate}
+                        onChange={(newValue) => setStartDate(newValue)}
+                        sx={{ fontFamily: 'var(--lato)' }}
+                    />
+                    <DateTimePicker
+                        label="Fecha de devolución"
+                        value={endDate}
+                        onChange={(newValue) => setEndDate(newValue)}
+                        sx={{ fontFamily: 'var(--lato)' }}
+                    />
+                </LocalizationProvider>
+                <Button className='searchButton'>Buscar</Button>
+            </div>
+        </section>
+    )
+}

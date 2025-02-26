@@ -1,0 +1,43 @@
+.categories-component {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.categories-component .iconContainer {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.categories-component .iconContainer svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.categories-component .category {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.categories-component .category:hover {
+    transform: scale(1.05);
+}
+
+.categories-component .category p {
+    font-size: 0.8rem;
+    color: #8e8e8e;
+    font-family: var(--lato);
+    font-weight: 500;
+}
+
+.categories-component .selected p {
+    color: black;
+}
