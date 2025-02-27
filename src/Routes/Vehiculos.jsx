@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -12,7 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { Button, Typography } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
-import { getCars } from '../Services/cars';
+import { getCars, deleteCar } from '../Services/cars';
 
 const headers = [
     "ID",
@@ -55,9 +55,15 @@ export default function Vehiculos() {
         }
     }
 
+    
+
     useEffect(() => {
         getVehiculos();
-    }, [])
+    }, [page]);
+
+    const handlePageChange = (event, value) => {
+        setPage(value);
+    };
 
     return (
         <div>
@@ -84,7 +90,7 @@ export default function Vehiculos() {
                                     </Button>
                                     <Button
                                         sx={{ color: "var(--red)", p: 0, minWidth: "auto" }}
-                                        const onClick={() => handleModal(`¿Estás seguro de eliminar el vehículo ${name} ?`, "warning", "Cancelar", "Eliminar")}
+                                        onClick={() => handleModal(`¿Estás seguro de eliminar el vehículo ${name} ?`, "warning", "Cancelar", "Eliminar")}
                                     >
                                         <DeleteIcon />
                                     </Button>
@@ -94,7 +100,14 @@ export default function Vehiculos() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Pagination count={totalPages} showFirstButton showLastButton sx={{ display: "flex", justifyContent: "center" }} />
+            <Pagination 
+                count={totalPages} 
+                page={page} 
+                onChange={handlePageChange} 
+                showFirstButton 
+                showLastButton 
+                sx={{ display: "flex", justifyContent: "center" }} 
+            />
         </div>
     );
 }
