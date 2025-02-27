@@ -1,6 +1,6 @@
 import api from "./api";
 
-export const getCars = async (page = 1, size = 1000, query = "") => {
+export const getCars = async (page = 1, size = 10, query = "") => {
     try {
       const response = await api.get("/cars", { params: { page, size, query } });
       return response.data;

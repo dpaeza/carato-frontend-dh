@@ -23,6 +23,8 @@ const headers = [
 export default function Vehiculos() {
 
     const [vehiculos, setVehiculos] = useState([]);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
     const MySwal = withReactContent(Swal);
 
@@ -44,8 +46,10 @@ export default function Vehiculos() {
 
     const getVehiculos = async () => {
         try {
-            const response = await getCars();
-            setVehiculos(response);
+            const response = await getCars(page);
+            console.log("Vehículos:", response);
+            setVehiculos(response.data);
+            setTotalPages(response.totalPages);
         } catch (error) {
             console.error("Error al obtener los vehículos:", error);
         }
@@ -90,7 +94,7 @@ export default function Vehiculos() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Pagination count={10} showFirstButton showLastButton sx={{ display: "flex", justifyContent: "center" }} />
+            <Pagination count={totalPages} showFirstButton showLastButton sx={{ display: "flex", justifyContent: "center" }} />
         </div>
     );
 }
