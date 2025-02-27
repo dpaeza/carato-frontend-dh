@@ -23,21 +23,21 @@ export default function Specifications({vehicle}) {
             </Typography>
             <Divider sx={{my:2}}/>
             <Grid container spacing={2}>
-                <Grid size={4} display="flex" alignItems="center" gap="5px"><People />{vehicle.capacity}</Grid>
+                <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><People />{vehicle.capacity}</Grid>
                 {vehicle.transmission === "Manual" ? (
-                    <Grid size={4} display="flex" alignItems="center" gap="5px"><Settings /> Manual</Grid>
+                    <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><Settings /> Manual</Grid>
                 ) : (
-                    <Grid size={4} display="flex" alignItems="center" gap="5px"><SettingsSuggestIcon /> Automático</Grid>
+                    <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><SettingsSuggestIcon /> Automático</Grid>
                 )}
                 {vehicle.hasAirCondition && (
-                    <Grid size={4}><AcUnit /> Aire acondicionado</Grid>
+                    <Grid size={{xs:6, sm:4}}><AcUnit /> Aire acondicionado</Grid>
                 )}
-                <Grid size={4} display="flex" alignItems="center" gap="5px"><DoorFrontIcon />{vehicle.doors} Puertas</Grid>
-                <Grid size={4} display="flex" alignItems="center" gap="5px"><LocalGasStationIcon />{vehicle.gasoline}</Grid>
-                <Grid size={4} display="flex" alignItems="center" gap="5px"><SpeedIcon />{vehicle.horsePower} HP</Grid>
-                <Grid size={4} display="flex" alignItems="center" gap="5px"><DirectionsCarIcon />{vehicle.brakeSystem}</Grid>
-                <Grid size={4} display="flex" alignItems="center" gap="5px"><AddRoadIcon />{vehicle.mileage} km</Grid>
-                <Grid size={4} display="flex" alignItems="center" gap="5px"><DateRangeIcon />Modelo {vehicle.year}</Grid>
+                <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><DoorFrontIcon />{vehicle.doors} Puertas</Grid>
+                <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><LocalGasStationIcon />{vehicle.gasoline}</Grid>
+                <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><SpeedIcon />{vehicle.horsePower} HP</Grid>
+                <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><DirectionsCarIcon />{vehicle.brakeSystem}</Grid>
+                <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><AddRoadIcon />{vehicle.mileage} km</Grid>
+                <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><DateRangeIcon />Modelo {vehicle.year}</Grid>
             </Grid>
             <Typography variant="h5" sx={{ mt: 4 }} fontFamily={"var(--openSans)"} fontWeight={500} color= "var(--darkBlue)">
                 Descripción
