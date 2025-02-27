@@ -3,18 +3,24 @@ import { Box, Typography, CircularProgress, Alert } from "@mui/material";
 import Search from '../Components/Search';
 import Categories from '../Components/Categories';
 import GridCar from '../Components/GridCar';
-import { getRandomCars } from '../Services/cars';
+import { getCars } from '../Services/cars';
+import Pagination from '@mui/material/Pagination';
 
 export default function Home() {
 	const [cars, setCars] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const [page, setPage] = useState(1);
+	const [totalPages, setTotalPages] = useState(1);
 
-	const fetchCars = async () => {
+	const getVehiculos = async () => {
 		try {
-			const response = await getRandomCars();
-			console.log("Respuesta de la API:", response); // Depuración
-			setCars(response.data || response); // Ajusta según la estructura de la API
+			const response = await getCars(page);
+			console.log("Respuesta de la API:", response);
+			// Mezclar el array de autos de forma aleatoria
+            const shuffledCars = response.data.sort(() => Math.random() - 0.5);
+			setCars(shuffledCars);
+			setTotalPages(response.totalPages);
 		} catch (error) {
 			console.error("Error al obtener los autos:", error);
 			setError("Error al cargar los autos. Por favor, intenta de nuevo más tarde.");
@@ -24,8 +30,12 @@ export default function Home() {
 	};
 
 	useEffect(() => {
-		fetchCars();
-	}, []);
+		getVehiculos();
+	}, [page]);
+
+	const handlePageChange = (event, value) => {
+        setPage(value);
+    };
 
 	return (
 		<Box>
@@ -62,8 +72,15 @@ export default function Home() {
 						<Typography textAlign="center">No se encontraron autos.</Typography>
 					)}
 				</Box>
+				<Pagination
+					count={totalPages}
+					page={page}
+					onChange={handlePageChange}
+					showFirstButton
+					showLastButton
+					sx={{ display: "flex", justifyContent: "center", pb: 4 }}
+				/>
 			</Box>
 		</Box>
 	);
 }
-
