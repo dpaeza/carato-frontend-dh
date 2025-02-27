@@ -24,7 +24,7 @@ export default function Navbar(props) {
 
     const { window } = props || {};
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [openRegister, setOpenRegister] = useState(true);
+    const [openRegister, setOpenRegister] = useState(false);
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
