@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoCarato from "../../public/Logo-carato-slogan.svg";
+import Register from "./Register"
 
 const drawerWidth = 240;
 const navItems = ['Crear cuenta', 'Iniciar sesión'];
@@ -23,6 +24,7 @@ export default function Navbar(props) {
 
     const { window } = props || {};
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [openRegister, setOpenRegister] = useState(true);
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -51,14 +53,21 @@ export default function Navbar(props) {
             </Box>
             <Divider />
             <List>
-                {navItems.map((item) => (
-                    <ListItem key={item} disablePadding>
-                        <ListItemButton sx={{ textAlign: "center" }}>
-                            <ListItemText primary={item} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
+                <ListItem disablePadding>
+                    <ListItemButton 
+                        sx={{ textAlign: "center" }}
+                        onClick={() => setOpenRegister(true)}
+                    >
+                        <ListItemText primary={"Crear cuenta"} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton sx={{ textAlign: "center" }}>
+                        <ListItemText primary={"Iniciar sesión"} />
+                    </ListItemButton>
+                </ListItem>
             </List>
+            <Register open={openRegister} onClose={() => setOpenRegister(false)}/>
         </Box>
     );
 
@@ -82,20 +91,29 @@ export default function Navbar(props) {
                         />
                     </a>
                     <Box sx={{ display: { xs: "none", sm: "block" } }}>
-                        {navItems.map((item) => (
-                            <Button
-                                key={item}
-                                sx={{
-                                    color: "#fff",
-                                    border: "1px solid #fff",
-                                    textTransform: "none",
-                                    marginLeft: 1,
-                                    borderRadius: "20px",
-                                }}
-                            >
-                                {item}
-                            </Button>
-                        ))}
+                        <Button
+                            sx={{
+                                color: "#fff",
+                                border: "1px solid #fff",
+                                textTransform: "none",
+                                marginLeft: 1,
+                                borderRadius: "20px",
+                            }}
+                            onClick={() => setOpenRegister(true)}
+                        >
+                            Crear cuenta
+                        </Button>
+                        <Button
+                            sx={{
+                                color: "#fff",
+                                border: "1px solid #fff",
+                                textTransform: "none",
+                                marginLeft: 1,
+                                borderRadius: "20px",
+                            }}
+                        >
+                            Iniciar sesión
+                        </Button>
                     </Box>
                     <IconButton
                         color="inherit"
@@ -132,6 +150,7 @@ export default function Navbar(props) {
             <Box sx={{ width: "100%" }}>
                 <Toolbar />
             </Box>
+            <Register open={openRegister} onClose={() => setOpenRegister(false)}/>
         </Box>
     );
 }
