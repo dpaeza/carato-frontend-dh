@@ -38,7 +38,7 @@ export default function CardCar({ car }) {
             <CardMedia
                 component="img"
                 height="180"
-                image={images[0]}
+                image={images[0].url}
                 alt={name}
                 sx={{
                     objectFit: "cover",

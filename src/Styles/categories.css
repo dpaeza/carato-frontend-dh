@@ -1,16 +1,27 @@
+/* Estilos base para el contenedor de categorías */
 .categories-component {
-    display: flex;
-    justify-content: space-between;
     margin-top: 1rem;
 }
 
+/* Estilos para la versión de escritorio (cuadrícula) */
+.desktop-categories {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; /* Espacio entre elementos */
+}
+
+/* Estilos para la versión móvil (carrusel) */
+.mobile-categories {
+    display: none; /* Oculta el carrusel en escritorio */
+}
+
+/* Estilos comunes para las categorías */
 .categories-component .iconContainer {
     width: 50px;
     height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
 }
 
 .categories-component .iconContainer svg {
@@ -36,8 +47,27 @@
     color: #8e8e8e;
     font-family: var(--lato);
     font-weight: 500;
+    margin-top: 0.5rem; /* Espacio entre el ícono y el texto */
 }
 
 .categories-component .selected p {
     color: black;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+    .desktop-categories {
+        display: none; /* Oculta la cuadrícula en móvil */
+    }
+
+    .mobile-categories {
+        display: block; /* Muestra el carrusel en móvil */
+    }
+
+    /* Ajustes adicionales para el carrusel en móvil */
+    .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
