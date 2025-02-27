@@ -12,6 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { Button, Typography } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
+import { getCars } from '../Services/cars';
 
 const headers = [
     "ID",
@@ -21,19 +22,7 @@ const headers = [
 
 export default function Vehiculos() {
 
-    const [vehiculos, setVehiculos] = useState([
-        { id: 1, name: "Vehiculo 1" },
-        { id: 2, name: "Vehiculo 2" },
-        { id: 3, name: "Vehiculo 3" },
-        { id: 4, name: "Vehiculo 4" },
-        { id: 5, name: "Vehiculo 5" },
-        { id: 6, name: "Vehiculo 6" },
-        { id: 7, name: "Vehiculo 7" },
-        { id: 8, name: "Vehiculo 8" },
-        { id: 9, name: "Vehiculo 9" },
-        { id: 10, name: "Vehiculo 10" }
-    ]);
-
+    const [vehiculos, setVehiculos] = useState([]);
 
     const MySwal = withReactContent(Swal);
 
@@ -53,8 +42,17 @@ export default function Vehiculos() {
         });
     }
 
+    const getVehiculos = async () => {
+        try {
+            const response = await getCars();
+            setVehiculos(response);
+        } catch (error) {
+            console.error("Error al obtener los vehículos:", error);
+        }
+    }
+
     useEffect(() => {
-        console.log("Hola desde useEffect");
+        getVehiculos();
     }, [])
 
     return (
@@ -94,6 +92,5 @@ export default function Vehiculos() {
             </TableContainer>
             <Pagination count={10} showFirstButton showLastButton sx={{ display: "flex", justifyContent: "center" }} />
         </div>
-
     );
 }
