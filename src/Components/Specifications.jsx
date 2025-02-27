@@ -29,10 +29,6 @@ export default function Specifications({vehicle}) {
                 ) : (
                     <Grid size={4} display="flex" alignItems="center" gap="5px"><SettingsSuggestIcon /> Automático</Grid>
                 )}
-                {/* <Grid container spacing={1} size={4}>
-                    <Grid><LuggageIcon /> 1</Grid>
-                    <Grid><BusinessCenterIcon /> 2</Grid>
-                </Grid> */}
                 {vehicle.hasAirCondition && (
                     <Grid size={4}><AcUnit /> Aire acondicionado</Grid>
                 )}

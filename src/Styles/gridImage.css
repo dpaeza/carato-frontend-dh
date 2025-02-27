@@ -1,0 +1,20 @@
+.seeMoreButton {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    border-radius: 5px;
+    background-color: var(--lightBlue);
+    color: var(--pureWhite);
+    border: 1px solid var(--pureWhite);
+    padding: 6px 22px;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 600px) {
+    .seeMoreButton {
+        right: 8px;
+        bottom: 8px;
+        padding: 4px 16px;
+    }
+    
+}
