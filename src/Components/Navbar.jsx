@@ -14,7 +14,7 @@ import {
     Toolbar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import LogoCarato from "../../public/Logo-carato-slogan.svg";
+import LogoCarato from "../assets/Logo-carato-slogan.svg";
 import Register from "./Register"
 
 const drawerWidth = 240;

@@ -1,6 +1,6 @@
 import React from 'react'
 import { AppBar, Box, Toolbar, Typography } from '@mui/material'
-import Logo from '../../public/Logo-carato.svg'
+import Logo from '../assets/Logo-carato.svg'
 
 export default function Footer() {
     return (
