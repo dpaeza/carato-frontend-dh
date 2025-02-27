@@ -4,37 +4,53 @@ import Grid from '@mui/material/Grid2';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { getCarByIdOrName } from '../Services/cars';
 
 export default function Galery() {
     const { id } = useParams();
     const [images, setImages] = useState([
         {
-            src: "https://http2.mlstatic.com/D_NQ_NP_865812-MCO81366613733_122024-O.webp",
+            url: "https://http2.mlstatic.com/D_NQ_NP_865812-MCO81366613733_122024-O.webp",
             title: "Imagen 1"
         },
         {
-            src: "https://http2.mlstatic.com/D_NQ_NP_865812-MCO81366613733_122024-O.webp",
+            url: "https://http2.mlstatic.com/D_NQ_NP_865812-MCO81366613733_122024-O.webp",
             title: "Imagen 2"
         },
         {
-            src: "https://http2.mlstatic.com/D_NQ_NP_865812-MCO81366613733_122024-O.webp",
+            url: "https://http2.mlstatic.com/D_NQ_NP_865812-MCO81366613733_122024-O.webp",
             title: "Imagen 3"
         },
         {
-            src: "https://http2.mlstatic.com/D_NQ_NP_865812-MCO81366613733_122024-O.webp",
+            url: "https://http2.mlstatic.com/D_NQ_NP_865812-MCO81366613733_122024-O.webp",
             title: "Imagen 4"
         },
         {
-            src: "https://http2.mlstatic.com/D_NQ_NP_865812-MCO81366613733_122024-O.webp",
+            url: "https://http2.mlstatic.com/D_NQ_NP_865812-MCO81366613733_122024-O.webp",
             title: "Imagen 5"
         }
     ]);
+
     const navigate = useNavigate();
 
+    const fetchCar = async () => {
+        try {
+            const car = await getCarByIdOrName(id);
+            setImages(car
+                .images
+                .map(image => ({
+                    url: image.url,
+                    title: image.title
+                }))
+            );
+        } catch (error) {
+            console.error("Error al obtener el auto:", error);
+        }
+    }
+
     useEffect(() => {
-        console.log("useEffect");
-        console.log(id);
-    }, [id]);
+        fetchCar();
+    }, []);
 
     const handleNavigate = () => {
         navigate(`/vehiculo/${id}`);
@@ -62,11 +78,11 @@ export default function Galery() {
                     Volver
                 </Button>
             </Grid>
-            <Grid container spacing={3} px={3}>
+            <Grid container spacing={2} px={{xs:0, sm:2}}>
                 {images.map((image, index) => (
-                    <Grid size={6} key={index}>
+                    <Grid size={{xs:12, sm:6}} key={index}>
                         <Card sx={{border:"none", boxShadow:"none"}}>
-                            <CardMedia component="img" height="360" image={image.src} alt={image.title} sx={{borderRadius:2}}/>
+                            <CardMedia component="img" height="360" image={image.url} alt={image.title} sx={{borderRadius:2}}/>
                         </Card>
                     </Grid>
                 ))}
