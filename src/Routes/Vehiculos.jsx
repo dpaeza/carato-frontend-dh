@@ -28,18 +28,16 @@ export default function Vehiculos() {
 
     const MySwal = withReactContent(Swal);
 
-    const handleModal = (text, icon, confirmButtonText, denyButtonText) => {
+    const handleModal = (id, name) => {
         MySwal.fire({
-            text,
-            icon,
+            text: `¿Estás seguro de eliminar el vehículo ${name}?`,
+            icon: "warning",
             showDenyButton: true,
-            confirmButtonText,
-            denyButtonText,
+            confirmButtonText: "Cancelar",
+            denyButtonText: "Eliminar",
         }).then((result) => {
-            if (result.isConfirmed) {
-                console.log("El usuario no quiere eliminar.");
-            } else if (result.isDenied) {
-                console.log("El usuario quiere eliminar.");
+            if (result.isDenied) {
+                deleteVehiculo(id);
             }
         });
     }
@@ -55,7 +53,25 @@ export default function Vehiculos() {
         }
     }
 
-    
+    const deleteVehiculo = async (id) => {
+        try {
+            const response = await deleteCar(id);
+            console.log("Vehículo eliminado:", response);
+            // MySwal.fire({
+            //     text: "Vehículo eliminado correctamente",
+            //     icon: "success",
+            //     confirmButtonText: "Aceptar",
+            // });
+            getVehiculos();
+        } catch (error) {
+            console.error("Error al eliminar el vehículo:", error);
+            MySwal.fire({
+                text: "Error al eliminar el vehículo",
+                icon: "error",
+                confirmButtonText: "Aceptar",
+            });
+        }
+    }
 
     useEffect(() => {
         getVehiculos();
@@ -90,7 +106,7 @@ export default function Vehiculos() {
                                     </Button>
                                     <Button
                                         sx={{ color: "var(--red)", p: 0, minWidth: "auto" }}
-                                        onClick={() => handleModal(`¿Estás seguro de eliminar el vehículo ${name} ?`, "warning", "Cancelar", "Eliminar")}
+                                        onClick={() => handleModal(id, name)} // Pasa el id y el nombre del vehículo
                                     >
                                         <DeleteIcon />
                                     </Button>
