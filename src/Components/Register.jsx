@@ -41,7 +41,7 @@ const Register = React.memo(({ open, onClose }) => {
         }
         if (field === "name" || field === "lastName") {
             if (!/^[A-Za-z]+$/.test(value)) {
-                return "Solo se permiten letras y una palabra";
+                return "Solo se permiten letras y sin espacios";
             }
         }
         if (field === "email") {
@@ -104,10 +104,12 @@ const Register = React.memo(({ open, onClose }) => {
                     fullWidth
                     name="name"
                     type="text"
+                    size="small"
                     value={registerData.name}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={Boolean(errors.name)}
+                    success={registerData.name && !errors.name}
                     helperText={errors.name}
                     inputRef={nameRef}
                     sx={{
@@ -129,10 +131,12 @@ const Register = React.memo(({ open, onClose }) => {
                     fullWidth
                     name="lastName"
                     type="text"
+                    size="small"
                     value={registerData.lastName}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={Boolean(errors.lastName)}
+                    success={registerData.lastName && !errors.lastName}
                     helperText={errors.lastName}
                     inputRef={lastNameRef}
                     sx={{
@@ -154,10 +158,12 @@ const Register = React.memo(({ open, onClose }) => {
                     fullWidth
                     name="email"
                     type="text"
+                    size="small"
                     value={registerData.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={Boolean(errors.email)}
+                    success={registerData.email && !errors.email}
                     helperText={errors.email}
                     inputRef={emailRef}
                     sx={{
@@ -178,11 +184,13 @@ const Register = React.memo(({ open, onClose }) => {
                     label="Contraseña"
                     fullWidth
                     name="password"
+                    size="small"
                     type={showPassword ? 'text' : 'password'}
                     value={registerData.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={Boolean(errors.password)}
+                    success={registerData.password && !errors.password}
                     helperText="Debe tener 8 caracteres, una mayúscula, una minúscula, un número y un caracter especial"
                     InputProps={{
                         endAdornment: (
@@ -213,7 +221,7 @@ const Register = React.memo(({ open, onClose }) => {
                     fullWidth
                     onClick={() => console.log(registerData)}
                     disabled={Object.values(errors).some(err => err !== "") || Object.values(registerData).some(value => !value.trim())}
-                    sx={{ backgroundColor: Object.values(errors).every(err => err === "") && Object.values(registerData).every(value => value.trim()) ? '#1976d2' : 'grey' }}
+                    sx={{ backgroundColor: Object.values(errors).every(err => err === "") && Object.values(registerData).every(value => value.trim()) ? '#3083FF' : 'grey' }}
                 >
                     Registrarse
                 </Button>
