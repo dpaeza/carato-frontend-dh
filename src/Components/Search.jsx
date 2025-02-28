@@ -12,23 +12,6 @@ import Box from '@mui/material/Box';
 
 const cities = [
     'Buenos Aires',
-    'Córdoba',
-    'Rosario',
-    'Mendoza',
-    'La Plata',
-    'San Miguel de Tucumán',
-    'Mar del Plata',
-    'Salta',
-    'Santa Fe',
-    'San Juan',
-    'Resistencia',
-    'Neuquén',
-    'Santiago del Estero',
-    'Corrientes',
-    'Posadas',
-    'San Salvador de Jujuy',
-    'Bahía Blanca',
-    'Paraná',
 ];
 
 export default function Search() {
