@@ -127,7 +127,6 @@ const Login = React.memo(({ open, onClose }) => {
             <DialogTitle>
                 Iniciar sesión
                 <IconButton
-                    edge="end"
                     onClick={onClose}
                     aria-label="close"
                     sx={{
@@ -145,6 +144,7 @@ const Login = React.memo(({ open, onClose }) => {
                     name="email"
                     label="Correo electrónico"
                     type="email"
+                    size='small'
                     value={userData.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -161,6 +161,7 @@ const Login = React.memo(({ open, onClose }) => {
                     inputRef={passwordRef}
                     name="password"
                     label="Contraseña"
+                    size='small'
                     type={showPassword ? "text" : "password"}
                     value={userData.password}
                     onChange={handleChange}
