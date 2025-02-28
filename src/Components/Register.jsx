@@ -108,7 +108,7 @@ const Register = React.memo(({ open, onClose }) => {
             onClose();
             MySwal.fire({
                 title: "Error al registrarse",
-                text: "Por favor, intenta de nuevo más tarde.",
+                text: error.response?.data?.message || "Ocurrió un error al intentar registrarte. Por favor, intenta de nuevo.",
                 icon: "error",
                 confirmButtonText: "Aceptar",
             });

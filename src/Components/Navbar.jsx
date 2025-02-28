@@ -15,7 +15,8 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoCarato from "../assets/Logo-carato-slogan.svg";
-import Register from "./Register"
+import Register from "./Register";
+import Login from "./Login";
 
 const drawerWidth = 240;
 const navItems = ['Crear cuenta', 'Iniciar sesión'];
@@ -25,6 +26,7 @@ export default function Navbar(props) {
     const { window } = props || {};
     const [mobileOpen, setMobileOpen] = useState(false);
     const [openRegister, setOpenRegister] = useState(false);
+    const [openLogin, setOpenLogin] = useState(false);
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -62,12 +64,16 @@ export default function Navbar(props) {
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
-                    <ListItemButton sx={{ textAlign: "center" }}>
+                    <ListItemButton 
+                        sx={{ textAlign: "center" }}
+                        onClick={() => setOpenLogin(true)}
+                    >
                         <ListItemText primary={"Iniciar sesión"} />
                     </ListItemButton>
                 </ListItem>
             </List>
             <Register open={openRegister} onClose={() => setOpenRegister(false)}/>
+            <Login open={openLogin} onClose={() => setOpenLogin(false)}/>
         </Box>
     );
 
@@ -111,6 +117,7 @@ export default function Navbar(props) {
                                 marginLeft: 1,
                                 borderRadius: "20px",
                             }}
+                            onClick={() => setOpenLogin(true)}
                         >
                             Iniciar sesión
                         </Button>
@@ -151,6 +158,7 @@ export default function Navbar(props) {
                 <Toolbar />
             </Box>
             <Register open={openRegister} onClose={() => setOpenRegister(false)}/>
+            <Login open={openLogin} onClose={() => setOpenLogin(false)}/>
         </Box>
     );
 }

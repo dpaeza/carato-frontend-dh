@@ -1,0 +1,202 @@
+import React, { useState, useEffect, useRef, use, useCallback } from 'react'
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { loginUser } from '../Services/auth';
+
+const Login = React.memo(({ open, onClose }) => {
+    const [userData, setUserData] = useState({
+        email: '',
+        password: ''
+    });
+
+    const [errors, setErrors] = useState({
+        email: '',
+        password: ''
+    });
+
+    const [showPassword, setShowPassword] = useState(false);
+    const MySwal = withReactContent(Swal);
+
+    const emailRef = useRef(null);
+    const passwordRef = useRef(null);
+
+    const handleClickShowPassword = useCallback(() => setShowPassword((show) => !show), []);
+
+    const validateField = useCallback((field, value) => {
+        if (!value.trim()) {
+            return "Este campo es requerido";
+        }
+        if (field === "email") {
+            const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+            if (!regex.test(value)) {
+                return "Formato de correo no válido";
+            }
+        }
+        if (field === "password") {
+            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!regex.test(value)) {
+                return "Debe contener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un carácter especial.";
+            }
+        }
+        return "";
+    }, []);
+
+    const handleChange = useCallback((e) => {
+        const { name, value } = e.target;
+        setUserData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+        setErrors((prev) => ({
+            ...prev,
+            [name]: validateField(name, value)
+        }));
+    }, [validateField]);
+
+    const handleBlur = useCallback((e) => {
+        const { name } = e.target;
+        setErrors((prev) => ({
+            ...prev,
+            [name]: validateField(name, userData[name])
+        }));
+    }, [userData, validateField]);
+
+    const resetForm = useCallback(() => {
+        setUserData({
+            email: '',
+            password: ''
+        });
+        setErrors({
+            email: '',
+            password: ''
+        });
+    }, []);
+
+    const handleSubmit = useCallback(async () => {
+        try {
+            await loginUser(userData);
+            localStorage.setItem("auth", JSON.stringify(responseData));
+            resetForm();
+            onClose();
+            MySwal.fire({
+                icon: 'success',
+                title: '¡Bienvenido!'
+            });
+        } catch (error) {
+            console.error(error);
+            resetForm();
+            onClose();
+            MySwal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message
+            });
+        }
+    }, [userData, onClose, resetForm]);
+
+    useEffect(() => {
+        if (open && emailRef.current) {
+            emailRef.current.focus();
+        }
+    }, [open]);
+
+    useEffect(() => {
+        if (!open) {
+            resetForm();
+        }
+    }, [open, resetForm]);
+
+    const getBorderColor = (field) => {
+        if (errors[field]) return "red";
+        if (userData[field] && !errors[field]) return "green";
+        return "";
+    }
+
+    return (
+        <Dialog open={open} onClose={onClose} maxWidth="xs">
+            <DialogTitle>
+                Iniciar sesión
+                <IconButton
+                    edge="end"
+                    onClick={onClose}
+                    aria-label="close"
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent>
+                <TextField
+                    inputRef={emailRef}
+                    name="email"
+                    label="Correo electrónico"
+                    type="email"
+                    value={userData.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!errors.email}
+                    helperText={errors.email}
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    InputProps={{
+                        style: { borderColor: getBorderColor("email") }
+                    }}
+                />
+                <TextField
+                    inputRef={passwordRef}
+                    name="password"
+                    label="Contraseña"
+                    type={showPassword ? "text" : "password"}
+                    value={userData.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!errors.password}
+                    helperText={errors.password}
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    InputProps={{
+                        style: { borderColor: getBorderColor("password") },
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    edge="end"
+                                >
+                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                            </InputAdornment>
+                        )
+                    }}
+                />
+                <Button
+                    onClick={handleSubmit}
+                    variant="contained"
+                    fullWidth
+                    disabled={Object.values(errors).some(err => err !== "") || Object.values(userData).some(value => !value.trim())}
+                    sx={{ backgroundColor: Object.values(errors).some(err => err !== "") || Object.values(userData).some(value => !value.trim()) ? 'grey' : '#3083FF' , mt: 4 }}
+                >
+                    Iniciar sesión
+                </Button>
+            </DialogContent>
+        </Dialog>
+    )
+});
+
+export default Login;
