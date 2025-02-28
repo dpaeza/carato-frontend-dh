@@ -3,8 +3,9 @@ import { Box, Accordion, AccordionSummary, Typography, AccordionDetails, TextFie
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Grid from "@mui/material/Grid2";
 
-export default function Categorias() {
+export default function AgregarCategoria() {
 
     const [categoria, setCategoria] = useState({
         nombre: "",
@@ -84,6 +85,39 @@ export default function Categorias() {
                     </Box>
                 </AccordionDetails>
             </Accordion>
+            <Grid
+                sx={{
+                    display: "flex",
+                    gap: 2,
+                    justifyContent: "flex-end",
+                    width: "100%",
+                }}
+            >
+                <Button
+                    variant="contained"
+                    sx={{
+                        backgroundColor: "#B3B3BB",
+                        color: "var(--pureWhite)",
+                        width: "200px",
+                        textTransform: "capitalize",
+                        borderRadius: 2,
+                    }}
+                >
+                    Cancelar
+                </Button>
+                <Button
+                    variant="contained"
+                    sx={{
+                        backgroundColor: "var(--lightBlue)",
+                        color: "var(--pureWhite)",
+                        width: "200px",
+                        textTransform: "capitalize",
+                        borderRadius: 2,
+                    }}
+                >
+                    Agregar categoría
+                </Button>
+            </Grid>
         </Box>
     )
 }
