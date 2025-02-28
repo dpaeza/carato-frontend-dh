@@ -86,7 +86,7 @@ export default function Vehiculos() {
             <Typography variant='h1' color='var(--darkBlue)' fontFamily="var(--openSans)" fontWeight={700} fontSize={25}>
                 Vehículos
             </Typography>
-            <TableContainer component={Paper} sx={{ bgcolor: "(--pureWhite)", my: 3 }}>
+            <TableContainer component={Paper} sx={{ bgcolor: "(--pureWhite)", my: 3, maxWidth: 750, mx:"auto" }}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
