@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -47,13 +47,13 @@ const Register = React.memo(({ open, onClose }) => {
         if (field === "email") {
             const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
             if (!regex.test(value)) {
-                return "Email no es válido";
+                return "Formato de correo no válido";
             }
         }
         if (field === "password") {
             const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
             if (!regex.test(value)) {
-                return "Debe tener 8 caracteres, una mayúscula, una minúscula, un número y un caracter especial";
+                return "Debe contener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un carácter especial.";
             }
         }
         return "";
@@ -72,8 +72,10 @@ const Register = React.memo(({ open, onClose }) => {
         }
     }, [registerData, validateField]);
 
+
+
     // Enfocar el primer input cuando el modal se abre
-    React.useEffect(() => {
+    useEffect(() => {
         if (open && nameRef.current) {
             nameRef.current.focus();
         }
@@ -87,7 +89,7 @@ const Register = React.memo(({ open, onClose }) => {
     };
 
     return (
-        <Dialog onClose={onClose} open={open} maxWidth="sm" fullWidth>
+        <Dialog onClose={onClose} open={open} maxWidth="xs">
             <DialogTitle>Cree su cuenta</DialogTitle>
             <IconButton onClick={onClose} sx={{ position: 'absolute', right: 8, top: 8 }}>
                 <CloseIcon />
@@ -191,7 +193,7 @@ const Register = React.memo(({ open, onClose }) => {
                     onBlur={handleBlur}
                     error={Boolean(errors.password)}
                     success={registerData.password && !errors.password}
-                    helperText="Debe tener 8 caracteres, una mayúscula, una minúscula, un número y un caracter especial"
+                    helperText="Debe contener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un carácter especial"
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
@@ -221,7 +223,7 @@ const Register = React.memo(({ open, onClose }) => {
                     fullWidth
                     onClick={() => console.log(registerData)}
                     disabled={Object.values(errors).some(err => err !== "") || Object.values(registerData).some(value => !value.trim())}
-                    sx={{ backgroundColor: Object.values(errors).every(err => err === "") && Object.values(registerData).every(value => value.trim()) ? '#3083FF' : 'grey' }}
+                    sx={{ backgroundColor: Object.values(errors).every(err => err === "") && Object.values(registerData).every(value => value.trim()) ? '#3083FF' : 'grey', mt: 4 }}
                 >
                     Registrarse
                 </Button>
