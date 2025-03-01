@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -24,6 +26,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Grid from "@mui/material/Grid2";
 import { getBrands, getFuelTypes, getTransmissions, getBrakeTypes } from '../Services/extras';
 import { Category } from '@mui/icons-material';
+import { createCar } from '../Services/cars';
 
 export default function AgregarVehiculo() {
     const [age, setAge] = useState('');
@@ -66,6 +69,8 @@ export default function AgregarVehiculo() {
         { name: "No", value: false }
     ];
 
+    const MySwal = withReactContent(Swal);
+
     const fetchBrands = async () => {
         try {
             const brands = await getBrands();
@@ -102,8 +107,43 @@ export default function AgregarVehiculo() {
         }
     }
 
-    const onSubmit =  () => {
+    const resetForm = () => {
+        setNewProduct({
+            brandId: "",
+            name: "",
+            categoryId: "",
+            images: [],
+            description: "",
+            transmissionId: "",
+            capacity: "",
+            hasAirCondition: true,
+            doors: "",
+            gasolineId: "",
+            brakeSystemId: "",
+            horsePower: "",
+            year: "",
+            mileage: "",
+            price: "",
+        })
+    }
+
+    const onSubmit =  async () => {
         console.log(newProduct)
+        try {
+            await createCar(newProduct)
+            resetForm();
+            MySwal.fire({
+                icon: 'success',
+                title: 'Producto creado exitosamente.'
+            });
+        } catch (error) {
+            console.error(error);
+            MySwal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message
+            });
+        }
     }
 
     useEffect(() => {
