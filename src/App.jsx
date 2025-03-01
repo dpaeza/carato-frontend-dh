@@ -11,6 +11,7 @@ import Vehiculos from './Routes/Vehiculos'
 import AgregarCategoria from './Routes/AgregarCategoria'
 import Usuarios from './Routes/Usuarios'
 import AgregarVehiculo from './Routes/AgregarVehiculo'
+import PrivateRoute from './PrivateRoute/PrivateRoute'
 
 function App() {
 
@@ -22,7 +23,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/vehiculo/:id" element={<Vehiculo />} />
           <Route path="/vehiculo/:id/galeria" element={<Galeria />} />
-          <Route path="/administracion" element={<Administracion/>} >
+          {/* Ruta protegida para administración */}
+          <Route 
+            path="/administracion" 
+            element={<PrivateRoute requiredRole="admin" />}
+          >
             <Route path="vehiculos" element={<Vehiculos />} />
             <Route path="agregarvehiculo" element={<AgregarVehiculo />} />
             <Route path="agregarcategoria" element={<AgregarCategoria />} />
