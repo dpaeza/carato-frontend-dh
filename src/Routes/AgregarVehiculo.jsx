@@ -29,13 +29,10 @@ import { Category } from '@mui/icons-material';
 import { createCar } from '../Services/cars';
 
 export default function AgregarVehiculo() {
-    const [age, setAge] = useState('');
     const [brands, setBrands] = useState([]);
     const [gasolines, setGasolines] = useState([]);
     const [transmissions, setTransmissions] = useState([]);
     const [brakeSystems, setBrakeSystems] = useState([]);
-
-    const placeholder = "Seleccione";
 
     const [newProduct, setNewProduct] = useState({
         brandId: "",
@@ -54,6 +51,8 @@ export default function AgregarVehiculo() {
         mileage: "",
         price: "",
     });
+
+    const [errors, setErrors] = useState({});
 
     const categories = [
         { name: "Híbridos", icon: IconHibrido, id:1 },
@@ -124,11 +123,43 @@ export default function AgregarVehiculo() {
             year: "",
             mileage: "",
             price: "",
-        })
+        });
+        setErrors({});
     }
 
+    const validateForm = () => {
+        const newErrors = {};
+
+        // Validar cada campo obligatorio
+        if (!newProduct.brandId) newErrors.brandId = "Marca es obligatoria";
+        if (!newProduct.name) newErrors.name = "Nombre es obligatorio";
+        if (!newProduct.categoryId) newErrors.categoryId = "Categoría es obligatoria";
+        if (!newProduct.description) newErrors.description = "Descripción es obligatoria";
+        if (newProduct.images.length == []) newErrors.images = "Imagenes es obligatoria";
+        if (!newProduct.transmissionId) newErrors.transmissionId = "Transmisión es obligatoria";
+        if (!newProduct.capacity) newErrors.capacity = "Capacidad es obligatoria";
+        if (!newProduct.doors) newErrors.doors = "Puertas es obligatorio";
+        if (!newProduct.gasolineId) newErrors.gasolineId = "Combustible es obligatorio";
+        if (!newProduct.brakeSystemId) newErrors.brakeSystemId = "Frenos es obligatorio";
+        if (!newProduct.horsePower) newErrors.horsePower = "Caballo de fuerza es obligatorio";
+        if (!newProduct.year) newErrors.year = "Año es obligatorio";
+        if (!newProduct.mileage) newErrors.mileage = "Kilometraje es obligatorio";
+        if (!newProduct.price) newErrors.price = "Precio es obligatorio";
+
+        setErrors(newErrors); // Actualizar el estado de errores
+        return Object.keys(newErrors).length === 0; // Retorna true si no hay errores
+    };
+
     const onSubmit =  async () => {
-        console.log(newProduct)
+        if (!validateForm()) {
+            MySwal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Por favor, completa todos los campos obligatorios.',
+            });
+            return;
+        }
+
         try {
             await createCar(newProduct)
             resetForm();
@@ -170,7 +201,7 @@ export default function AgregarVehiculo() {
                     <Box sx={{ display: "flex", flexDirection: "column", mx: "auto", maxWidth: 500, gap: 2 }}>
                         <Grid container spacing={6}>
                             <Grid size={4}>
-                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} error={!!errors.brandId}>
                                     <InputLabel
                                         id="marca"
                                         shrink
@@ -188,6 +219,7 @@ export default function AgregarVehiculo() {
                                             <MenuItem key={index} value={brand.id}>{brand.name}</MenuItem>
                                         ))}
                                     </Select>
+                                    {errors.brandId && <Typography color="error" fontSize={12}>{errors.brandId}</Typography>}
                                 </FormControl>
                             </Grid>
                             <Grid size={4}>
@@ -202,6 +234,7 @@ export default function AgregarVehiculo() {
                                         label="Nombre*"
                                         variant="standard"
                                         value={newProduct.name}
+                                        error={!!errors.name}
                                         onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
                                         slotProps={{
                                             inputLabel: {
@@ -209,10 +242,11 @@ export default function AgregarVehiculo() {
                                             },
                                         }}
                                     />
+                                    {errors.name && <Typography color="error" fontSize={12}>{errors.name}</Typography>}
                                 </Box>
                             </Grid>
                             <Grid size={4}>
-                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} error={!!errors.categoryId}>
                                     <InputLabel
                                         id="categoria"
                                         shrink
@@ -233,6 +267,7 @@ export default function AgregarVehiculo() {
                                             </MenuItem>
                                         ))}
                                     </Select>
+                                    {errors.categoryId && <Typography color="error" fontSize={12}>{errors.categoryId}</Typography>}
                                 </FormControl>
                             </Grid>
                         </Grid>
@@ -260,8 +295,10 @@ export default function AgregarVehiculo() {
                                         cursor: "pointer",
                                     }}
                                 />
+                                
                             </Button>
                         </Grid>
+                        {errors.images && <Typography color="error" fontSize={12}>{errors.images}</Typography>}
                         <Grid size={12} sx={{ maxWidth: 600 }}>
                             <Box
                                 component="form"
@@ -272,11 +309,13 @@ export default function AgregarVehiculo() {
                                 <TextField
                                     id="descripcion"
                                     label="Descripción"
+                                    error={!!errors.description}
                                     multiline
                                     minRows={6}
                                     value={newProduct.description}
                                     onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
                                 />
+                                {errors.description && <Typography color="error" fontSize={12}>{errors.description}</Typography>}
                             </Box>
                         </Grid>
                     </Box>
@@ -296,7 +335,7 @@ export default function AgregarVehiculo() {
                     <Box sx={{ display: "flex", flexDirection: "column", mx: "auto", maxWidth: 500, gap: 3 }}>
                         <Grid container spacing={6}>
                             <Grid size={4}>
-                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} error={!!errors.transmissionId}>
                                     <InputLabel
                                         id="transmision"
                                         shrink
@@ -314,10 +353,11 @@ export default function AgregarVehiculo() {
                                             <MenuItem key={index} value={transmission.id}>{transmission.name}</MenuItem>
                                         ))}
                                     </Select>
+                                    {errors.transmissionId && <Typography color="error" fontSize={12}>{errors.transmissionId}</Typography>}
                                 </FormControl>
                             </Grid>
                             <Grid size={4}>
-                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} id="capacidad" error={!!errors.capacity}>
                                     <InputLabel
                                         id="capacidad"
                                         shrink
@@ -326,7 +366,6 @@ export default function AgregarVehiculo() {
                                     </InputLabel>
                                     <Select
                                         labelId="capacidad"
-                                        id="capacidad"
                                         value={newProduct.capacity}
                                         label="Capacidad"
                                         onChange={(e) => setNewProduct({ ...newProduct, capacity: e.target.value })}
@@ -342,10 +381,11 @@ export default function AgregarVehiculo() {
                                         <MenuItem value={9}>9</MenuItem>
                                         <MenuItem value={10}>10</MenuItem>
                                     </Select>
+                                    {errors.capacity && <Typography color="error" fontSize={12}>{errors.capacity}</Typography>}
                                 </FormControl>
                             </Grid>
                             <Grid size={4}>
-                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} error={!!errors.hasAirCondition}>
                                     <InputLabel
                                         id="aire"
                                         shrink
@@ -363,12 +403,13 @@ export default function AgregarVehiculo() {
                                             <MenuItem key={index} value={air.value}>{air.name}</MenuItem>
                                         ))}
                                     </Select>
+                                    {errors.hasAirCondition && <Typography color="error" fontSize={12}>{errors.hasAirCondition}</Typography>}
                                 </FormControl>
                             </Grid>
                         </Grid>
                         <Grid container spacing={6}>
                             <Grid size={4}>
-                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} error={!!errors.doors}>
                                     <InputLabel
                                         id="puertas"
                                         shrink
@@ -388,10 +429,11 @@ export default function AgregarVehiculo() {
                                         <MenuItem value={4}>4</MenuItem>
                                         <MenuItem value={5}>5</MenuItem>
                                     </Select>
+                                    {errors.doors && <Typography color="error" fontSize={12}>{errors.doors}</Typography>}
                                 </FormControl>
                             </Grid>
                             <Grid size={4}>
-                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} error={!!errors.gasolineId}>
                                     <InputLabel
                                         id="gasolina"
                                         shrink
@@ -409,10 +451,11 @@ export default function AgregarVehiculo() {
                                             <MenuItem key={index} value={gasoline.id}>{gasoline.name}</MenuItem>
                                         ))}
                                     </Select>
+                                    {errors.gasolineId && <Typography color="error" fontSize={12}>{errors.gasolineId}</Typography>}
                                 </FormControl>
                             </Grid>
                             <Grid size={4}>
-                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} error={!!errors.brakeSystemId}>
                                     <InputLabel
                                         id="frenos"
                                         shrink
@@ -430,6 +473,7 @@ export default function AgregarVehiculo() {
                                             <MenuItem key={index} value={brake.id}>{brake.name}</MenuItem>
                                         ))}
                                     </Select>
+                                    {errors.brakeSystemId && <Typography color="error" fontSize={12}>{errors.brakeSystemId}</Typography>}
                                 </FormControl>
                             </Grid>
                         </Grid>
@@ -444,6 +488,7 @@ export default function AgregarVehiculo() {
                                         id="potencia"
                                         label="Caballo de fuerza (HP)*"
                                         variant="standard"
+                                        error={!!errors.horsePower}
                                         type="number"
                                         value={newProduct.horsePower}
                                         onChange={(e) => setNewProduct({ ...newProduct, horsePower: e.target.value })}
@@ -453,6 +498,7 @@ export default function AgregarVehiculo() {
                                             },
                                         }}
                                     />
+                                    {errors.horsePower && <Typography color="error" fontSize={12}>{errors.horsePower}</Typography>}
                                 </Box>
                             </Grid>
                             <Grid size={4}>
@@ -466,6 +512,7 @@ export default function AgregarVehiculo() {
                                         label="Año del modelo*"
                                         variant="standard"
                                         type="number"
+                                        error={!!errors.year}
                                         value={newProduct.year}
                                         onChange={(e) => setNewProduct({ ...newProduct, year: e.target.value })}
                                         slotProps={{
@@ -474,6 +521,7 @@ export default function AgregarVehiculo() {
                                             },
                                         }}
                                     />
+                                    {errors.year && <Typography color="error" fontSize={12}>{errors.year}</Typography>}
                                 </Box>
                             </Grid>
                             <Grid size={4}>
@@ -487,6 +535,7 @@ export default function AgregarVehiculo() {
                                         label="Kilometraje (Km)*"
                                         variant="standard"
                                         type="number"
+                                        error={!!errors.mileage}
                                         value={newProduct.mileage}
                                         onChange={(e) => setNewProduct({ ...newProduct, mileage: e.target.value })}
                                         slotProps={{
@@ -495,6 +544,7 @@ export default function AgregarVehiculo() {
                                             },
                                         }}
                                     />
+                                    {errors.mileage && <Typography color="error" fontSize={12}>{errors.mileage}</Typography>}
                                 </Box>
                             </Grid>
                         </Grid>
@@ -524,6 +574,7 @@ export default function AgregarVehiculo() {
                                     label="Valor x día*"
                                     variant="standard"
                                     type="number"
+                                    error={!!errors.price}
                                     value={newProduct.price}
                                     onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
                                     slotProps={{
@@ -532,6 +583,7 @@ export default function AgregarVehiculo() {
                                         },
                                     }}
                                 />
+                                {errors.price && <Typography color="error" fontSize={12}>{errors.price}</Typography>}
                             </Box>
                         </Grid>
                     </Box>
