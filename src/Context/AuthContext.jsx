@@ -4,6 +4,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true); // Estado de carga
 
     useEffect(() => {
         // Verificar si hay un usuario en localStorage al cargar la app
@@ -11,6 +12,7 @@ export const AuthProvider = ({ children }) => {
         if (storedUser) {
             setUser(storedUser);
         }
+        setLoading(false); // Finaliza la carga una vez se haya realizado la verificación
     }, []);
 
     const login = (userData) => {
@@ -24,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, loading, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
