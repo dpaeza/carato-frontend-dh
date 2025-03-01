@@ -16,14 +16,14 @@ import { registerUser } from '../Services/auth';
 const Register = React.memo(({ open, onClose }) => {
     const [registerData, setRegisterData] = useState({
         name: '',
-        lastName: '',
+        lastname: '',
         email: '',
         password: ''
     });
 
     const [errors, setErrors] = useState({
         name: '',
-        lastName: '',
+        lastname: '',
         email: '',
         password: ''
     });
@@ -33,7 +33,7 @@ const Register = React.memo(({ open, onClose }) => {
 
     // Referencias para los inputs
     const nameRef = useRef(null);
-    const lastNameRef = useRef(null);
+    const lastnameRef = useRef(null);
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
 
@@ -43,7 +43,7 @@ const Register = React.memo(({ open, onClose }) => {
         if (!value.trim()) {
             return "Este campo es requerido";
         }
-        if (field === "name" || field === "lastName") {
+        if (field === "name" || field === "lastname") {
             if (!/^[A-Za-z]+$/.test(value)) {
                 return "Solo se permiten letras y sin espacios";
             }
@@ -79,13 +79,13 @@ const Register = React.memo(({ open, onClose }) => {
     const resetForm = useCallback(() => {
         setRegisterData({
             name: '',
-            lastName: '',
+            lastname: '',
             email: '',
             password: ''
         });
         setErrors({
             name: '',
-            lastName: '',
+            lastname: '',
             email: '',
             password: ''
         });
@@ -108,7 +108,7 @@ const Register = React.memo(({ open, onClose }) => {
             onClose();
             MySwal.fire({
                 title: "Error al registrarse",
-                text: error.response?.data?.message || "Ocurrió un error al intentar registrarte. Por favor, intenta de nuevo.",
+                text: error.response?.data?.message[0],
                 icon: "error",
                 confirmButtonText: "Aceptar",
             });
@@ -178,26 +178,26 @@ const Register = React.memo(({ open, onClose }) => {
                 <TextField
                     label="Apellido"
                     fullWidth
-                    name="lastName"
+                    name="lastname"
                     type="text"
                     size="small"
-                    value={registerData.lastName}
+                    value={registerData.lastname}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    error={Boolean(errors.lastName)}
-                    success={registerData.lastName && !errors.lastName}
-                    helperText={errors.lastName}
-                    inputRef={lastNameRef}
+                    error={Boolean(errors.lastname)}
+                    success={registerData.lastname && !errors.lastname}
+                    helperText={errors.lastname}
+                    inputRef={lastnameRef}
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '&.Mui-focused fieldset': {
-                                borderColor: getBorderColor('lastName'),
+                                borderColor: getBorderColor('lastname'),
                             },
                             '&:hover fieldset': {
-                                borderColor: getBorderColor('lastName'),
+                                borderColor: getBorderColor('lastname'),
                             },
                             '& fieldset': {
-                                borderColor: getBorderColor('lastName'),
+                                borderColor: getBorderColor('lastname'),
                             },
                         },
                     }}
