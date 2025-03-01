@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -22,41 +22,40 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Grid from "@mui/material/Grid2";
+import { getBrands, getFuelTypes, getTransmissions, getBrakeTypes } from '../Services/extras';
 
 export default function AgregarVehiculo() {
-    const [age, setAge] = React.useState('');
+    const [age, setAge] = useState('');
+    const [brands, setBrands] = useState([]);
+    const [gasolines, setGasolines] = useState([]);
+    const [transmissions, setTransmissions] = useState([]);
+    const [brakeSystems, setBrakeSystems] = useState([]);
 
     const placeholder = "Seleccione";
 
     const [newProduct, setNewProduct] = useState({
+        // brandId: "",
         brand: "",
+        // name:  "",
         model: "",
+        // categoryId: "",
         category: "",
         images: [],
         description: "",
+        // transmissionId: "",
         transmission: "",
         capacity: "",
         hasAirCondition: true,
         doors: "",
+        // gasolineId: "",
         gasoline: "",
+        // brakeSystemId: "",
         brakeSystem: "",
         horsePower: "",
         year: "",
         mileage: "",
         price: "",
     });
-
-    const brands = [
-        "Toyota",
-        "Nissan",
-        "Chevrolet",
-        "Ford",
-        "Hyundai",
-        "Kia",
-        "Mazda",
-        "Volkswagen",
-        "Honda"
-    ];
 
     const categories = [
         { name: "Híbridos", icon: IconHibrido },
@@ -67,28 +66,53 @@ export default function AgregarVehiculo() {
         { name: "Familiares", icon: IconFamiliar }
     ];
 
-    const transmissions = [
-        "Manual",
-        "Automático"
-    ];
-
-    const gasolines = [
-        "Gasolina",
-        "Diesel",
-        "Híbrido",
-        "Eléctrico"
-    ];
-
-    const brakeSystems = [
-        "ABS",
-        "Discos",
-        "Tambor"
-    ];
-
     const hasAirCondition = [
         "Sí",
         "No"
     ];
+
+    const fetchBrands = async () => {
+        try {
+            const brands = await getBrands();
+            setBrands(brands);
+        } catch (error) {
+            console.error("Error al obtener las marcas:", error);
+        }
+    }
+
+    const fetchGasolines = async () => {
+        try {
+            const gasolines = await getFuelTypes();
+            setGasolines(gasolines);
+        } catch (error) {
+            console.error("Error al obtener los tipos de combustible:", error);
+        }
+    }
+
+    const fetchTransmissions = async () => {
+        try {
+            const transmissions = await getTransmissions();
+            setTransmissions(transmissions);
+        } catch (error) {
+            console.error("Error al obtener los tipos de transmisión:", error);
+        }
+    }
+
+    const fetchBrakeSystems = async () => {
+        try {
+            const brakeSystems = await getBrakeTypes();
+            setBrakeSystems(brakeSystems);
+        } catch (error) {
+            console.error("Error al obtener los tipos de frenos:", error);
+        }
+    }
+
+    useEffect(() => {
+        fetchBrands();
+        fetchGasolines();
+        fetchTransmissions();
+        fetchBrakeSystems();
+    }, []);
 
 
     return (
@@ -122,31 +146,31 @@ export default function AgregarVehiculo() {
                                         onChange={(e) => setNewProduct({ ...newProduct, brand: e.target.value })}
                                     >
                                         {brands.map((brand, index) => (
-                                            <MenuItem key={index} value={brand}>{brand}</MenuItem>
+                                            <MenuItem key={index} value={brand.name}>{brand.name}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
                             </Grid>
                             <Grid size={4}>
-                                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                                    <InputLabel
+                                <Box
+                                    component="form"
+                                    sx={{ '& > :not(style)': { width: '100%' } }}
+                                    noValidate
+                                    autoComplete="off"
+                                >
+                                    <TextField
                                         id="modelo"
-                                        shrink
-                                    >
-                                        Modelo*
-                                    </InputLabel>
-                                    <Select
-                                        labelId="modelo"
-                                        id="modelo"
+                                        label="Modelo*"
+                                        variant="standard"
                                         value={newProduct.model}
-                                        label="Modelo"
                                         onChange={(e) => setNewProduct({ ...newProduct, model: e.target.value })}
-                                    >
-                                        {brands.map((brand, index) => (
-                                            <MenuItem key={index} value={brand}>{brand}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                        slotProps={{
+                                            inputLabel: {
+                                                shrink: true,
+                                            },
+                                        }}
+                                    />
+                                </Box>
                             </Grid>
                             <Grid size={4}>
                                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
@@ -248,7 +272,7 @@ export default function AgregarVehiculo() {
                                         onChange={(e) => setNewProduct({ ...newProduct, transmission: e.target.value })}
                                     >
                                         {transmissions.map((transmission, index) => (
-                                            <MenuItem key={index} value={transmission}>{transmission}</MenuItem>
+                                            <MenuItem key={index} value={transmission.name}>{transmission.name}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
@@ -343,7 +367,7 @@ export default function AgregarVehiculo() {
                                         onChange={(e) => setNewProduct({ ...newProduct, gasoline: e.target.value })}
                                     >
                                         {gasolines.map((gasoline, index) => (
-                                            <MenuItem key={index} value={gasoline}>{gasoline}</MenuItem>
+                                            <MenuItem key={index} value={gasoline.name}>{gasoline.name}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
@@ -364,7 +388,7 @@ export default function AgregarVehiculo() {
                                         onChange={(e) => setNewProduct({ ...newProduct, brakeSystem: e.target.value })}
                                     >
                                         {brakeSystems.map((brake, index) => (
-                                            <MenuItem key={index} value={brake}>{brake}</MenuItem>
+                                            <MenuItem key={index} value={brake.name}>{brake.name}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
