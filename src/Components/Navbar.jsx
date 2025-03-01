@@ -25,6 +25,7 @@ import NoCrashIcon from '@mui/icons-material/NoCrash';
 import LogoCarato from "../assets/Logo-carato-slogan.svg";
 import Register from "./Register";
 import Login from "./Login";
+import { useAuth } from "../Context/authContext";
 
 const drawerWidth = 240;
 
@@ -33,16 +34,9 @@ export default function Navbar(props) {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [openRegister, setOpenRegister] = useState(false);
     const [openLogin, setOpenLogin] = useState(false);
-    const [user, setUser] = useState(null);
     const [menuAnchor, setMenuAnchor] = useState(null);
 
-    useEffect(() => {
-        // Obtener usuario desde localStorage al cargar el componente
-        const auth = localStorage.getItem("auth");
-        if (auth) {
-            setUser(JSON.parse(auth));
-        }
-    }, []);
+    const { user, logout } = useAuth();
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -57,10 +51,8 @@ export default function Navbar(props) {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem("auth");
-        setUser(null);
+        logout();
         handleMenuClose();
-        window.location.reload(); // Recargar la página
     };
 
     const drawer = (

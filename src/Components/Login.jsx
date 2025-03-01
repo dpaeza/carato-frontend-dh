@@ -12,6 +12,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { loginUser } from '../Services/auth';
+import { useAuth } from '../Context/authContext';
 
 const Login = React.memo(({ open, onClose }) => {
     const [userData, setUserData] = useState({
@@ -23,6 +24,8 @@ const Login = React.memo(({ open, onClose }) => {
         email: '',
         password: ''
     });
+
+    const { login } = useAuth();
 
     const [showPassword, setShowPassword] = useState(false);
     const MySwal = withReactContent(Swal);
@@ -84,8 +87,8 @@ const Login = React.memo(({ open, onClose }) => {
 
     const handleSubmit = useCallback(async () => {
         try {
-            await loginUser(userData);
-            localStorage.setItem("auth", JSON.stringify(responseData));
+            const response = await loginUser(userData);
+            login(response);
             resetForm();
             onClose();
             MySwal.fire({
