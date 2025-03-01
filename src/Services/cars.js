@@ -1,6 +1,8 @@
 import api from "./api";
 import axios from "axios";
 
+const API_URL = "http://localhost:8080/api/cars";
+
 export const getCars = async (page = 1, size = 10, query = "") => {
     try {
         const response = await api.get("/cars", { params: { page, size, query } });
@@ -47,10 +49,7 @@ export const createCar = async (carData) => {
       if (token) {
         headers.Authorization = `Bearer ${token}`;
       }
-  
-      // URL de la API
-      const API_URL = "http://localhost:8080/api/cars";
-  
+      
       // Realiza la solicitud POST
       const response = await axios.post(API_URL, carData, { headers });
   
@@ -76,7 +75,19 @@ export const updateCar = async (id, carData) => {
 
 export const deleteCar = async (id) => {
     try {
-        const response = await api.delete(`/cars/${id}`);
+        const userData = JSON.parse(localStorage.getItem('auth'));
+        const token = userData ? userData.token : null;
+        
+        const headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        };
+
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+        }
+
+        const response = await axios.delete(`${API_URL}/${id}`, {headers});
         return response.data;
     } catch (error) {
         console.error("Error al eliminar el auto:", error);
