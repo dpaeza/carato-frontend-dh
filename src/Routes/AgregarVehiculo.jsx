@@ -23,6 +23,7 @@ import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Grid from "@mui/material/Grid2";
 import { getBrands, getFuelTypes, getTransmissions, getBrakeTypes } from '../Services/extras';
+import { Category } from '@mui/icons-material';
 
 export default function AgregarVehiculo() {
     const [age, setAge] = useState('');
@@ -34,23 +35,17 @@ export default function AgregarVehiculo() {
     const placeholder = "Seleccione";
 
     const [newProduct, setNewProduct] = useState({
-        // brandId: "",
-        brand: "",
-        // name:  "",
-        model: "",
-        // categoryId: "",
-        category: "",
+        brandId: "",
+        name: "",
+        categoryId: "",
         images: [],
         description: "",
-        // transmissionId: "",
-        transmission: "",
+        transmissionId: "",
         capacity: "",
         hasAirCondition: true,
         doors: "",
-        // gasolineId: "",
-        gasoline: "",
-        // brakeSystemId: "",
-        brakeSystem: "",
+        gasolineId: "",
+        brakeSystemId: "",
         horsePower: "",
         year: "",
         mileage: "",
@@ -58,17 +53,17 @@ export default function AgregarVehiculo() {
     });
 
     const categories = [
-        { name: "Híbridos", icon: IconHibrido },
-        { name: "Eléctricos", icon: IconElectrico },
-        { name: "Lujo", icon: IconLujo },
-        { name: "Compactos", icon: IconCompacto },
-        { name: "Deportivos", icon: IconDeportivo },
-        { name: "Familiares", icon: IconFamiliar }
+        { name: "Híbridos", icon: IconHibrido, id:1 },
+        { name: "Eléctricos", icon: IconElectrico, id:2 },
+        { name: "Lujo", icon: IconLujo, id:3 },
+        { name: "Compactos", icon: IconCompacto, id:4 },
+        { name: "Deportivos", icon: IconDeportivo, id:5 },
+        { name: "Familiares", icon: IconFamiliar, id:6 }
     ];
 
     const hasAirCondition = [
-        "Sí",
-        "No"
+        { name: "Sí", value: true },
+        { name: "No", value: false }
     ];
 
     const fetchBrands = async () => {
@@ -107,6 +102,10 @@ export default function AgregarVehiculo() {
         }
     }
 
+    const onSubmit =  () => {
+        console.log(newProduct)
+    }
+
     useEffect(() => {
         fetchBrands();
         fetchGasolines();
@@ -141,12 +140,12 @@ export default function AgregarVehiculo() {
                                     <Select
                                         labelId="marca"
                                         id="marca"
-                                        value={newProduct.brand}
+                                        value={newProduct.brandId}
                                         label="Marca"
-                                        onChange={(e) => setNewProduct({ ...newProduct, brand: e.target.value })}
+                                        onChange={(e) => setNewProduct({ ...newProduct, brandId: e.target.value })}
                                     >
                                         {brands.map((brand, index) => (
-                                            <MenuItem key={index} value={brand.name}>{brand.name}</MenuItem>
+                                            <MenuItem key={index} value={brand.id}>{brand.name}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
@@ -160,10 +159,10 @@ export default function AgregarVehiculo() {
                                 >
                                     <TextField
                                         id="modelo"
-                                        label="Modelo*"
+                                        label="Nombre*"
                                         variant="standard"
-                                        value={newProduct.model}
-                                        onChange={(e) => setNewProduct({ ...newProduct, model: e.target.value })}
+                                        value={newProduct.name}
+                                        onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
                                         slotProps={{
                                             inputLabel: {
                                                 shrink: true,
@@ -183,12 +182,12 @@ export default function AgregarVehiculo() {
                                     <Select
                                         labelId="categoria"
                                         id="categoria"
-                                        value={newProduct.category}
+                                        value={newProduct.categoryId}
                                         label="Categoría"
-                                        onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
+                                        onChange={(e) => setNewProduct({ ...newProduct, categoryId: e.target.value })}
                                     >
                                         {categories.map((category, index) => (
-                                            <MenuItem key={index} value={category.name}>
+                                            <MenuItem key={index} value={category.id}>
                                                 <img src={category.icon} alt={category.name} />
                                                 {category.name}
                                             </MenuItem>
@@ -267,12 +266,12 @@ export default function AgregarVehiculo() {
                                     <Select
                                         labelId="transmision"
                                         id="transmision"
-                                        value={newProduct.transmission}
+                                        value={newProduct.transmissionId}
                                         label="Transmisión"
-                                        onChange={(e) => setNewProduct({ ...newProduct, transmission: e.target.value })}
+                                        onChange={(e) => setNewProduct({ ...newProduct, transmissionId: e.target.value })}
                                     >
                                         {transmissions.map((transmission, index) => (
-                                            <MenuItem key={index} value={transmission.name}>{transmission.name}</MenuItem>
+                                            <MenuItem key={index} value={transmission.id}>{transmission.name}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
@@ -321,7 +320,7 @@ export default function AgregarVehiculo() {
                                         onChange={(e) => setNewProduct({ ...newProduct, hasAirCondition: e.target.value })}
                                     >
                                         {hasAirCondition.map((air, index) => (
-                                            <MenuItem key={index} value={air}>{air}</MenuItem>
+                                            <MenuItem key={index} value={air.value}>{air.name}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
@@ -362,12 +361,12 @@ export default function AgregarVehiculo() {
                                     <Select
                                         labelId="gasolina"
                                         id="gasolina"
-                                        value={newProduct.gasoline}
+                                        value={newProduct.gasolineId}
                                         label="Tipo de gasolina"
-                                        onChange={(e) => setNewProduct({ ...newProduct, gasoline: e.target.value })}
+                                        onChange={(e) => setNewProduct({ ...newProduct, gasolineId: e.target.value })}
                                     >
                                         {gasolines.map((gasoline, index) => (
-                                            <MenuItem key={index} value={gasoline.name}>{gasoline.name}</MenuItem>
+                                            <MenuItem key={index} value={gasoline.id}>{gasoline.name}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
@@ -383,12 +382,12 @@ export default function AgregarVehiculo() {
                                     <Select
                                         labelId="frenos"
                                         id="frenos"
-                                        value={newProduct.brakeSystem}
+                                        value={newProduct.brakeSystemId}
                                         label="Sistema de frenos"
-                                        onChange={(e) => setNewProduct({ ...newProduct, brakeSystem: e.target.value })}
+                                        onChange={(e) => setNewProduct({ ...newProduct, brakeSystemId: e.target.value })}
                                     >
                                         {brakeSystems.map((brake, index) => (
-                                            <MenuItem key={index} value={brake.name}>{brake.name}</MenuItem>
+                                            <MenuItem key={index} value={brake.id}>{brake.name}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
@@ -527,6 +526,7 @@ export default function AgregarVehiculo() {
                         textTransform: "capitalize",
                         borderRadius: 2,
                     }}
+                    onClick={onSubmit}
                 >
                     Agregar vehículo
                 </Button>
