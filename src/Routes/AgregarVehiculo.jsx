@@ -188,7 +188,7 @@ export default function AgregarVehiculo() {
                                     >
                                         {categories.map((category, index) => (
                                             <MenuItem key={index} value={category.id}>
-                                                <img src={category.icon} alt={category.name} />
+                                                <category.icon style={{ marginRight: 8, height:15, width:15 }} />
                                                 {category.name}
                                             </MenuItem>
                                         ))}
