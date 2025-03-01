@@ -35,25 +35,20 @@ export const getCarByIdOrName = async (value) => {
 
 export const createCar = async (carData) => {
     try {
-      // Obtén el token del localStorage
       const userData = JSON.parse(localStorage.getItem('auth'));
       const token = userData ? userData.token : null;
   
-      // Configura los headers
       const headers = {
-        "Content-Type": "multipart/form-data", // Para enviar archivos
-        "Accept": "application/json", // Aceptar respuestas en JSON
+        "Content-Type": "multipart/form-data",
+        "Accept": "application/json",
       };
   
-      // Si hay un token, agrega el header de autorización
       if (token) {
         headers.Authorization = `Bearer ${token}`;
       }
-      
-      // Realiza la solicitud POST
+
       const response = await axios.post(API_URL, carData, { headers });
-  
-      // Retorna la respuesta
+
       return response.data;
     } catch (error) {
       console.error("Error al crear el auto:", error);
