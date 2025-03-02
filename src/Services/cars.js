@@ -57,11 +57,23 @@ export const createCar = async (carData) => {
   };
 
 export const updateCar = async (id, carData) => {
+    console.log(id)
     try {
-        const response = await api.put(`/cars/${id}`, carData, {
-            headers: { "Content-Type": "multipart/form-data" },
-        });
-        return response.data;
+        const userData = JSON.parse(localStorage.getItem('auth'));
+        const token = userData ? userData.token : null;
+    
+        const headers = {
+            "Content-Type": "multipart/form-data",
+            "Accept": "application/json",
+        };
+
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+        }
+
+        const response = await axios.put(`${API_URL}/${id}`, carData, { headers });
+        console.log(response)
+        return response;
     } catch (error) {
         console.error("Error al actualizar el auto:", error);
         throw error;
