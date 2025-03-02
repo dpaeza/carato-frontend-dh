@@ -26,6 +26,7 @@ import LogoCarato from "../assets/Logo-carato-slogan.svg";
 import Register from "./Register";
 import Login from "./Login";
 import { useAuth } from "../Context/authContext";
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -37,6 +38,7 @@ export default function Navbar(props) {
     const [menuAnchor, setMenuAnchor] = useState(null);
 
     const { user, logout } = useAuth();
+    const navigate = useNavigate();
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -53,6 +55,11 @@ export default function Navbar(props) {
     const handleLogout = () => {
         logout();
         handleMenuClose();
+    };
+
+    const handleClick = () => {
+        handleMenuClose();
+        navigate('/cuenta');
     };
 
     const drawer = (
@@ -104,7 +111,7 @@ export default function Navbar(props) {
             <List>
                 {user ? (
                     <>
-                        <MenuItem>
+                        <MenuItem onClick={handleClick}>
                             <ListItemIcon>
                                 <PersonOutlineIcon fontSize="small" />
                             </ListItemIcon>
@@ -169,7 +176,7 @@ export default function Navbar(props) {
                                     onClose={handleMenuClose}
                                     sx={{ mt: '15px' }}
                                 >
-                                    <MenuItem>
+                                    <MenuItem onClick={handleClick}> 
                                         <ListItemIcon>
                                             <PersonOutlineIcon fontSize="small" />
                                         </ListItemIcon>
