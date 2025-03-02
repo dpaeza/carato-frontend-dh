@@ -39,11 +39,11 @@ export default function Home() {
 
 	return (
 		<Box>
-			<Box sx={{ px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto" }}>
-				<Box sx={{ pt: 6 }}>
+			<Box sx={{ backgroundColor:"var(--pureWhite)" }}>
+				<Box sx={{ pt: 6, px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto"}}>
 					<Search />
 				</Box>
-				<Box sx={{ py: 3 }}>
+				<Box sx={{ py: 3, px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto" }}>
 					<Categories />
 				</Box>
 			</Box>
