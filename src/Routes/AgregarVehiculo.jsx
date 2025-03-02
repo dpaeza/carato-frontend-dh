@@ -36,7 +36,6 @@ export default function AgregarVehiculo() {
     const [gasolines, setGasolines] = useState([]);
     const [transmissions, setTransmissions] = useState([]);
     const [brakeSystems, setBrakeSystems] = useState([]);
-    const [images, setImages] = useState([]);
 
     const [newProduct, setNewProduct] = useState({
         brandId: "",
@@ -55,6 +54,8 @@ export default function AgregarVehiculo() {
         mileage: "",
         price: "",
     });
+
+    const [previews, setPreviews] = useState([]);
 
     const [errors, setErrors] = useState({});
 
@@ -128,8 +129,9 @@ export default function AgregarVehiculo() {
             mileage: "",
             price: "",
         });
+        setPreviews([]);
         setErrors({});
-    }
+    };
 
     const validateForm = () => {
         const newErrors = {};
@@ -165,6 +167,7 @@ export default function AgregarVehiculo() {
         }
 
         try {
+            console.log(newProduct)
             await createCar(newProduct)
             resetForm();
             MySwal.fire({
@@ -172,40 +175,64 @@ export default function AgregarVehiculo() {
                 title: 'Producto creado exitosamente.'
             });
         } catch (error) {
-            console.error(error);
             MySwal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: error.message
+                text: error.response.data.message
             });
         }
     }
 
     // Función para manejar la subida de archivos
     const onDrop = (acceptedFiles) => {
-        setImages((prev) => [
+        // Guardar los archivos en newProduct.images
+        setNewProduct((prev) => ({
             ...prev,
-            ...acceptedFiles.map((file) => ({
-                file,
-                preview: URL.createObjectURL(file),
-                id: `image-${prev.length + 1}` // ID único para cada imagen
-            }))
-        ]);
+            images: [...prev.images, ...acceptedFiles]
+        }));
+
+        // Generar vistas previas y guardarlas en el estado `previews`
+        const newPreviews = acceptedFiles.map((file) => ({
+            file,
+            preview: URL.createObjectURL(file),
+            id: `preview-${previews.length + 1}` // ID único para cada vista previa
+        }));
+        setPreviews((prev) => [...prev, ...newPreviews]);
     };
 
     // Función para eliminar una imagen
     const handleRemoveImage = (id) => {
-        setImages((prev) => prev.filter((image) => image.id !== id));
+        // Filtrar las vistas previas y los archivos
+        const updatedPreviews = previews.filter((preview) => preview.id !== id);
+        const updatedFiles = newProduct.images.filter((_, index) => previews[index].id !== id);
+
+        setPreviews(updatedPreviews);
+        setNewProduct((prev) => ({
+            ...prev,
+            images: updatedFiles
+        }));
     };
 
     // Función para reordenar imágenes
     const handleDragEnd = (result) => {
         if (!result.destination) return;
-        const items = Array.from(images);
-        const [reorderedItem] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItem);
-        setImages(items);
+
+        // Reordenar las vistas previas y los archivos
+        const reorderedPreviews = Array.from(previews);
+        const [movedPreview] = reorderedPreviews.splice(result.source.index, 1);
+        reorderedPreviews.splice(result.destination.index, 0, movedPreview);
+
+        const reorderedFiles = Array.from(newProduct.images);
+        const [movedFile] = reorderedFiles.splice(result.source.index, 1);
+        reorderedFiles.splice(result.destination.index, 0, movedFile);
+
+        setPreviews(reorderedPreviews);
+        setNewProduct((prev) => ({
+            ...prev,
+            images: reorderedFiles
+        }));
     };
+
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -304,18 +331,18 @@ export default function AgregarVehiculo() {
                             </Grid>
                         </Grid>
                         <Grid size={12} sx={{ maxWidth: 600, display: "flex", justifyContent: "center" }}>
-                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width:"100%" }}>
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
                                 {/* Área de arrastrar y soltar */}
                                 <Box
                                     {...getRootProps()}
                                     sx={{
-                                        border: `2px dashed ${isDragActive ? "#1976d2" : "#ccc"}`, // Cambia el color del borde
-                                        backgroundColor: isDragActive ? "rgba(25, 118, 210, 0.1)" : "transparent", // Cambia el fondo
+                                        border: `2px dashed ${isDragActive ? "#1976d2" : "#ccc"}`,
+                                        backgroundColor: isDragActive ? "rgba(25, 118, 210, 0.1)" : "transparent",
                                         borderRadius: 2,
                                         padding: 4,
                                         textAlign: "center",
                                         cursor: "pointer",
-                                        transition: "background-color 0.3s, border-color 0.3s", // Transición suave
+                                        transition: "background-color 0.3s, border-color 0.3s",
                                         width: '100%'
                                     }}
                                 >
@@ -337,8 +364,8 @@ export default function AgregarVehiculo() {
                                                 ref={provided.innerRef}
                                                 sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}
                                             >
-                                                {images.map((image, index) => (
-                                                    <Draggable key={image.id} draggableId={image.id} index={index}>
+                                                {previews.map((preview, index) => (
+                                                    <Draggable key={preview.id} draggableId={preview.id} index={index}>
                                                         {(provided) => (
                                                             <Box
                                                                 ref={provided.innerRef}
@@ -347,12 +374,12 @@ export default function AgregarVehiculo() {
                                                                 sx={{ position: "relative" }}
                                                             >
                                                                 <img
-                                                                    src={image.preview}
+                                                                    src={preview.preview}
                                                                     alt={`Imagen ${index}`}
                                                                     style={{ width: 100, height: 100, objectFit: "cover", borderRadius: 2 }}
                                                                 />
                                                                 <Button
-                                                                    onClick={() => handleRemoveImage(image.id)}
+                                                                    onClick={() => handleRemoveImage(preview.id)}
                                                                     sx={{
                                                                         position: "absolute",
                                                                         top: 0,
@@ -676,18 +703,6 @@ export default function AgregarVehiculo() {
                     width: "100%",
                 }}
             >
-                <Button
-                    variant="contained"
-                    sx={{
-                        backgroundColor: "#B3B3BB",
-                        color: "var(--pureWhite)",
-                        width: "200px",
-                        textTransform: "capitalize",
-                        borderRadius: 2,
-                    }}
-                >
-                    Cancelar
-                </Button>
                 <Button
                     variant="contained"
                     sx={{
