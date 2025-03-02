@@ -30,12 +30,15 @@ import { createCar } from '../Services/cars';
 import { useDropzone } from 'react-dropzone';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function AgregarVehiculo() {
     const [brands, setBrands] = useState([]);
     const [gasolines, setGasolines] = useState([]);
     const [transmissions, setTransmissions] = useState([]);
     const [brakeSystems, setBrakeSystems] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const [newProduct, setNewProduct] = useState({
         brandId: "",
@@ -166,6 +169,8 @@ export default function AgregarVehiculo() {
             return;
         }
 
+        setLoading(true);
+
         try {
             console.log(newProduct)
             await createCar(newProduct)
@@ -180,6 +185,8 @@ export default function AgregarVehiculo() {
                 title: 'Error',
                 text: error.response.data.message
             });
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -717,7 +724,15 @@ export default function AgregarVehiculo() {
                     Agregar vehículo
                 </Button>
             </Grid>
-
+            <Backdrop
+                sx={(theme) => ({
+                    color: '#fff',
+                    zIndex: theme.zIndex.drawer + 1,
+                })}
+                open={loading} // Mostrar el Backdrop solo cuando loading sea true
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </Box>
     )
 }
