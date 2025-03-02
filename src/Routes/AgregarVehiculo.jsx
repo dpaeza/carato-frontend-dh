@@ -27,12 +27,16 @@ import Grid from "@mui/material/Grid2";
 import { getBrands, getFuelTypes, getTransmissions, getBrakeTypes } from '../Services/extras';
 import { Category } from '@mui/icons-material';
 import { createCar } from '../Services/cars';
+import { useDropzone } from 'react-dropzone';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function AgregarVehiculo() {
     const [brands, setBrands] = useState([]);
     const [gasolines, setGasolines] = useState([]);
     const [transmissions, setTransmissions] = useState([]);
     const [brakeSystems, setBrakeSystems] = useState([]);
+    const [images, setImages] = useState([]);
 
     const [newProduct, setNewProduct] = useState({
         brandId: "",
@@ -55,12 +59,12 @@ export default function AgregarVehiculo() {
     const [errors, setErrors] = useState({});
 
     const categories = [
-        { name: "Híbridos", icon: IconHibrido, id:1 },
-        { name: "Eléctricos", icon: IconElectrico, id:2 },
-        { name: "Lujo", icon: IconLujo, id:3 },
-        { name: "Compactos", icon: IconCompacto, id:4 },
-        { name: "Deportivos", icon: IconDeportivo, id:5 },
-        { name: "Familiares", icon: IconFamiliar, id:6 }
+        { name: "Híbridos", icon: IconHibrido, id: 1 },
+        { name: "Eléctricos", icon: IconElectrico, id: 2 },
+        { name: "Lujo", icon: IconLujo, id: 3 },
+        { name: "Compactos", icon: IconCompacto, id: 4 },
+        { name: "Deportivos", icon: IconDeportivo, id: 5 },
+        { name: "Familiares", icon: IconFamiliar, id: 6 }
     ];
 
     const hasAirCondition = [
@@ -150,7 +154,7 @@ export default function AgregarVehiculo() {
         return Object.keys(newErrors).length === 0; // Retorna true si no hay errores
     };
 
-    const onSubmit =  async () => {
+    const onSubmit = async () => {
         if (!validateForm()) {
             MySwal.fire({
                 icon: 'error',
@@ -176,6 +180,34 @@ export default function AgregarVehiculo() {
             });
         }
     }
+
+    // Función para manejar la subida de archivos
+    const onDrop = (acceptedFiles) => {
+        setImages((prev) => [
+            ...prev,
+            ...acceptedFiles.map((file) => ({
+                file,
+                preview: URL.createObjectURL(file),
+                id: `image-${prev.length + 1}` // ID único para cada imagen
+            }))
+        ]);
+    };
+
+    // Función para eliminar una imagen
+    const handleRemoveImage = (id) => {
+        setImages((prev) => prev.filter((image) => image.id !== id));
+    };
+
+    // Función para reordenar imágenes
+    const handleDragEnd = (result) => {
+        if (!result.destination) return;
+        const items = Array.from(images);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+        setImages(items);
+    };
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
     useEffect(() => {
         fetchBrands();
@@ -262,7 +294,7 @@ export default function AgregarVehiculo() {
                                     >
                                         {categories.map((category, index) => (
                                             <MenuItem key={index} value={category.id}>
-                                                <category.icon style={{ marginRight: 8, height:15, width:15 }} />
+                                                <category.icon style={{ marginRight: 8, height: 15, width: 15 }} />
                                                 {category.name}
                                             </MenuItem>
                                         ))}
@@ -272,31 +304,78 @@ export default function AgregarVehiculo() {
                             </Grid>
                         </Grid>
                         <Grid size={12} sx={{ maxWidth: 600, display: "flex", justifyContent: "center" }}>
-                            <Button
-                                component="label"
-                                variant="contained"
-                                fullWidth
-                                startIcon={<CloudUploadIcon />}
-                                sx={{ width: "100%" }}
-                            >
-                                Subir imágenes
-                                <input
-                                    type="file"
-                                    multiple
-                                    accept="image/*"
-                                    onChange={(e) => setNewProduct({ ...newProduct, images: e.target.files })}
-                                    style={{
-                                        position: "absolute",
-                                        top: 0,
-                                        left: 0,
-                                        width: "100%",
-                                        height: "100%",
-                                        opacity: 0,
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width:"100%" }}>
+                                {/* Área de arrastrar y soltar */}
+                                <Box
+                                    {...getRootProps()}
+                                    sx={{
+                                        border: `2px dashed ${isDragActive ? "#1976d2" : "#ccc"}`, // Cambia el color del borde
+                                        backgroundColor: isDragActive ? "rgba(25, 118, 210, 0.1)" : "transparent", // Cambia el fondo
+                                        borderRadius: 2,
+                                        padding: 4,
+                                        textAlign: "center",
                                         cursor: "pointer",
+                                        transition: "background-color 0.3s, border-color 0.3s", // Transición suave
+                                        width: '100%'
                                     }}
-                                />
-                                
-                            </Button>
+                                >
+                                    <input {...getInputProps()} />
+                                    <CloudUploadIcon fontSize="large" />
+                                    <Typography fontSize={12}>
+                                        {isDragActive
+                                            ? "Suelta las imágenes aquí"
+                                            : "Arrastra y suelta las imágenes aquí, o haz clic para seleccionarlas"}
+                                    </Typography>
+                                </Box>
+
+                                {/* Mostrar imágenes cargadas */}
+                                <DragDropContext onDragEnd={handleDragEnd}>
+                                    <Droppable droppableId="images" direction="horizontal">
+                                        {(provided) => (
+                                            <Box
+                                                {...provided.droppableProps}
+                                                ref={provided.innerRef}
+                                                sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}
+                                            >
+                                                {images.map((image, index) => (
+                                                    <Draggable key={image.id} draggableId={image.id} index={index}>
+                                                        {(provided) => (
+                                                            <Box
+                                                                ref={provided.innerRef}
+                                                                {...provided.draggableProps}
+                                                                {...provided.dragHandleProps}
+                                                                sx={{ position: "relative" }}
+                                                            >
+                                                                <img
+                                                                    src={image.preview}
+                                                                    alt={`Imagen ${index}`}
+                                                                    style={{ width: 100, height: 100, objectFit: "cover", borderRadius: 2 }}
+                                                                />
+                                                                <Button
+                                                                    onClick={() => handleRemoveImage(image.id)}
+                                                                    sx={{
+                                                                        position: "absolute",
+                                                                        top: 0,
+                                                                        right: 0,
+                                                                        minWidth: "auto",
+                                                                        padding: 0.5,
+                                                                        color: "white",
+                                                                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                                                                        "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" }
+                                                                    }}
+                                                                >
+                                                                    <DeleteIcon fontSize="small" />
+                                                                </Button>
+                                                            </Box>
+                                                        )}
+                                                    </Draggable>
+                                                ))}
+                                                {provided.placeholder}
+                                            </Box>
+                                        )}
+                                    </Droppable>
+                                </DragDropContext>
+                            </Box>
                         </Grid>
                         {errors.images && <Typography color="error" fontSize={12}>{errors.images}</Typography>}
                         <Grid size={12} sx={{ maxWidth: 600 }}>
