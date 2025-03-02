@@ -9,6 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { Button, Typography } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
@@ -57,11 +58,10 @@ export default function Vehiculos() {
         try {
             const response = await deleteCar(id);
             console.log("Vehículo eliminado:", response);
-            // MySwal.fire({
-            //     text: "Vehículo eliminado correctamente",
-            //     icon: "success",
-            //     confirmButtonText: "Aceptar",
-            // });
+            MySwal.fire({
+                text: "Vehículo eliminado correctamente",
+                icon: "success",
+            });
             getVehiculos();
         } catch (error) {
             console.error("Error al eliminar el vehículo:", error);
@@ -101,6 +101,9 @@ export default function Vehiculos() {
                                 <TableCell align="center">{id}</TableCell>
                                 <TableCell align="center">{name}</TableCell>
                                 <TableCell align="center" sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
+                                    <Button sx={{ color: "var(--darkBlue)", p: 0, minWidth: "auto" }}>
+                                        <VisibilityIcon />
+                                    </Button>
                                     <Button sx={{ color: "var(--darkBlue)", p: 0, minWidth: "auto" }}>
                                         <ModeEditIcon />
                                     </Button>
