@@ -36,7 +36,7 @@ import { useDropzone } from 'react-dropzone';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function DeatilModal({ open, onClose, mode = "view", vehicleData }) {
+export default function DeatilModal({ open, onClose, mode = "view", vehicleData, onUpdate }) {
     const [brands, setBrands] = useState([]);
     const [gasolines, setGasolines] = useState([]);
     const [transmissions, setTransmissions] = useState([]);
@@ -88,29 +88,39 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData 
             const transmissionId = transmissions.find((transmission) => transmission.name === vehicleData.transmission)?.id || "";
             const brakeSystemId = brakeSystems.find((brake) => brake.name === vehicleData.brakeSystem)?.id || "";
 
-            setNewProduct({
-                brandId: brandId,
-                name: vehicleData.name || "",
-                categoryId: categoryId,
-                images: vehicleData.images || [],
-                description: vehicleData.description || "",
-                transmissionId: transmissionId,
-                capacity: vehicleData.capacity || "",
-                hasAirCondition: vehicleData.hasAirCondition || true,
-                doors: vehicleData.doors || "",
-                gasolineId: gasolineId,
-                brakeSystemId: brakeSystemId,
-                horsePower: vehicleData.horsePower || "",
-                year: vehicleData.year || "",
-                mileage: vehicleData.mileage || "",
-                price: vehicleData.price || "",
-            });
+            const loadExistingImages = async () => {
+                const existingFiles = await Promise.all(
+                    vehicleData.images.map(async (image) => {
+                        const file = await urlToFile(image.url, image.name);
+                        return {
+                            file,
+                            preview: image.url,
+                            id: image.id.toString(),
+                            isExisting: true
+                        };
+                    })
+                );
 
-            setPreviews(vehicleData.images.map((image, index) => ({
-                file: image,
-                preview: image.url,
-                id: `preview-${index + 1}`
-            })));
+                setNewProduct({
+                    brandId: brandId,
+                    name: vehicleData.name || "",
+                    categoryId: categoryId,
+                    images: existingFiles.map((img) => img.file),
+                    description: vehicleData.description || "",
+                    transmissionId: transmissionId,
+                    capacity: vehicleData.capacity || "",
+                    hasAirCondition: vehicleData.hasAirCondition || true,
+                    doors: vehicleData.doors || "",
+                    gasolineId: gasolineId,
+                    brakeSystemId: brakeSystemId,
+                    horsePower: vehicleData.horsePower || "",
+                    year: vehicleData.year || "",
+                    mileage: vehicleData.mileage || "",
+                    price: vehicleData.price || "",
+                });
+                setPreviews(existingFiles);
+            };
+            loadExistingImages();
         }
     }, [vehicleData]);
 
@@ -205,13 +215,29 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData 
         }
 
         try {
+
+            const formData = new FormData();
+
+            Object.keys(newProduct).forEach((key) => {
+                if (key !== "images") {
+                    formData.append(key, newProduct[key]);
+                }
+            });
+
+            newProduct.images.forEach((file) => {
+                formData.append("images", file);
+            });
+
             await updateCar(vehicleData.id, newProduct);
             resetForm();
+            onUpdate();
+            onClose();
             MySwal.fire({
                 icon: 'success',
-                title: 'Producto creado exitosamente.'
+                title: 'Vahiculo editado exitosamente.'
             });
         } catch (error) {
+            console.error(error)
             MySwal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -220,12 +246,19 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData 
         }
     };
 
+    const urlToFile = async (url, filename) => {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        return new File([blob], filename, { type: blob.type });
+    };
+
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop: (acceptedFiles) => {
             const newPreviews = acceptedFiles.map((file) => ({
                 file,
                 preview: URL.createObjectURL(file),
-                id: `preview-${previews.length + 1}`
+                id: `new-${Date.now()}-${file.name}`,
+                isExisting: false
             }));
             setPreviews((prev) => [...prev, ...newPreviews]);
             setNewProduct((prev) => ({
@@ -402,16 +435,21 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData 
                                                             : "Arrastra y suelta las imágenes aquí, o haz clic para seleccionarlas"}
                                                     </Typography>
                                                 </Box>
+
                                                 <DragDropContext onDragEnd={handleDragEnd}>
                                                     <Droppable droppableId="images" direction="horizontal">
                                                         {(provided) => (
                                                             <Box
                                                                 {...provided.droppableProps}
                                                                 ref={provided.innerRef}
-                                                                sx={{ display: "flex", flexWrap: "wrap", gap: 2, justifyContent:"space-between" }}
+                                                                sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}
                                                             >
                                                                 {previews.map((preview, index) => (
-                                                                    <Draggable key={preview.id} draggableId={preview.id} index={index}>
+                                                                    <Draggable
+                                                                        key={preview.id}
+                                                                        draggableId={preview.id.toString()} // Asegurar que sea string
+                                                                        index={index}
+                                                                    >
                                                                         {(provided) => (
                                                                             <Box
                                                                                 ref={provided.innerRef}
@@ -450,7 +488,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData 
                                                 </DragDropContext>
                                             </>
                                         ) : (
-                                            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, justifyContent:"space-between" }}>
+                                            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
                                                 {previews.map((preview, index) => (
                                                     <img
                                                         key={index}

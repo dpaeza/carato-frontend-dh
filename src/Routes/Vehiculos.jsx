@@ -156,6 +156,7 @@ export default function Vehiculos() {
                 onClose={handleCloseModal}
                 mode={openDetail.mode}
                 vehicleData={openDetail.vehicleData}
+                onUpdate={getVehiculos}
             />
         </div>
     );
