@@ -12,7 +12,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { loginUser } from '../Services/auth';
-import { useAuth } from '../Context/authContext';
+import { useAuth } from '../Context/auth.context';
 
 const Login = React.memo(({ open, onClose }) => {
     const [userData, setUserData] = useState({

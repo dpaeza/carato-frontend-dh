@@ -25,7 +25,7 @@ import NoCrashIcon from '@mui/icons-material/NoCrash';
 import LogoCarato from "../assets/Logo-carato-slogan.svg";
 import Register from "./Register";
 import Login from "./Login";
-import { useAuth } from "../Context/authContext";
+import { useAuth } from "../Context/auth.context";
 import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
