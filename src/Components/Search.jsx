@@ -55,6 +55,7 @@ export default function Search() {
                             fontFamily: 'var(--lato)',
                             width: '100%',
                         }}
+                        size='small'
                     >
                         {cities.map((name) => (
                             <MenuItem key={name} value={name}>
@@ -72,6 +73,7 @@ export default function Search() {
                             fontFamily: 'var(--lato)',
                             width: { xs: '100%', sm: 'auto' },
                         }}
+                        slotProps={{ textField: { size: 'small' } }}
                     />
                     <DateTimePicker
                         label="Fecha de devolución"
@@ -81,6 +83,7 @@ export default function Search() {
                             fontFamily: 'var(--lato)',
                             width: { xs: '100%', sm: 'auto' },
                         }}
+                        slotProps={{ textField: { size: 'small' } }}
                     />
                 </LocalizationProvider>
                 <Button 
@@ -89,7 +92,7 @@ export default function Search() {
                         width: { xs: '100%', sm: 'auto' },
                         backgroundColor: 'var(--lightBlue)',
                         color: 'white',
-                        
+                        px: 2
                     }}
                 >
                     Buscar
