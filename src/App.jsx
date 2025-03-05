@@ -27,7 +27,7 @@ function App() {
           {/* Ruta protegida para administración */}
           <Route
             path="/administracion"
-            element={<PrivateRoute requiredRole="admin" />}
+            element={<PrivateRoute requiredRole="ADMIN" />}
           >
             <Route path="vehiculos" element={<Vehiculos />} />
             <Route path="agregarvehiculo" element={<AgregarVehiculo />} />
