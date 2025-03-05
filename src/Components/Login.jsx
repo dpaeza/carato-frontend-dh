@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, use, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import Button from '@mui/material/Button';
@@ -109,6 +109,12 @@ const Login = React.memo(({ open, onClose }) => {
         }
     }, [userData, onClose, resetForm]);
 
+    const handleKeyDown = useCallback((e) => {
+        if (e.key === 'Enter') {
+            handleSubmit();
+        }
+    }, [handleSubmit]);
+
     useEffect(() => {
         if (open && emailRef.current) {
             emailRef.current.focus();
@@ -153,6 +159,7 @@ const Login = React.memo(({ open, onClose }) => {
                     value={userData.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    onKeyDown={handleKeyDown}
                     error={!!errors.email}
                     helperText={errors.email}
                     fullWidth
@@ -171,6 +178,7 @@ const Login = React.memo(({ open, onClose }) => {
                     value={userData.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    onKeyDown={handleKeyDown}
                     error={!!errors.password}
                     helperText={errors.password}
                     fullWidth
