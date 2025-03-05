@@ -6,7 +6,7 @@ import Tab from '@mui/material/Tab';
 const routes = [
     { label: "Lista de productos", to: "/administracion/vehiculos" },
     { label: "Agregar producto", to: "/administracion/agregarvehiculo" },
-    { label: "Agregar categoría", to: "/administracion/agregarcategoria" },
+    // { label: "Agregar categoría", to: "/administracion/agregarcategoria" },
     { label: "Usuarios", to: "/administracion/usuarios" }
 ];
 
