@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Avatar } from '@mui/material';
-import { useAuth } from '../Context/authContext';
+import { useAuth } from '../Context/auth.context';
 
 export default function Cuenta() {
     const { user } = useAuth();

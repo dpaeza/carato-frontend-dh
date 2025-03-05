@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../Context/authContext';
+import { useAuth } from '../Context/auth.context';
 
 const PrivateRoute = ({ requiredRole }) => {
   const { user, loading } = useAuth();
