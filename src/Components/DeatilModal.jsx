@@ -213,6 +213,8 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                 icon: 'error',
                 title: 'Error',
                 text: 'Por favor, completa todos los campos obligatorios.',
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#3083FF",
             });
             return;
         }
@@ -239,14 +241,18 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
             onClose();
             MySwal.fire({
                 icon: 'success',
-                title: 'Vahiculo editado exitosamente.'
+                title: 'Vehículo editado exitosamente.',
+                showConfirmButton: false,
+                timer: 1500
             });
         } catch (error) {
             console.error(error)
             MySwal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: error.response.data.message
+                text: error.response.data.message,
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#3083FF",
             });
         } finally {
             setLoading(false);
