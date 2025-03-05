@@ -1,7 +1,7 @@
 import api from "./api";
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/cars";
+const API_URL = import.meta.env.VITE_API_BASE_URL+ '/cars';
 
 export const getCars = async (page = 1, size = 10, query = "") => {
     try {
