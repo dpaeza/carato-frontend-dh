@@ -101,6 +101,7 @@ const Register = React.memo(({ open, onClose }) => {
                 text: "Te hemos enviado un correo de confirmación. Por favor, verifica tu bandeja de entrada.",
                 icon: "success",
                 confirmButtonText: "Aceptar",
+                confirmButtonColor : '#3083FF',
             });
         } catch (error) {
             console.error("Error al registrar el usuario:", error);
@@ -111,6 +112,7 @@ const Register = React.memo(({ open, onClose }) => {
                 text: error.response?.data?.message[0],
                 icon: "error",
                 confirmButtonText: "Aceptar",
+                confirmButtonColor : '#3083FF',
             });
         }
     }, [registerData, onClose, resetForm]);
