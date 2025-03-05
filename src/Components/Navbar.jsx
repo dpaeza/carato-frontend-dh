@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     AppBar,
     Box,
@@ -12,108 +12,218 @@ import {
     ListItemButton,
     ListItemText,
     Toolbar,
+    Menu,
+    MenuItem,
+    Avatar,
+    Typography,
+    ListItemIcon
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import LogoutIcon from '@mui/icons-material/Logout';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import NoCrashIcon from '@mui/icons-material/NoCrash';
 import LogoCarato from "../assets/Logo-carato-slogan.svg";
-import Register from "./Register"
+import Register from "./Register";
+import Login from "./Login";
+import { useAuth } from "../Context/authContext";
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
-const navItems = ['Crear cuenta', 'Iniciar sesión'];
 
 export default function Navbar(props) {
-
     const { window } = props || {};
     const [mobileOpen, setMobileOpen] = useState(false);
     const [openRegister, setOpenRegister] = useState(false);
+    const [openLogin, setOpenLogin] = useState(false);
+    const [menuAnchor, setMenuAnchor] = useState(null);
+
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
+    const handleMenuOpen = (event) => {
+        setMenuAnchor(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setMenuAnchor(null);
+    };
+
+    const handleLogout = () => {
+        logout();
+        handleMenuClose();
+    };
+
+    const handleClick = () => {
+        handleMenuClose();
+        navigate('/cuenta');
+    };
+
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-            <Box
-                sx={{
-                    display: "flex",
-                    padding: "10px",
-                    alignContent: "center",
-                    justifyContent: "center",
-                    backgroundColor: "var(--darkBlue)",
-                }}
-            >
-                <a href="/">
-                    <img
-                        src={LogoCarato}
-                        alt="Logo"
-                        width="140"
-                        height="70"
-                        style={{ marginRight: "1rem" }}
-                    />
-                </a>
-            </Box>
+
+            {
+                user ? (
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            padding: "10px",
+                            alignContent: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <Avatar
+                            src={user.avatar}
+                            alt={user.name}
+                            sx={{ width: 50, height: 50, margin: "auto" }}
+                        />
+                        <Typography color="var(--darkBle)" sx={{ m: 1, textTransform: "capitalize" }}>
+                            Hola {user.name}
+                        </Typography>
+                    </Box>
+                ) : (
+                    <Box
+                        sx={{
+                            display: "flex",
+                            padding: "10px",
+                            alignContent: "center",
+                            justifyContent: "center",
+                            backgroundColor: "var(--darkBlue)",
+                        }}
+                    >
+                        <a href="/">
+                            <img
+                                src={LogoCarato}
+                                alt="Logo"
+                                width="140"
+                                height="70"
+                                style={{ marginRight: "1rem" }}
+                            />
+                        </a>
+                    </Box>
+                )
+            }
             <Divider />
             <List>
-                <ListItem disablePadding>
-                    <ListItemButton 
-                        sx={{ textAlign: "center" }}
-                        onClick={() => setOpenRegister(true)}
-                    >
-                        <ListItemText primary={"Crear cuenta"} />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton sx={{ textAlign: "center" }}>
-                        <ListItemText primary={"Iniciar sesión"} />
-                    </ListItemButton>
-                </ListItem>
+                {user ? (
+                    <>
+                        <MenuItem onClick={handleClick}>
+                            <ListItemIcon>
+                                <PersonOutlineIcon fontSize="small" />
+                            </ListItemIcon>
+                            Mi cuenta
+                        </MenuItem>
+                        <MenuItem>
+                            <ListItemIcon>
+                                <NoCrashIcon fontSize="small" />
+                            </ListItemIcon>
+                            Mis reservas
+                        </MenuItem>
+                        <MenuItem onClick={handleLogout}>
+                            <ListItemIcon>
+                                <LogoutIcon fontSize="small" />
+                            </ListItemIcon>
+                            Cerrar sesión
+                        </MenuItem>
+                    </>
+                ) : (
+                    <>
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={() => setOpenRegister(true)}>
+                                <ListItemText primary="Crear cuenta" />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={() => setOpenLogin(true)}>
+                                <ListItemText primary="Iniciar sesión" />
+                            </ListItemButton>
+                        </ListItem>
+                    </>
+                )}
             </List>
-            <Register open={openRegister} onClose={() => setOpenRegister(false)}/>
         </Box>
     );
 
-    const container =
-        window !== undefined ? () => window().document.body : undefined
+    const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
         <Box sx={{ display: "flex" }}>
             <CssBaseline />
-            <AppBar
-                component="nav"
-                position="fixed"
-                sx={{ backgroundColor: "var(--darkBlue)" }}
-            >
+            <AppBar component="nav" position="fixed" sx={{ backgroundColor: "var(--darkBlue)" }}>
                 <Toolbar sx={{ justifyContent: "space-between" }}>
                     <a href="/">
-                        <img
-                            src={LogoCarato}
-                            alt="Logo"
-                            height="70"
-                        />
+                        <img src={LogoCarato} alt="Logo" height="70" />
                     </a>
-                    <Box sx={{ display: { xs: "none", sm: "block" } }}>
-                        <Button
-                            sx={{
-                                color: "#fff",
-                                border: "1px solid #fff",
-                                textTransform: "none",
-                                marginLeft: 1,
-                                borderRadius: "20px",
-                            }}
-                            onClick={() => setOpenRegister(true)}
-                        >
-                            Crear cuenta
-                        </Button>
-                        <Button
-                            sx={{
-                                color: "#fff",
-                                border: "1px solid #fff",
-                                textTransform: "none",
-                                marginLeft: 1,
-                                borderRadius: "20px",
-                            }}
-                        >
-                            Iniciar sesión
-                        </Button>
+                    <Box sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center" }}>
+                        {user ? (
+                            <Box sx={{ display: "flex", alignItems: "center", borderRadius: "30px", border: "1px solid #fff", p: 1 }}>
+                                <Typography color="white" sx={{ marginRight: 1, textTransform: "capitalize" }}>
+                                    Hola {user.name}
+                                </Typography>
+                                <Avatar
+                                    src={user.avatar}
+                                    alt={user.name}
+                                    onClick={handleMenuOpen}
+                                    sx={{ cursor: "pointer" }}
+                                />
+                                <Menu
+                                    anchorEl={menuAnchor}
+                                    open={Boolean(menuAnchor)}
+                                    onClose={handleMenuClose}
+                                    sx={{ mt: '15px' }}
+                                >
+                                    <MenuItem onClick={handleClick}> 
+                                        <ListItemIcon>
+                                            <PersonOutlineIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        Mi cuenta
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <ListItemIcon>
+                                            <NoCrashIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        Mis reservas
+                                    </MenuItem>
+                                    <MenuItem onClick={handleLogout}>
+                                        <ListItemIcon>
+                                            <LogoutIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        Cerrar sesión
+                                    </MenuItem>
+                                </Menu>
+                            </Box>
+                        ) : (
+                            <>
+                                <Button
+                                    sx={{
+                                        color: "#fff",
+                                        border: "1px solid #fff",
+                                        textTransform: "none",
+                                        marginLeft: 1,
+                                        borderRadius: "20px",
+                                    }}
+                                    onClick={() => setOpenRegister(true)}
+                                >
+                                    Crear cuenta
+                                </Button>
+                                <Button
+                                    sx={{
+                                        color: "#fff",
+                                        border: "1px solid #fff",
+                                        textTransform: "none",
+                                        marginLeft: 1,
+                                        borderRadius: "20px",
+                                    }}
+                                    onClick={() => setOpenLogin(true)}
+                                >
+                                    Iniciar sesión
+                                </Button>
+                            </>
+                        )}
                     </Box>
                     <IconButton
                         color="inherit"
@@ -133,15 +243,10 @@ export default function Navbar(props) {
                     anchor="right"
                     open={mobileOpen}
                     onClose={handleDrawerToggle}
-                    ModalProps={{
-                        keepMounted: true,
-                    }}
+                    ModalProps={{ keepMounted: true }}
                     sx={{
                         display: { xs: "block", sm: "none" },
-                        "& .MuiDrawer-paper": {
-                            boxSizing: "border-box",
-                            width: drawerWidth,
-                        },
+                        "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
                     }}
                 >
                     {drawer}
@@ -150,7 +255,8 @@ export default function Navbar(props) {
             <Box sx={{ width: "100%" }}>
                 <Toolbar />
             </Box>
-            <Register open={openRegister} onClose={() => setOpenRegister(false)}/>
+            <Register open={openRegister} onClose={() => setOpenRegister(false)} />
+            <Login open={openLogin} onClose={() => setOpenLogin(false)} />
         </Box>
     );
 }

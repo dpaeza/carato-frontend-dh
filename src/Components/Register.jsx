@@ -1,4 +1,6 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -9,27 +11,29 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { registerUser } from '../Services/auth';
 
 const Register = React.memo(({ open, onClose }) => {
     const [registerData, setRegisterData] = useState({
         name: '',
-        lastName: '',
+        lastname: '',
         email: '',
         password: ''
     });
 
     const [errors, setErrors] = useState({
         name: '',
-        lastName: '',
+        lastname: '',
         email: '',
         password: ''
     });
 
     const [showPassword, setShowPassword] = useState(false);
+    const MySwal = withReactContent(Swal);
 
     // Referencias para los inputs
     const nameRef = useRef(null);
-    const lastNameRef = useRef(null);
+    const lastnameRef = useRef(null);
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
 
@@ -39,7 +43,7 @@ const Register = React.memo(({ open, onClose }) => {
         if (!value.trim()) {
             return "Este campo es requerido";
         }
-        if (field === "name" || field === "lastName") {
+        if (field === "name" || field === "lastname") {
             if (!/^[A-Za-z]+$/.test(value)) {
                 return "Solo se permiten letras y sin espacios";
             }
@@ -47,13 +51,13 @@ const Register = React.memo(({ open, onClose }) => {
         if (field === "email") {
             const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
             if (!regex.test(value)) {
-                return "Email no es válido";
+                return "Formato de correo no válido";
             }
         }
         if (field === "password") {
             const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
             if (!regex.test(value)) {
-                return "Debe tener 8 caracteres, una mayúscula, una minúscula, un número y un caracter especial";
+                return "Debe contener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un carácter especial.";
             }
         }
         return "";
@@ -72,12 +76,57 @@ const Register = React.memo(({ open, onClose }) => {
         }
     }, [registerData, validateField]);
 
+    const resetForm = useCallback(() => {
+        setRegisterData({
+            name: '',
+            lastname: '',
+            email: '',
+            password: ''
+        });
+        setErrors({
+            name: '',
+            lastname: '',
+            email: '',
+            password: ''
+        });
+    }, []);
+
+    const handleSubmit = useCallback(async () => {
+        try {
+            await registerUser(registerData);
+            resetForm();
+            onClose();
+            MySwal.fire({
+                title: "¡Registro exitoso!",
+                text: "Te hemos enviado un correo de confirmación. Por favor, verifica tu bandeja de entrada.",
+                icon: "success",
+                confirmButtonText: "Aceptar",
+            });
+        } catch (error) {
+            console.error("Error al registrar el usuario:", error);
+            resetForm();
+            onClose();
+            MySwal.fire({
+                title: "Error al registrarse",
+                text: error.response?.data?.message[0],
+                icon: "error",
+                confirmButtonText: "Aceptar",
+            });
+        }
+    }, [registerData, onClose, resetForm]);
+
     // Enfocar el primer input cuando el modal se abre
-    React.useEffect(() => {
+    useEffect(() => {
         if (open && nameRef.current) {
             nameRef.current.focus();
         }
     }, [open]);
+
+    useEffect(() => {
+        if (!open) {
+            resetForm();
+        }
+    }, [open, resetForm]);
 
     // Función para obtener el color del borde
     const getBorderColor = (field) => {
@@ -87,7 +136,7 @@ const Register = React.memo(({ open, onClose }) => {
     };
 
     return (
-        <Dialog onClose={onClose} open={open} maxWidth="sm" fullWidth>
+        <Dialog onClose={onClose} open={open} maxWidth="xs">
             <DialogTitle>Cree su cuenta</DialogTitle>
             <IconButton onClick={onClose} sx={{ position: 'absolute', right: 8, top: 8 }}>
                 <CloseIcon />
@@ -129,26 +178,26 @@ const Register = React.memo(({ open, onClose }) => {
                 <TextField
                     label="Apellido"
                     fullWidth
-                    name="lastName"
+                    name="lastname"
                     type="text"
                     size="small"
-                    value={registerData.lastName}
+                    value={registerData.lastname}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    error={Boolean(errors.lastName)}
-                    success={registerData.lastName && !errors.lastName}
-                    helperText={errors.lastName}
-                    inputRef={lastNameRef}
+                    error={Boolean(errors.lastname)}
+                    success={registerData.lastname && !errors.lastname}
+                    helperText={errors.lastname}
+                    inputRef={lastnameRef}
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '&.Mui-focused fieldset': {
-                                borderColor: getBorderColor('lastName'),
+                                borderColor: getBorderColor('lastname'),
                             },
                             '&:hover fieldset': {
-                                borderColor: getBorderColor('lastName'),
+                                borderColor: getBorderColor('lastname'),
                             },
                             '& fieldset': {
-                                borderColor: getBorderColor('lastName'),
+                                borderColor: getBorderColor('lastname'),
                             },
                         },
                     }}
@@ -191,7 +240,7 @@ const Register = React.memo(({ open, onClose }) => {
                     onBlur={handleBlur}
                     error={Boolean(errors.password)}
                     success={registerData.password && !errors.password}
-                    helperText="Debe tener 8 caracteres, una mayúscula, una minúscula, un número y un caracter especial"
+                    helperText="Debe contener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un carácter especial"
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
@@ -219,9 +268,9 @@ const Register = React.memo(({ open, onClose }) => {
                 <Button
                     variant="contained"
                     fullWidth
-                    onClick={() => console.log(registerData)}
+                    onClick={handleSubmit}
                     disabled={Object.values(errors).some(err => err !== "") || Object.values(registerData).some(value => !value.trim())}
-                    sx={{ backgroundColor: Object.values(errors).every(err => err === "") && Object.values(registerData).every(value => value.trim()) ? '#3083FF' : 'grey' }}
+                    sx={{ backgroundColor: Object.values(errors).every(err => err === "") && Object.values(registerData).every(value => value.trim()) ? '#3083FF' : 'grey', mt: 4 }}
                 >
                     Registrarse
                 </Button>
