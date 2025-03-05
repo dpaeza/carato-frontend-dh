@@ -165,6 +165,8 @@ export default function AgregarVehiculo() {
                 icon: 'error',
                 title: 'Error',
                 text: 'Por favor, completa todos los campos obligatorios.',
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#3083FF",
             });
             return;
         }
@@ -177,13 +179,17 @@ export default function AgregarVehiculo() {
             resetForm();
             MySwal.fire({
                 icon: 'success',
-                title: 'Producto creado exitosamente.'
+                title: 'Producto creado exitosamente.',
+                showConfirmButton: false,
+                timer: 1500
             });
         } catch (error) {
             MySwal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: error.response.data.message
+                text: error.response.data.message,
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#3083FF",
             });
         } finally {
             setLoading(false);
