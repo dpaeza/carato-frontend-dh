@@ -44,9 +44,9 @@ const Register = React.memo(({ open, onClose }) => {
             return "Este campo es requerido";
         }
         if (field === "name" || field === "lastname") {
-            if (!/^[A-Za-z]+$/.test(value)) {
-                return "Solo se permiten letras y sin espacios";
-            }
+            if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s.'-]+$/.test(value)) {
+                return "No se permite el uso de caracteres que no sean letras";
+            }            
         }
         if (field === "email") {
             const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
