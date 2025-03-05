@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import NavbarAdmin from '../Components/NavbarAdmin';
 import { Outlet } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
@@ -6,6 +7,8 @@ import NoAvailable from '../assets/NoAvailable.svg?react';
 
 export default function Administracion() {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
+    const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         const handleResize = () => {
@@ -19,9 +22,15 @@ export default function Administracion() {
         };
     }, []);
 
+    // Redirige si la URL es exactamente "/administracion"
+    useEffect(() => {
+        if (location.pathname === "/administracion") {
+            navigate("/administracion/vehiculos", { replace: true });
+        }
+    }, [location.pathname, navigate]);
+
     return (
         <Box sx={{ p: 3, bgcolor: "#fafafa", minHeight: "80vh" }}>
-
             {isMobile ? (
                 <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                     <NoAvailable style={{ width: "50%", height: "auto" }} />

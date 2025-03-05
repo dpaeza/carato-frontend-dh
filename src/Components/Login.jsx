@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, use, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import Button from '@mui/material/Button';
@@ -93,7 +93,9 @@ const Login = React.memo(({ open, onClose }) => {
             onClose();
             MySwal.fire({
                 icon: 'success',
-                title: '¡Bienvenido!'
+                title: '¡Bienvenido!',
+                showConfirmButton: false,
+                timer: 1500
             });
         } catch (error) {
             console.error(error);
@@ -101,11 +103,17 @@ const Login = React.memo(({ open, onClose }) => {
             onClose();
             MySwal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: error.message
+                confirmButtonColor : '#3083FF',
+                text: error.response.data.message
             });
         }
     }, [userData, onClose, resetForm]);
+
+    const handleKeyDown = useCallback((e) => {
+        if (e.key === 'Enter') {
+            handleSubmit();
+        }
+    }, [handleSubmit]);
 
     useEffect(() => {
         if (open && emailRef.current) {
@@ -151,6 +159,7 @@ const Login = React.memo(({ open, onClose }) => {
                     value={userData.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    onKeyDown={handleKeyDown}
                     error={!!errors.email}
                     helperText={errors.email}
                     fullWidth
@@ -169,6 +178,7 @@ const Login = React.memo(({ open, onClose }) => {
                     value={userData.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    onKeyDown={handleKeyDown}
                     error={!!errors.password}
                     helperText={errors.password}
                     fullWidth
@@ -194,7 +204,7 @@ const Login = React.memo(({ open, onClose }) => {
                     variant="contained"
                     fullWidth
                     disabled={Object.values(errors).some(err => err !== "") || Object.values(userData).some(value => !value.trim())}
-                    sx={{ backgroundColor: Object.values(errors).some(err => err !== "") || Object.values(userData).some(value => !value.trim()) ? 'grey' : '#3083FF' , mt: 4 }}
+                    sx={{ backgroundColor: Object.values(errors).some(err => err !== "") || Object.values(userData).some(value => !value.trim()) ? 'grey' : '#3083FF' , mt: 6 }}
                 >
                     Iniciar sesión
                 </Button>
