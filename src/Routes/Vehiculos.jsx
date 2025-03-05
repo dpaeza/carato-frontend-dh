@@ -54,11 +54,13 @@ export default function Vehiculos() {
         MySwal.fire({
             text: `¿Estás seguro de eliminar el vehículo ${name}?`,
             icon: "warning",
-            showDenyButton: true,
-            confirmButtonText: "Cancelar",
-            denyButtonText: "Eliminar",
+            showCancelButton: true,
+            cancelButtonText: "Cancelar",
+            confirmButtonText: "Eliminar",
+            cancelButtonColor: "#B3B3BB",
+            confirmButtonColor: "#FF4F4F", 
         }).then((result) => {
-            if (result.isDenied) {
+            if (result.isConfirmed) {
                 deleteVehiculo(id);
             }
         });
@@ -80,14 +82,17 @@ export default function Vehiculos() {
             MySwal.fire({
                 text: "Vehículo eliminado correctamente",
                 icon: "success",
+                showConfirmButton: false,
+                timer: 1500
             });
-            getVehiculos(); // Actualizar la lista de vehículos
+            getVehiculos();
         } catch (error) {
             console.error("Error al eliminar el vehículo:", error);
             MySwal.fire({
                 text: "Error al eliminar el vehículo",
                 icon: "error",
                 confirmButtonText: "Aceptar",
+                confirmButtonColor: "#3083FF",
             });
         }
     };
