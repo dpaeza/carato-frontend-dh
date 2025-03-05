@@ -2,11 +2,10 @@ import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../Context/auth.context';
 
-const PrivateRoute = ({ requiredRole }) => {
+const PrivateRoute = ({ requiredRole, children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    // Mientras se verifica la autenticación, muestra un loader o pantalla de carga
     return <div>Cargando...</div>;
   }
 
@@ -18,7 +17,7 @@ const PrivateRoute = ({ requiredRole }) => {
     return <Navigate to="/" />;
   }
 
-  return <Outlet />;
+  return children ? children : <Outlet />;
 };
 
 export default PrivateRoute;
