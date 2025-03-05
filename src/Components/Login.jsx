@@ -93,7 +93,9 @@ const Login = React.memo(({ open, onClose }) => {
             onClose();
             MySwal.fire({
                 icon: 'success',
-                title: '¡Bienvenido!'
+                title: '¡Bienvenido!',
+                showConfirmButton: false,
+                timer: 1500
             });
         } catch (error) {
             console.error(error);
@@ -101,8 +103,8 @@ const Login = React.memo(({ open, onClose }) => {
             onClose();
             MySwal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: error.message
+                confirmButtonColor : '#3083FF',
+                text: error.response.data.message
             });
         }
     }, [userData, onClose, resetForm]);
@@ -194,7 +196,7 @@ const Login = React.memo(({ open, onClose }) => {
                     variant="contained"
                     fullWidth
                     disabled={Object.values(errors).some(err => err !== "") || Object.values(userData).some(value => !value.trim())}
-                    sx={{ backgroundColor: Object.values(errors).some(err => err !== "") || Object.values(userData).some(value => !value.trim()) ? 'grey' : '#3083FF' , mt: 4 }}
+                    sx={{ backgroundColor: Object.values(errors).some(err => err !== "") || Object.values(userData).some(value => !value.trim()) ? 'grey' : '#3083FF' , mt: 6 }}
                 >
                     Iniciar sesión
                 </Button>
