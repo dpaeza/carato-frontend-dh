@@ -34,7 +34,7 @@ export const updateRole = async (id, role) => {
         const token = userData ? userData.token : null;
     
         const headers = {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
             "Accept": "application/json",
         };
     
