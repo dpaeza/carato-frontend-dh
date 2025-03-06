@@ -188,6 +188,7 @@ export default function Navbar(props) {
                                     anchorEl={menuAnchor}
                                     open={Boolean(menuAnchor)}
                                     onClose={handleMenuClose}
+                                    MenuListProps={{ autoFocusItem: false }}
                                     sx={{ mt: '15px' }}
                                 >
                                     <MenuItem onClick={handleClick}> 
