@@ -68,12 +68,12 @@ export default function Usuarios() {
             text: `¿Estás seguro de querer realizar esta acción ?`,
             icon: "question",
             showCancelButton: true,
-            confirmButtonText: "Aceptar",
-            cancelButtonText: "Cancelar",
-            confirmButtonColor: "#3083FF", 
-            cancelButtonColor: "#B3B3BB",
+            confirmButtonText: "Cancelar",
+            confirmButtonColor: "#B3B3BB",
+            cancelButtonText: "Aceptar",
+            cancelButtonColor: "#3083FF",
         }).then((result) => {
-            if (result.isConfirmed) {
+            if (result.isDismissed) {
                 handleRoleChange(id, currentRole, name, lastname);
             }
         });
