@@ -159,6 +159,28 @@ export default function AgregarVehiculo() {
         return Object.keys(newErrors).length === 0; // Retorna true si no hay errores
     };
 
+    const getErrorMessage = (error) => {
+        // Verifica si el error tiene una respuesta
+        if (error.response) {
+            // Intenta obtener el mensaje de error desde error.response.data.message
+            if (error.response.data && error.response.data.message) {
+                return error.response.data.message;
+            }
+            // Si no, intenta obtener el mensaje desde error.response.data
+            else if (error.response.data) {
+                return error.response.data;
+            }
+            // Si no, usa el mensaje de error por defecto
+            else {
+                return error.response.statusText || "Error desconocido";
+            }
+        }
+        // Si no hay respuesta, usa el mensaje del error
+        else {
+            return error.message || "Error desconocido";
+        }
+    };
+
     const onSubmit = async () => {
         if (!validateForm()) {
             MySwal.fire({
@@ -184,10 +206,12 @@ export default function AgregarVehiculo() {
                 timer: 1500
             });
         } catch (error) {
+            console.error(error)
+            const errorMessage = getErrorMessage(error);
             MySwal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: error.response.data.message,
+                text: errorMessage,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#3083FF",
             });
