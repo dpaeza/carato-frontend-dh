@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { registerUser } from '../Services/auth';
+import { registerUser, sendConfirmationEmail } from '../Services/auth';
 
 const Register = React.memo(({ open, onClose }) => {
     const [registerData, setRegisterData] = useState({
@@ -46,7 +46,7 @@ const Register = React.memo(({ open, onClose }) => {
         if (field === "name" || field === "lastname") {
             if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s.'-]+$/.test(value)) {
                 return "No se permite el uso de caracteres que no sean letras";
-            }            
+            }
         }
         if (field === "email") {
             const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -91,6 +91,14 @@ const Register = React.memo(({ open, onClose }) => {
         });
     }, []);
 
+    const resendEmail = async () => {
+        try {
+            await sendConfirmationEmail(registerData.email)
+        } catch (error) {
+            console.error(error.message)
+        }
+    }
+
     const handleSubmit = useCallback(async () => {
         try {
             await registerUser(registerData);
@@ -98,10 +106,43 @@ const Register = React.memo(({ open, onClose }) => {
             onClose();
             MySwal.fire({
                 title: "¡Registro exitoso!",
-                text: "Te hemos enviado un correo de confirmación. Por favor, verifica tu bandeja de entrada.",
+                html: `
+                    <p style="font-size: 13px">Te hemos enviado un correo de confirmación. Por favor, verifica tu bandeja de entrada y correo no deseado.</p>
+                    <div style="display:flex; justify-content:space-between; margin-top:20px">
+                        <p style="font-size: 13px">¿No lo recibiste?</p>
+                        <button id="resend-button" style="background-color: transparent; color: #3083FF; border: none; padding: 0px; cursor: pointer; text-decoration:underline">
+                            Reenviar correo
+                        </button>
+                    </div>
+                    <p id="wait-message" style="color: red; margin-top: 10px; font-size:12px; text-align: left; display: none; ">
+                        Te hemos enviado un nuevo correo a ${registerData.email}. Por favor, espera unos segundos antes de intentarlo nuevamente.
+                    </p>
+                `,
                 icon: "success",
                 confirmButtonText: "Aceptar",
-                confirmButtonColor : '#3083FF',
+                confirmButtonColor: "#3083FF",
+                didOpen: () => {
+                    const resendButton = Swal.getPopup().querySelector("#resend-button");
+                    const waitMessage = Swal.getPopup().querySelector("#wait-message");
+    
+                    resendButton.addEventListener("click", async () => {
+                        // Desactivar el botón y aplicar estilos visuales de "disabled"
+                        resendButton.disabled = true;
+                        resendButton.style.color = "grey";
+                        resendButton.style.cursor = "not-allowed";
+                        waitMessage.style.display = "block";
+    
+                        await resendEmail(); // Ejecuta la función para reenviar el correo
+    
+                        // Reactivar el botón después de 30 segundos
+                        setTimeout(() => {
+                            resendButton.disabled = false;
+                            resendButton.style.color= "#3083FF";
+                            resendButton.style.cursor = "pointer";
+                            waitMessage.style.display = "none";
+                        }, 30000);
+                    });
+                },
             });
         } catch (error) {
             console.error("Error al registrar el usuario:", error);
@@ -112,7 +153,7 @@ const Register = React.memo(({ open, onClose }) => {
                 text: error.response?.data?.message[0],
                 icon: "error",
                 confirmButtonText: "Aceptar",
-                confirmButtonColor : '#3083FF',
+                confirmButtonColor: '#3083FF',
             });
         }
     }, [registerData, onClose, resetForm]);
