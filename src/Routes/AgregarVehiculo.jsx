@@ -205,10 +205,10 @@ export default function AgregarVehiculo() {
         }));
 
         // Generar vistas previas y guardarlas en el estado `previews`
-        const newPreviews = acceptedFiles.map((file) => ({
+        const newPreviews = acceptedFiles.map((file, index) => ({
             file,
             preview: URL.createObjectURL(file),
-            id: `preview-${previews.length + 1}` // ID único para cada vista previa
+            id: `preview-${previews.length + index + 1}` // ID único para cada vista previa
         }));
         setPreviews((prev) => [...prev, ...newPreviews]);
     };
@@ -611,6 +611,11 @@ export default function AgregarVehiculo() {
                                         type="number"
                                         value={newProduct.horsePower}
                                         onChange={(e) => setNewProduct({ ...newProduct, horsePower: e.target.value })}
+                                        onKeyDown={(e) => {
+                                            if (['-', '+', 'e', 'E'].includes(e.key)) {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                         slotProps={{
                                             inputLabel: {
                                                 shrink: true,
@@ -634,6 +639,11 @@ export default function AgregarVehiculo() {
                                         error={!!errors.year}
                                         value={newProduct.year}
                                         onChange={(e) => setNewProduct({ ...newProduct, year: e.target.value })}
+                                        onKeyDown={(e) => {
+                                            if (['-', '+', 'e', 'E'].includes(e.key)) {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                         slotProps={{
                                             inputLabel: {
                                                 shrink: true,
@@ -657,6 +667,11 @@ export default function AgregarVehiculo() {
                                         error={!!errors.mileage}
                                         value={newProduct.mileage}
                                         onChange={(e) => setNewProduct({ ...newProduct, mileage: e.target.value })}
+                                        onKeyDown={(e) => {
+                                            if (['-', '+', 'e', 'E'].includes(e.key)) {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                         slotProps={{
                                             inputLabel: {
                                                 shrink: true,
@@ -696,6 +711,11 @@ export default function AgregarVehiculo() {
                                     error={!!errors.price}
                                     value={newProduct.price}
                                     onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+                                    onKeyDown={(e) => {
+                                        if (['-', '+', 'e', 'E'].includes(e.key)) {
+                                            e.preventDefault();
+                                        }
+                                    }}
                                     slotProps={{
                                         inputLabel: {
                                             shrink: true,
