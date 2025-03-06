@@ -156,6 +156,7 @@ const Login = React.memo(({ open, onClose }) => {
                     label="Correo electrónico"
                     type="email"
                     size='small'
+                    autoComplete='off'
                     value={userData.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -174,6 +175,7 @@ const Login = React.memo(({ open, onClose }) => {
                     name="password"
                     label="Contraseña"
                     size='small'
+                    autoComplete='off'
                     type={showPassword ? "text" : "password"}
                     value={userData.password}
                     onChange={handleChange}
