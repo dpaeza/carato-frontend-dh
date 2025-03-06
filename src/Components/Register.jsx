@@ -197,6 +197,7 @@ const Register = React.memo(({ open, onClose }) => {
                     name="name"
                     type="text"
                     size="small"
+                    autoComplete='off'
                     value={registerData.name}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -224,6 +225,7 @@ const Register = React.memo(({ open, onClose }) => {
                     name="lastname"
                     type="text"
                     size="small"
+                    autoComplete='off'
                     value={registerData.lastname}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -251,6 +253,7 @@ const Register = React.memo(({ open, onClose }) => {
                     name="email"
                     type="text"
                     size="small"
+                    autoComplete='off'
                     value={registerData.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -277,6 +280,7 @@ const Register = React.memo(({ open, onClose }) => {
                     fullWidth
                     name="password"
                     size="small"
+                    autoComplete='off'
                     type={showPassword ? 'text' : 'password'}
                     value={registerData.password}
                     onChange={handleChange}
