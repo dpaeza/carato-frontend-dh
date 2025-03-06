@@ -44,7 +44,7 @@ const Register = React.memo(({ open, onClose }) => {
             return "Este campo es requerido";
         }
         if (field === "name" || field === "lastname") {
-            if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s.'-]+$/.test(value)) {
+            if (!/^[a-zA-ZÀ-ÿ']+(?:\s[a-zA-ZÀ-ÿ']+)*$/.test(value)) {
                 return "No se permite el uso de caracteres que no sean letras";
             }
         }
@@ -197,6 +197,7 @@ const Register = React.memo(({ open, onClose }) => {
                     name="name"
                     type="text"
                     size="small"
+                    autoComplete='off'
                     value={registerData.name}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -224,6 +225,7 @@ const Register = React.memo(({ open, onClose }) => {
                     name="lastname"
                     type="text"
                     size="small"
+                    autoComplete='off'
                     value={registerData.lastname}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -251,6 +253,7 @@ const Register = React.memo(({ open, onClose }) => {
                     name="email"
                     type="text"
                     size="small"
+                    autoComplete='off'
                     value={registerData.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -277,6 +280,7 @@ const Register = React.memo(({ open, onClose }) => {
                     fullWidth
                     name="password"
                     size="small"
+                    autoComplete='off'
                     type={showPassword ? 'text' : 'password'}
                     value={registerData.password}
                     onChange={handleChange}
