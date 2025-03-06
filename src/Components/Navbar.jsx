@@ -21,6 +21,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import SettingsIcon from '@mui/icons-material/Settings';
 import NoCrashIcon from '@mui/icons-material/NoCrash';
 import LogoCarato from "../assets/Logo-carato-slogan.svg";
 import Register from "./Register";
@@ -61,6 +62,11 @@ export default function Navbar(props) {
         handleMenuClose();
         navigate('/cuenta');
     };
+
+    const handleClickAdmin = () => {
+        handleMenuClose();
+        navigate('/administracion');
+    }
 
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
@@ -123,6 +129,14 @@ export default function Navbar(props) {
                             </ListItemIcon>
                             Mis reservas
                         </MenuItem>
+                        {user.role === "ADMIN" && (
+                            <MenuItem onClick={handleClickAdmin}>
+                                <ListItemIcon>
+                                    <SettingsIcon fontSize="small" />
+                                </ListItemIcon>
+                                Admin
+                            </MenuItem>
+                        )}
                         <MenuItem onClick={handleLogout}>
                             <ListItemIcon>
                                 <LogoutIcon fontSize="small" />
@@ -188,6 +202,14 @@ export default function Navbar(props) {
                                         </ListItemIcon>
                                         Mis reservas
                                     </MenuItem>
+                                    {user.role === "ADMIN" && (
+                                        <MenuItem onClick={handleClickAdmin}>
+                                            <ListItemIcon>
+                                                <SettingsIcon fontSize="small" />
+                                            </ListItemIcon>
+                                            Admin
+                                        </MenuItem>
+                                    )}
                                     <MenuItem onClick={handleLogout}>
                                         <ListItemIcon>
                                             <LogoutIcon fontSize="small" />
