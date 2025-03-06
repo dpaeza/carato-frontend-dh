@@ -714,6 +714,11 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                                 type="number"
                                                 value={newProduct.horsePower}
                                                 onChange={(e) => setNewProduct({ ...newProduct, horsePower: e.target.value })}
+                                                onKeyDown={(e) => {
+                                                    if (['-', '+', 'e', 'E'].includes(e.key)) {
+                                                        e.preventDefault();
+                                                    }
+                                                }}
                                                 disabled={mode === "view"}
                                                 slotProps={{
                                                     inputLabel: {
@@ -739,6 +744,11 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                                 value={newProduct.year}
                                                 onChange={(e) => setNewProduct({ ...newProduct, year: e.target.value })}
                                                 disabled={mode === "view"}
+                                                onKeyDown={(e) => {
+                                                    if (['-', '+', 'e', 'E'].includes(e.key)) {
+                                                        e.preventDefault();
+                                                    }
+                                                }}
                                                 slotProps={{
                                                     inputLabel: {
                                                         shrink: true,
@@ -763,6 +773,11 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                                 value={newProduct.mileage}
                                                 onChange={(e) => setNewProduct({ ...newProduct, mileage: e.target.value })}
                                                 disabled={mode === "view"}
+                                                onKeyDown={(e) => {
+                                                    if (['-', '+', 'e', 'E'].includes(e.key)) {
+                                                        e.preventDefault();
+                                                    }
+                                                }}
                                                 slotProps={{
                                                     inputLabel: {
                                                         shrink: true,
@@ -803,6 +818,11 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                             value={newProduct.price}
                                             onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
                                             disabled={mode === "view"}
+                                            onKeyDown={(e) => {
+                                                if (['-', '+', 'e', 'E'].includes(e.key)) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
                                             slotProps={{
                                                 inputLabel: {
                                                     shrink: true,
