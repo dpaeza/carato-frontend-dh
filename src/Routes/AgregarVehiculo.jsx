@@ -205,10 +205,10 @@ export default function AgregarVehiculo() {
         }));
 
         // Generar vistas previas y guardarlas en el estado `previews`
-        const newPreviews = acceptedFiles.map((file) => ({
+        const newPreviews = acceptedFiles.map((file, index) => ({
             file,
             preview: URL.createObjectURL(file),
-            id: `preview-${previews.length + 1}` // ID único para cada vista previa
+            id: `preview-${previews.length + index + 1}` // ID único para cada vista previa
         }));
         setPreviews((prev) => [...prev, ...newPreviews]);
     };
