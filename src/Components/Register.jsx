@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { registerUser } from '../Services/auth';
+import { registerUser, sendConfirmationEmail } from '../Services/auth';
 
 const Register = React.memo(({ open, onClose }) => {
     const [registerData, setRegisterData] = useState({
@@ -91,112 +91,71 @@ const Register = React.memo(({ open, onClose }) => {
         });
     }, []);
 
+    const resendEmail = async () => {
+        try {
+            await sendConfirmationEmail(registerData.email)
+        } catch (error) {
+            console.error(error.message)
+        }
+    }
+
     const handleSubmit = useCallback(async () => {
-
-        MySwal.fire({
-            title: "¡Registro exitoso!",
-            html: `
-                <p style="font-size: 13px">Te hemos enviado un correo de confirmación. Por favor, verifica tu bandeja de entrada y correo no deseado.</p>
-                <div style="display:flex; justify-content:space-between; margin-top:20px">
-                    <p style="font-size: 13px">¿No lo recibiste?</p>
-                    <button id="resend-button" style="background-color: transparent; color: #3083FF; border: none; padding: 0px; cursor: pointer; text-decoration:underline">
-                        Reenviar correo
-                    </button>
-                </div>
-                <p id="wait-message" style="color: red; margin-top: 10px; font-size:12px; text-align: left; display: none; ">
-                    Por favor espera unos minutos antes de intentarlo nuevamente.
-                </p>
-            `,
-            icon: "success",
-            confirmButtonText: "Aceptar",
-            confirmButtonColor: "#3083FF",
-            didOpen: () => {
-                const resendButton = Swal.getPopup().querySelector("#resend-button");
-                const waitMessage = Swal.getPopup().querySelector("#wait-message");
-
-                resendButton.addEventListener("click", async () => {
-                    // Desactivar el botón y aplicar estilos visuales de "disabled"
-                    resendButton.disabled = true;
-                    resendButton.style.color = "grey";
-                    resendButton.style.cursor = "not-allowed";
-                    waitMessage.style.display = "block";
-
-                    console.log("Reenviando correo...");
-
-                    // await resendEmail(); // Ejecuta la función para reenviar el correo
-
-                    Swal.fire({
-                        position: "top",
-                        toast: true,
-                        icon: "success",
-                        tittle: "¡Reenvío exitoso!",
-                        text: `Te hemos enviado un correo a ${registerData.email}. Revisa tu bandeja de entrada y spam.`,
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
+        try {
+            await registerUser(registerData);
+            resetForm();
+            onClose();
+            MySwal.fire({
+                title: "¡Registro exitoso!",
+                html: `
+                    <p style="font-size: 13px">Te hemos enviado un correo de confirmación. Por favor, verifica tu bandeja de entrada y correo no deseado.</p>
+                    <div style="display:flex; justify-content:space-between; margin-top:20px">
+                        <p style="font-size: 13px">¿No lo recibiste?</p>
+                        <button id="resend-button" style="background-color: transparent; color: #3083FF; border: none; padding: 0px; cursor: pointer; text-decoration:underline">
+                            Reenviar correo
+                        </button>
+                    </div>
+                    <p id="wait-message" style="color: red; margin-top: 10px; font-size:12px; text-align: left; display: none; ">
+                        Te hemos enviado un nuevo correo a ${registerData.email}. Por favor, espera unos segundos antes de intentarlo nuevamente.
+                    </p>
+                `,
+                icon: "success",
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#3083FF",
+                didOpen: () => {
+                    const resendButton = Swal.getPopup().querySelector("#resend-button");
+                    const waitMessage = Swal.getPopup().querySelector("#wait-message");
+    
+                    resendButton.addEventListener("click", async () => {
+                        // Desactivar el botón y aplicar estilos visuales de "disabled"
+                        resendButton.disabled = true;
+                        resendButton.style.color = "grey";
+                        resendButton.style.cursor = "not-allowed";
+                        waitMessage.style.display = "block";
+    
+                        await resendEmail(); // Ejecuta la función para reenviar el correo
+    
+                        // Reactivar el botón después de 30 segundos
+                        setTimeout(() => {
+                            resendButton.disabled = false;
+                            resendButton.style.color= "#3083FF";
+                            resendButton.style.cursor = "pointer";
+                            waitMessage.style.display = "none";
+                        }, 30000);
                     });
-
-                    // Reactivar el botón después de 30 segundos
-                    setTimeout(() => {
-                        resendButton.disabled = false;
-                        resendButton.style.color= "#3083FF";
-                        resendButton.style.cursor = "pointer";
-                        waitMessage.style.display = "none";
-                    }, 30000);
-                });
-            },
-        });
-
-        // try {
-        //     await registerUser(registerData);
-        //     resetForm();
-        //     onClose();
-        //     MySwal.fire({
-        //         title: "¡Registro exitoso!",
-        //         html: `
-        //           <p>Te hemos enviado un correo de confirmación. Por favor, verifica tu bandeja de entrada y correo no deseado.</p>
-        //           <p>¿No lo recibiste?</p>
-        //           <button id="resend-button" class="swal2-confirm" style="background-color: #3083FF; color: white; border: none; padding: 8px 16px; cursor: pointer; border-radius: 5px;">
-        //             Reenviar correo
-        //           </button>
-        //           <p id="wait-message" style="color: red; display: none; margin-top: 10px;">
-        //             Por favor espera unos minutos antes de intentarlo nuevamente.
-        //           </p>
-        //         `,
-        //         icon: "success",
-        //         confirmButtonText: "Aceptar",
-        //         confirmButtonColor: "#3083FF",
-        //         didOpen: () => {
-        //             const resendButton = Swal.getPopup().querySelector("#resend-button");
-        //             const waitMessage = Swal.getPopup().querySelector("#wait-message");
-
-        //             resendButton.addEventListener("click", async () => {
-        //                 resendButton.disabled = true; // Desactiva el botón
-        //                 resendButton.style.opacity = "0.6";
-        //                 waitMessage.style.display = "block"; // Muestra el mensaje en rojo
-
-        //                 await resendEmail(); // Llama a la función de reenvío
-
-        //                 setTimeout(() => {
-        //                     resendButton.disabled = false; // Reactiva el botón después de 30s
-        //                     resendButton.style.opacity = "1";
-        //                     waitMessage.style.display = "none"; // Oculta el mensaje
-        //                 }, 30000);
-        //             });
-        //         },
-        //     });
-        // } catch (error) {
-        //     console.error("Error al registrar el usuario:", error);
-        //     resetForm();
-        //     onClose();
-        //     MySwal.fire({
-        //         title: "Error al registrarse",
-        //         text: error.response?.data?.message[0],
-        //         icon: "error",
-        //         confirmButtonText: "Aceptar",
-        //         confirmButtonColor: '#3083FF',
-        //     });
-        // }
+                },
+            });
+        } catch (error) {
+            console.error("Error al registrar el usuario:", error);
+            resetForm();
+            onClose();
+            MySwal.fire({
+                title: "Error al registrarse",
+                text: error.response?.data?.message[0],
+                icon: "error",
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: '#3083FF',
+            });
+        }
     }, [registerData, onClose, resetForm]);
 
     // Enfocar el primer input cuando el modal se abre

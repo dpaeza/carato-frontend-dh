@@ -19,3 +19,15 @@ export const loginUser = async (userData) => {
         throw error;
     }
 };
+
+export const sendConfirmationEmail = async (email) => {
+    try {
+        const body = {
+            email: email
+        }
+        await api.post('/auth/resend-confirmation', body );
+    } catch (error) {
+        console.error('Error al reenviar correo:', error);
+        throw error;
+    }
+}
