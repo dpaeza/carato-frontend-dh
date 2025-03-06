@@ -611,6 +611,11 @@ export default function AgregarVehiculo() {
                                         type="number"
                                         value={newProduct.horsePower}
                                         onChange={(e) => setNewProduct({ ...newProduct, horsePower: e.target.value })}
+                                        onKeyDown={(e) => {
+                                            if (['-', '+', 'e', 'E'].includes(e.key)) {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                         slotProps={{
                                             inputLabel: {
                                                 shrink: true,
@@ -634,6 +639,11 @@ export default function AgregarVehiculo() {
                                         error={!!errors.year}
                                         value={newProduct.year}
                                         onChange={(e) => setNewProduct({ ...newProduct, year: e.target.value })}
+                                        onKeyDown={(e) => {
+                                            if (['-', '+', 'e', 'E'].includes(e.key)) {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                         slotProps={{
                                             inputLabel: {
                                                 shrink: true,
@@ -657,6 +667,11 @@ export default function AgregarVehiculo() {
                                         error={!!errors.mileage}
                                         value={newProduct.mileage}
                                         onChange={(e) => setNewProduct({ ...newProduct, mileage: e.target.value })}
+                                        onKeyDown={(e) => {
+                                            if (['-', '+', 'e', 'E'].includes(e.key)) {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                         slotProps={{
                                             inputLabel: {
                                                 shrink: true,
@@ -696,6 +711,11 @@ export default function AgregarVehiculo() {
                                     error={!!errors.price}
                                     value={newProduct.price}
                                     onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+                                    onKeyDown={(e) => {
+                                        if (['-', '+', 'e', 'E'].includes(e.key)) {
+                                            e.preventDefault();
+                                        }
+                                    }}
                                     slotProps={{
                                         inputLabel: {
                                             shrink: true,
