@@ -55,12 +55,12 @@ export default function Vehiculos() {
             text: `¿Estás seguro de eliminar el vehículo ${name}?`,
             icon: "warning",
             showCancelButton: true,
-            cancelButtonText: "Cancelar",
-            confirmButtonText: "Eliminar",
-            cancelButtonColor: "#B3B3BB",
-            confirmButtonColor: "#FF4F4F", 
+            cancelButtonText: "Eliminar",
+            confirmButtonText: "Cancelar",
+            cancelButtonColor: "#FF4F4F",
+            confirmButtonColor: "#B3B3BB",
         }).then((result) => {
-            if (result.isConfirmed) {
+            if (result.isDismissed) {
                 deleteVehiculo(id);
             }
         });
