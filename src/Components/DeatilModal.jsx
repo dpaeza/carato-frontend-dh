@@ -843,6 +843,19 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                             width: "100%",
                         }}
                     >
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: mode === "view" ? "#3083FF" : "#B3B3BB",
+                                color: "white",
+                                width: "200px",
+                                textTransform: "capitalize",
+                                borderRadius: 2,
+                            }}
+                            onClick={onClose}
+                        >
+                            {mode === "view" ? "Cerrar" : "Cancelar"}
+                        </Button>
                         {mode === "edit" && (
                             <Button
                                 variant="contained"
@@ -858,19 +871,6 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                 Guardar cambios
                             </Button>
                         )}
-                        <Button
-                            variant="contained"
-                            sx={{
-                                backgroundColor: mode === "view" ? "#3083FF" : "#B3B3BB",
-                                color: "white",
-                                width: "200px",
-                                textTransform: "capitalize",
-                                borderRadius: 2,
-                            }}
-                            onClick={onClose}
-                        >
-                            {mode === "view" ? "Cerrar" : "Cancelar"}
-                        </Button>
                     </Grid>
                 </Box>
             </DialogContent>
