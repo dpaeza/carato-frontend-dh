@@ -15,7 +15,6 @@ export default function Vehiculo() {
         queryKey: ["car", id],
         queryFn: () => getCarByIdOrName(id),
         refetchOnWindowFocus: false,
-		staleTime: 120000,
         throwOnError: (error) => {
             console.error("Error al obtener el auto:", error);
         },
