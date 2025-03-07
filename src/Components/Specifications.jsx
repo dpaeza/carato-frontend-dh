@@ -50,11 +50,7 @@ export default function Specifications({vehicle}) {
             <List sx={{ mt: 3 }}>
                 <ListItem>
                     <ListItemIcon><EmojiEventsIcon /></ListItemIcon>
-                    <ListItemText primary="En los top 10 autos más económicos" secondary="Este auto triunfa en Caroto por su rendimiento en ciudad." />
-                </ListItem>
-                <ListItem>
-                    <ListItemIcon><EmojiEventsIcon /></ListItemIcon>
-                    <ListItemText primary="En los top 10 autos más económicos" secondary="Este auto triunfa en Caroto por su rendimiento en ciudad." />
+                    <ListItemText primary="En los top 10 autos más económicos" secondary="Este auto triunfa en Carato por su rendimiento en ciudad." />
                 </ListItem>
                 <ListItem>
                     <ListItemIcon><StarIcon /></ListItemIcon>
@@ -62,7 +58,7 @@ export default function Specifications({vehicle}) {
                 </ListItem>
                 <ListItem>
                     <ListItemIcon><LockOpenIcon /></ListItemIcon>
-                    <ListItemText primary="Cancelación gratuita antes del 15 de febrero" secondary="Si cambias de opinión, recibirás un reembolso total." />
+                    <ListItemText primary="Cancelación gratuita antes del 20 de marzo" secondary="Si cambias de opinión, recibirás un reembolso total." />
                 </ListItem>
             </List>
         </Box>
