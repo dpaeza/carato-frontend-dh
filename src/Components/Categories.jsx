@@ -22,17 +22,8 @@ const iconMap = {
     familiares: IconFamiliar,
 };
 
-export default function Categories() {
-    const [selectedCategories, setSelectedCategories] = useState([]);
+export default function Categories({selectedCategoriesId, toggleCategoryById}) {
     const [categories, setCategories] = useState([]);
-
-    const toggleCategory = (category) => {
-        setSelectedCategories(prevSelected =>
-            prevSelected.includes(category)
-                ? prevSelected.filter(item => item !== category)
-                : [...prevSelected, category]
-        );
-    };
 
     const fetchCategories = async () => {
         try {
@@ -62,14 +53,14 @@ export default function Categories() {
                     return (
                         <div
                             key={id}
-                            className={`category ${selectedCategories.includes(name) ? 'selected' : ''}`}
-                            onClick={() => toggleCategory(name)}
+                            className={`category ${selectedCategoriesId.includes(id) ? 'selected' : ''}`}
+                            onClick={() => toggleCategoryById(id)}
                         >
                             <div className="iconContainer">
                                 {Icon ? (
                                     <Icon
                                         className="category-icon"
-                                        style={{ fill: selectedCategories.includes(name) ? 'var(--darkBlue)' : 'var(--lightGrey)' }}
+                                        style={{ fill: selectedCategoriesId.includes(id) ? 'var(--darkBlue)' : 'var(--lightGrey)' }}
                                     />
                                 ) : (
                                     <span>Ícono no encontrado</span> // Fallback en caso de que no haya ícono
@@ -101,14 +92,14 @@ export default function Categories() {
                         return (
                             <SwiperSlide key={id}>
                                 <div
-                                    className={`category ${selectedCategories.includes(name) ? 'selected' : ''}`}
-                                    onClick={() => toggleCategory(name)}
+                                    className={`category ${selectedCategoriesId.includes(id) ? 'selected' : ''}`}
+                                    onClick={() => toggleCategoryById(id)}
                                 >
                                     <div className="iconContainer">
                                         {Icon ? (
                                             <Icon
                                                 className="category-icon"
-                                                style={{ fill: selectedCategories.includes(name) ? 'var(--darkBlue)' : 'var(--lightGrey)' }}
+                                                style={{ fill: selectedCategoriesId.includes(id) ? 'var(--darkBlue)' : 'var(--lightGrey)' }}
                                             />
                                         ) : (
                                             <span>Ícono no encontrado</span> // Fallback en caso de que no haya ícono

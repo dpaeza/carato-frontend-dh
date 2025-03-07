@@ -6,15 +6,33 @@ import GridCar from '../Components/GridCar';
 import { getCars } from '../Services/cars';
 import Pagination from '@mui/material/Pagination';
 import { useQuery } from '@tanstack/react-query';
+import { shuffleArray, sortNumbers } from '../Utils/numbers';
+import { useSearchParams } from 'react-router-dom';
+import queryString from 'query-string';
 
 export default function Home() {
-	const [page, setPage] = useState(1);
-	const [error, setError] = useState(null);
+	const [searchParams, setSearchParams] = useSearchParams();
+	const params = queryString.parse(searchParams.toString(), {
+		types: {
+			page: "number",
+			categoriesId: "string"
+		}
+	});
 
-	const {data, isLoading } = useQuery({
-		queryKey: ["cars", page],
-		queryFn: () => getCars(page),
-		select: (data) => ({...data, data: data.data.sort(() => Math.random() - 0.5) }),
+	const validCategoriesId = /^\d*(,\d+)*$/.test(params.categoriesId);
+
+	const page = params.page ?? 1;
+	const categoriesId = validCategoriesId ? params.categoriesId : "";
+
+	const categoriesIdArray =  (categoriesId !== "")
+		? categoriesId.split(",").map(id => isNaN(id) ? null : parseInt(id)).filter(id => id !== null)
+		: [];
+
+	const [error, setError] = useState(null);
+	const {data, isLoading} = useQuery({
+		queryKey: ["cars", page, categoriesId],
+		queryFn: () => getCars({page, categoriesId}),
+		select: (data) => ({...data, data: shuffleArray(data.data) }),
 		refetchOnWindowFocus: false,
 		staleTime: 60000,
 		throwOnError: (error) => {
@@ -23,8 +41,23 @@ export default function Home() {
 		}
 	});
 
+	const handleToggleCategoryById = (id) => {
+		const updatedCategories = categoriesIdArray.includes(id)
+        	? categoriesIdArray.filter(categoryId => categoryId !== id)
+        	: sortNumbers([...categoriesIdArray, id]);
+
+		setSearchParams(queryString.stringify({
+			...params,
+			page: undefined,
+			categoriesId: updatedCategories.length > 0 ? updatedCategories.join(",") : undefined,
+		}));
+	}
+
 	const handlePageChange = (event, value) => {
-        setPage(value);
+		setSearchParams(queryString.stringify({
+			...params,
+			page: (value !== 1) ? value : undefined,
+		}));
     };
 
 	return (
@@ -34,7 +67,7 @@ export default function Home() {
 					<Search />
 				</Box>
 				<Box sx={{ py: 3, px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto" }}>
-					<Categories />
+					<Categories selectedCategoriesId={categoriesIdArray} toggleCategoryById={handleToggleCategoryById} />
 				</Box>
 			</Box>
 			<Box sx={{ bgcolor: "#fafafa", pt: 6 }}>

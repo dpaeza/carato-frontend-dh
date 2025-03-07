@@ -68,7 +68,7 @@ export default function Vehiculos() {
 
     const getVehiculos = async () => {
         try {
-            const response = await getCars(page);
+            const response = await getCars({page});
             setVehiculos(response.data);
             setTotalPages(response.totalPages);
         } catch (error) {
