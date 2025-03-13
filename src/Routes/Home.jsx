@@ -41,6 +41,11 @@ export default function Home() {
 		}
 	});
 
+	const { data: totalData, isLoading: isTotalLoading } = useQuery({
+		queryKey: ["totalCars"],
+		queryFn: () => getCars({}),
+	});
+
 	const handleToggleCategoryById = (id) => {
 		const updatedCategories = categoriesIdArray.includes(id)
 			? categoriesIdArray.filter(categoryId => categoryId !== id)
@@ -71,7 +76,7 @@ export default function Home() {
 						selectedCategoriesId={categoriesIdArray} 
 						toggleCategoryById={handleToggleCategoryById}
 						filteredProducts={data?.data?.length || 0}
-						totalProducts={data?.totalElements || 0}  
+						totalProducts={totalData?.totalElements || 0} 
 					/>
 				</Box>
 			</Box>
