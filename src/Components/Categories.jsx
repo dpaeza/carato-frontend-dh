@@ -178,7 +178,8 @@ export default function Categories({selectedCategoriesId, toggleCategoryById, fi
                             fontWeight={500}
                             sx={{ color: 'var(--darkGrey)' }}
                         >
-                            Mostrando {filteredProducts} de {totalProducts} vehículos
+                            <span style={{fontWeight: 700}}>{filteredProducts}</span> de {totalProducts} vehículos cumplen con el filtro
+                            
                         </Typography>
                     </Box>
                 )}
