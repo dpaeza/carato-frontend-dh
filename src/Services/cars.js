@@ -3,9 +3,9 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL+ '/cars';
 
-export const getCars = async (page = 1, size = 10, query = "") => {
+export const getCars = async ({page = 1, size = 10, query = "", categoriesId = ""}) => {
     try {
-        const response = await api.get("/cars", { params: { page, size, query } });
+        const response = await api.get("/cars", { params: { page, size, query, categoriesId } });
         return response.data;
     } catch (error) {
         console.error("Error al obtener los autos:", error);
