@@ -75,7 +75,7 @@ export default function Home() {
 					<Typography
 						variant='h2'
 						fontFamily="var(--openSans)"
-						fontSize={24}
+						fontSize={22}
 						marginBottom={6}
 						fontWeight={700}
 						textAlign={"center"}
