@@ -19,3 +19,13 @@ export const getCategoryByIdOrName = async (value) => {
         throw error;
     }
 };
+
+export const deleteCategory = async (id) => {
+    try {
+        const response = await api.delete(`/categories/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error al eliminar la categoría:", error);
+        throw error;
+    }
+}
