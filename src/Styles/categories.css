@@ -1,6 +1,8 @@
 /* Estilos base para el contenedor de categorías */
 .categories-component {
     margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Estilos para la versión de escritorio (cuadrícula) */
@@ -56,6 +58,9 @@
 
 /* Media queries para responsividad */
 @media (max-width: 768px) {
+    .categories-component {
+        flex-direction: column-reverse;
+    }
     .desktop-categories {
         display: none; /* Oculta la cuadrícula en móvil */
     }
