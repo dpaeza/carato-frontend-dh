@@ -15,6 +15,7 @@ import { Button, Typography } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import { getCars, deleteCar } from '../Services/cars';
 import DeatilModal from '../Components/CategoryModal';
+import CategoryEditModal from '../Components/CategoryEditModal';
 import { getCategories, deleteCategory } from '../Services/categories';
 
 const headers = [
@@ -25,7 +26,13 @@ const headers = [
 
 export default function AgregarCategoria() {
     const [categorias, setCategorias] = useState([]);
+    
     const [openDetail, setOpenDetail] = useState({
+        isOpen: false,
+        categoryData: null
+    });
+
+    const [ openEdit, setOpenEdit ] = useState({
         isOpen: false,
         categoryData: null
     });
@@ -124,7 +131,7 @@ export default function AgregarCategoria() {
                                     </Button>
                                     <Button
                                         sx={{ color: "var(--darkBlue)", p: 0, minWidth: "auto" }}
-                                        onClick={() => handleOpenModal(categoria)}
+                                        onClick={() => setOpenEdit({ isOpen: true, categoryData: categoria })}
                                     >
                                         <ModeEditIcon />
                                     </Button>
@@ -143,6 +150,12 @@ export default function AgregarCategoria() {
                 open={openDetail.isOpen}
                 onClose={handleCloseModal}
                 categoria={openDetail.categoryData}
+            />
+            <CategoryEditModal 
+                open={openEdit.isOpen}
+                onClose={() => setOpenEdit({ isOpen: false, categoryData: null })}
+                categoria={openEdit.categoryData}
+                onUpdate={fetchCategories}
             />
         </div>
     )
