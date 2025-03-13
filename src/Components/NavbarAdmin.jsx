@@ -33,12 +33,19 @@ export default function NavbarAdmin() {
             aria-label="nav tabs example"
             sx={{
                 '& .MuiTabs-indicator': { backgroundColor: 'var(--lightBlue)' },
-                '& .MuiTab-root': { color: 'gray' },
+                '& .MuiTab-root': { 
+                    color: 'gray', 
+                    fontSize: '15px',
+                    padding: '8px 15px',
+                    textTransform: 'none'
+                },
                 '& .Mui-selected': { 
                     backgroundColor: 'var(--lightBlue)',
                     color: 'white !important',
                     borderTopLeftRadius: '10px',
                     borderTopRightRadius: '10px',
+                    fontSize: '15px',
+                    padding: '8px 15px',
                 }
             }}
         >
