@@ -24,15 +24,15 @@ export default function Home() {
 	const page = params.page ?? 1;
 	const categoriesId = validCategoriesId ? params.categoriesId : "";
 
-	const categoriesIdArray =  (categoriesId !== "")
+	const categoriesIdArray = (categoriesId !== "")
 		? categoriesId.split(",").map(id => isNaN(id) ? null : parseInt(id)).filter(id => id !== null)
 		: [];
 
 	const [error, setError] = useState(null);
-	const {data, isLoading} = useQuery({
+	const { data, isLoading } = useQuery({
 		queryKey: ["cars", page, categoriesId],
-		queryFn: () => getCars({page, categoriesId}),
-		select: (data) => ({...data, data: shuffleArray(data.data) }),
+		queryFn: () => getCars({ page, categoriesId }),
+		select: (data) => ({ ...data, data: shuffleArray(data.data) }),
 		refetchOnWindowFocus: false,
 		staleTime: 60000,
 		throwOnError: (error) => {
@@ -43,8 +43,8 @@ export default function Home() {
 
 	const handleToggleCategoryById = (id) => {
 		const updatedCategories = categoriesIdArray.includes(id)
-        	? categoriesIdArray.filter(categoryId => categoryId !== id)
-        	: sortNumbers([...categoriesIdArray, id]);
+			? categoriesIdArray.filter(categoryId => categoryId !== id)
+			: sortNumbers([...categoriesIdArray, id]);
 
 		setSearchParams(queryString.stringify({
 			...params,
@@ -58,12 +58,12 @@ export default function Home() {
 			...params,
 			page: (value !== 1) ? value : undefined,
 		}));
-    };
+	};
 
 	return (
 		<Box>
-			<Box sx={{ backgroundColor:"var(--pureWhite)" }}>
-				<Box sx={{ pt: 6, px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto"}}>
+			<Box sx={{ backgroundColor: "var(--pureWhite)" }}>
+				<Box sx={{ pt: 6, px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto" }}>
 					<Search />
 				</Box>
 				<Box sx={{ py: 3, px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto" }}>
