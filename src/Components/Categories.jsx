@@ -25,7 +25,7 @@ const iconMap = {
     familiares: IconFamiliar,
 };
 
-export default function Categories({selectedCategoriesId, toggleCategoryById}) {
+export default function Categories({selectedCategoriesId, toggleCategoryById, filteredProducts, totalProducts}) {
     const [categories, setCategories] = useState([]);
 
     const fetchCategories = async () => {
@@ -77,97 +77,109 @@ export default function Categories({selectedCategoriesId, toggleCategoryById}) {
                     })}
                 </div>
                 { selectedCategoriesId.length > 0 && (
-                    <Box 
-                        mt={3} 
-                        display={'flex'} 
-                        gap={2} 
-                        alignItems={'center'} 
-                        justifyContent={'space-between'}
-                        flexDirection={{ xs: 'column', sm: 'row' }}
-                    >
+                    <Box>
                         <Box 
+                            mt={3} 
                             display={'flex'} 
                             gap={2} 
-                            alignItems={'center'}
+                            alignItems={'center'} 
+                            justifyContent={'space-between'}
                             flexDirection={{ xs: 'column', sm: 'row' }}
                         >
-                            <Typography
-                                variant='h5'
-                                fontFamily="var(--openSans)"
-                                fontSize={{ xs: 13, sm: 15 }}
-                                fontWeight={600}
+                            <Box 
+                                display={'flex'} 
+                                gap={2} 
+                                alignItems={'center'}
+                                flexDirection={{ xs: 'column', sm: 'row' }}
                             >
-                                Filtros seleccionados
-                            </Typography>
-                            <Box display="flex" gap={{ xs: 0.5, sm: 1 }} flexWrap="wrap">
-                                {selectedCategoriesId.map((id) => {
-                                        const category = categories.find((category) => category.id === id);
-                                        if (!category) return null;
-                                        return (
-                                            <Box 
-                                                key={id} 
-                                                className="selected-category"
-                                                sx={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'space-between',
-                                                    padding: '5px 8px',
-                                                    borderRadius: '5px',
-                                                    backgroundColor: 'var(--mediumWhite)',
-                                                    gap: '5px',
-                                                    flexWrap: 'wrap',
-                                                    maxWidth: '100%' 
-                                                }}
-                                            >
-                                                <Typography
-                                                    variant='body1'
-                                                    fontFamily="var(--openSans)"
-                                                    fontSize={{ xs: 11, sm: 13 }}
-                                                    fontWeight={400}
-                                                >
-                                                    {category.name}
-                                                </Typography>
-                                                <CloseIcon
-                                                    onClick={() => toggleCategoryById(id)}
-                                                    style={{ cursor: 'pointer' }}
-                                                    sx={{ 
-                                                        color: 'var(--darkBlue)', 
-                                                        fontSize: '14px' ,
-                                                        fontSize: { xs: '12px', sm: '14px' }
+                                <Typography
+                                    variant='h5'
+                                    fontFamily="var(--openSans)"
+                                    fontSize={{ xs: 13, sm: 15 }}
+                                    fontWeight={600}
+                                >
+                                    Filtros seleccionados
+                                </Typography>
+                                <Box display="flex" gap={{ xs: 0.5, sm: 1 }} flexWrap="wrap">
+                                    {selectedCategoriesId.map((id) => {
+                                            const category = categories.find((category) => category.id === id);
+                                            if (!category) return null;
+                                            return (
+                                                <Box 
+                                                    key={id} 
+                                                    className="selected-category"
+                                                    sx={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'space-between',
+                                                        padding: '5px 8px',
+                                                        borderRadius: '5px',
+                                                        backgroundColor: 'var(--mediumWhite)',
+                                                        gap: '5px',
+                                                        flexWrap: 'wrap',
+                                                        maxWidth: '100%' 
                                                     }}
-                                                />
-                                            </Box>
-                                        );
-                                    }
-                                )}
+                                                >
+                                                    <Typography
+                                                        variant='body1'
+                                                        fontFamily="var(--openSans)"
+                                                        fontSize={{ xs: 11, sm: 13 }}
+                                                        fontWeight={400}
+                                                    >
+                                                        {category.name}
+                                                    </Typography>
+                                                    <CloseIcon
+                                                        onClick={() => toggleCategoryById(id)}
+                                                        style={{ cursor: 'pointer' }}
+                                                        sx={{ 
+                                                            color: 'var(--darkBlue)', 
+                                                            fontSize: '14px' ,
+                                                            fontSize: { xs: '12px', sm: '14px' }
+                                                        }}
+                                                    />
+                                                </Box>
+                                            );
+                                        }
+                                    )}
+                                </Box>
                             </Box>
+                            <Button
+                                onClick={() => toggleCategoryById()}
+                                sx={{
+                                    backgroundColor: 'transparent',
+                                    border: '1px solid var(--lightGrey)',
+                                    color: 'var(--darkBlue)',
+                                    textTransform: 'none',
+                                    fontSize: { xs: '12px', sm: '13px' },
+                                    fontWeight: 400,
+                                    borderRadius: '5px',
+                                    padding: { xs: '3px', sm: '3px 4px' },
+                                    gap: '5px',
+                                    marginBttom: { xs: '10px', sm: 0 },
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        backgroundColor: 'var(--lightBlue)',
+                                        borderColor: 'var(--lightBlue)',
+                                        color: 'var(--white)',
+                                    },
+                                }}
+                            >
+                                Limpiar filtros
+                                <CleaningServicesOutlinedIcon 
+                                    sx={{ fontSize: { xs: '14px', sm: '14px' } }}
+                                />
+                            </Button>
+                            
                         </Box>
-                        <Button
-                            onClick={() => toggleCategoryById()}
-                            sx={{
-                                backgroundColor: 'transparent',
-                                border: '1px solid var(--lightGrey)',
-                                color: 'var(--darkBlue)',
-                                textTransform: 'none',
-                                fontSize: { xs: '12px', sm: '13px' },
-                                fontWeight: 400,
-                                borderRadius: '5px',
-                                padding: { xs: '3px', sm: '3px 4px' },
-                                gap: '5px',
-                                marginBttom: { xs: '10px', sm: 0 },
-                                transition: 'all 0.3s ease',
-                                '&:hover': {
-                                    backgroundColor: 'var(--lightBlue)',
-                                    borderColor: 'var(--lightBlue)',
-                                    color: 'var(--white)',
-                                },
-                            }}
+                        <Typography
+                            variant="h6"
+                            fontSize={12}
+                            mt={1} 
+                            fontWeight={500}
+                            sx={{ color: 'var(--darkGrey)' }}
                         >
-                            Limpiar filtros
-                            <CleaningServicesOutlinedIcon 
-                                sx={{ fontSize: { xs: '14px', sm: '14px' } }}
-                            />
-                        </Button>
+                            Mostrando {filteredProducts} de {totalProducts} vehículos
+                        </Typography>
                     </Box>
                 )}
             </div>

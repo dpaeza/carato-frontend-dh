@@ -67,7 +67,12 @@ export default function Home() {
 					<Search />
 				</Box>
 				<Box sx={{ py: 3, px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto" }}>
-					<Categories selectedCategoriesId={categoriesIdArray} toggleCategoryById={handleToggleCategoryById} />
+					<Categories 
+						selectedCategoriesId={categoriesIdArray} 
+						toggleCategoryById={handleToggleCategoryById}
+						filteredProducts={data?.data?.length || 0}
+						totalProducts={data?.totalElements || 0}  
+					/>
 				</Box>
 			</Box>
 			<Box sx={{ bgcolor: "#fafafa", pt: 6 }}>
