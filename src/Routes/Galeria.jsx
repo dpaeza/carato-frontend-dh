@@ -25,7 +25,7 @@ export default function Galery() {
     }
 
     return (
-        <Box padding={3} sx={{maxWidth: "1200px", margin: "auto",}}>
+        <Box padding={3} sx={{maxWidth: "1200px", margin: "auto"}}>
             <Grid>
                 <Button
                     startIcon={<KeyboardArrowLeftIcon />}

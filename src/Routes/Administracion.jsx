@@ -30,7 +30,7 @@ export default function Administracion() {
     }, [location.pathname, navigate]);
 
     return (
-        <Box sx={{ px: 3, py:2, bgcolor: "#fafafa", minHeight: "80vh" }}>
+        <Box sx={{ px: 3, py:2, bgcolor: "#fafafa", minHeight: "80vh", maxWidth: "900px", margin: "auto" }}>
             {isMobile ? (
                 <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                     <NoAvailable style={{ width: "50%", height: "auto" }} />

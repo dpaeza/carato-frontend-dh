@@ -37,7 +37,13 @@ export default function NavbarAdmin() {
                     color: 'gray', 
                     fontSize: '15px',
                     padding: '8px 15px',
-                    textTransform: 'none'
+                    textTransform: 'none',
+                    marginRight: '5px',
+                    // backgroundColor: 'var(--lightGrey)',
+                    // color: 'var(--pureWhite)',
+                    // boxShadow: '0 0 5px rgba(0,0,0,0.1)',
+                    borderTopLeftRadius: '10px',
+                    borderTopRightRadius: '10px',
                 },
                 '& .Mui-selected': { 
                     backgroundColor: 'var(--lightBlue)',
