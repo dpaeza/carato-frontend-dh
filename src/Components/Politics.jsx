@@ -3,8 +3,8 @@ import { Box, Typography, Divider } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
 import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
-import CachedIcon from '@mui/icons-material/Cached';
 import TaxiAlertIcon from '@mui/icons-material/TaxiAlert';
+import GppGoodIcon from '@mui/icons-material/GppGood';
 
 const policies = [
     {
@@ -18,14 +18,14 @@ const policies = [
         description: "El vehículo debe devolverse con el mismo nivel de combustible o carga con el que fue entregado.",
     },
     {
-        icon: <CachedIcon fontSize='medium' />,
+        icon: <TaxiAlertIcon fontSize='medium' />,
         title: "Devolución y penalidades",
         description: "Retrasos en la devolución pueden generar costos adicionales.",
     },
     {
-        icon: <TaxiAlertIcon fontSize='medium' />,
-        title: "Devolución y penalidades",
-        description: "Retrasos en la devolución pueden generar costos adicionales.",
+        icon: <GppGoodIcon fontSize='medium' />,
+        title: "Seguro y cobertura",
+        description: "Todos los vehículos incluyen seguro básico, con opciones de cobertura ampliada.",
     },
 ];
 
