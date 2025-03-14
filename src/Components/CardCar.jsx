@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
     Card,
     CardContent,
@@ -6,16 +6,25 @@ import {
     Typography,
     Box,
     Button,
+    Checkbox,
 } from "@mui/material";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import Grid from "@mui/material/Grid2";
 import PeopleIcon from "../assets/icons/people.svg?react";
 import AcUnit from "../assets/icons/acUnit.svg?react";
 import Manual from "../assets/icons/manual.svg?react";
 import Door from "../assets/icons/door.svg?react";
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import Favorite from '@mui/icons-material/Favorite';
+import { addFavorite, removeFavorite } from "../Services/favorites";
+import { useAuth } from "../Context/auth.context";
+import Login from "./Login";
 
 export default function CardCar({ car }) {
     const {
+        id,
         name,
         images,
         capacity,
@@ -23,8 +32,39 @@ export default function CardCar({ car }) {
         transmission,
         doors,
         price,
+        isFavorite,
     } = car;
 
+    const [ favorite, setFavorite ] = useState(isFavorite);
+    const [openLogin, setOpenLogin] = useState(false);
+    const { user } = useAuth();
+    const MySwal = withReactContent(Swal);
+
+    const handleFavorite = async (e) => {
+        e.stopPropagation();
+
+        if (!user) {
+            setOpenLogin(true);
+            return;
+        }
+
+        try {
+            if (favorite) {
+                await removeFavorite(id).then(() => setFavorite(false));
+            } else {
+                await addFavorite(id).then(() => setFavorite(true));
+            }
+        } catch (error) {
+            console.error("Error al agregar/quitar favorito:", error);
+            const message = favorite ? "eliminar" : "agregar";
+            MySwal.fire({
+                icon: 'error',
+                confirmButtonColor : '#3083FF',
+                text: `Error al ${message} favorito.`
+            });
+        }
+    }
+    
     return (
         <Card
             sx={{
@@ -33,6 +73,7 @@ export default function CardCar({ car }) {
                 borderRadius: 4,
                 boxShadow: 3,
                 overflow: "hidden",
+                position: "relative",
             }}
         >
             <CardMedia
@@ -155,6 +196,25 @@ export default function CardCar({ car }) {
                     </Grid>
                 </Grid>
             </CardContent>
+            <Box
+                sx={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    p: 1,
+                    zIndex: 2,
+                }}
+            >
+                <Checkbox
+                    icon={<FavoriteBorder />}
+                    checkedIcon={<Favorite />}
+                    checked={favorite}
+                    sx={{ color: "var(--lightBlue)" }}
+                    onChange={handleFavorite}
+                    onClick={(e) => e.stopPropagation()}
+                />
+            </Box>
+            <Login open={openLogin} onClose={() => setOpenLogin(false)} />
         </Card>
     );
 }
