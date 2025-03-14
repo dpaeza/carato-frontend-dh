@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Box, Typography, CircularProgress, Alert } from "@mui/material";
 import Search from '../Components/Search';
 import Categories from '../Components/Categories';
@@ -20,6 +20,7 @@ export default function Home() {
 	});
 
 	const validCategoriesId = /^\d*(,\d+)*$/.test(params.categoriesId);
+	const randomSeed = useMemo(() => Math.random(), []);
 
 	const page = params.page ?? 1;
 	const categoriesId = validCategoriesId ? params.categoriesId : "";
@@ -32,7 +33,7 @@ export default function Home() {
 	const { data, isLoading } = useQuery({
 		queryKey: ["cars", page, categoriesId],
 		queryFn: () => getCars({ page, categoriesId }),
-		select: (data) => ({ ...data, data: shuffleArray(data.data) }),
+		select: (data) => ({ ...data, data: shuffleArray(data.data, randomSeed) }),
 		refetchOnWindowFocus: false,
 		staleTime: 60000,
 		throwOnError: (error) => {
