@@ -48,7 +48,7 @@ export default function Specifications({vehicle}) {
             </Typography>
 
             <List sx={{ mt: 2 }}>
-                <ListItem>
+                <ListItem sx={{ py: 1 }}>
                     <ListItemIcon><EmojiEventsIcon fontSize='large'/></ListItemIcon>
                     <ListItemText 
                         primary="En los top 10 autos más económicos" 
@@ -57,7 +57,7 @@ export default function Specifications({vehicle}) {
                         secondaryTypographyProps={{ fontSize: 14, fontFamily:"var(--lato)" }}
                     />
                 </ListItem>
-                <ListItem>
+                <ListItem sx={{ py: 1 }}>
                     <ListItemIcon><StarIcon fontSize='large'/></ListItemIcon>
                     <ListItemText 
                         primary="Experiencia de retiro y devolución excepcional" 
@@ -66,7 +66,7 @@ export default function Specifications({vehicle}) {
                         secondaryTypographyProps={{ fontSize: 14, fontFamily:"var(--lato)" }}
                     />
                 </ListItem>
-                <ListItem>
+                <ListItem sx={{ py: 1 }}>
                     <ListItemIcon><LockOpenIcon fontSize='large'/></ListItemIcon>
                     <ListItemText 
                         primary="Cancelación gratuita antes del 20 de marzo" 
