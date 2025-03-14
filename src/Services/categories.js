@@ -25,7 +25,19 @@ export const getCategoryByIdOrName = async (value) => {
 
 export const deleteCategory = async (id) => {
     try {
-        const response = await api.delete(`/categories/${id}`);
+        const userData = JSON.parse(localStorage.getItem("auth"));
+        const token = userData ? userData.token : null;
+
+        const headers = {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+        };
+
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+        }
+
+        const response = await axios.delete(`${API_URL}/${id}`, { headers });
         return response.data;
     } catch (error) {
         console.error("Error al eliminar la categoría:", error);

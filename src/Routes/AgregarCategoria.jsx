@@ -13,8 +13,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { Button, Typography } from '@mui/material';
-import Pagination from '@mui/material/Pagination';
-import { getCars, deleteCar } from '../Services/cars';
 import DeatilModal from '../Components/CategoryModal';
 import CategoryEditModal from '../Components/CategoryEditModal';
 import CategoryAddModal from '../Components/CategoryAddModal';
