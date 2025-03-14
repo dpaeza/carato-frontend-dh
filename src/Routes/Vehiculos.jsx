@@ -80,7 +80,7 @@ export default function Vehiculos() {
         try {
             await deleteCar(id);
             MySwal.fire({
-                text: "Vehículo eliminado correctamente",
+                text: "Vehículo eliminado correctamente.",
                 icon: "success",
                 showConfirmButton: false,
                 timer: 1500
@@ -89,7 +89,7 @@ export default function Vehiculos() {
         } catch (error) {
             console.error("Error al eliminar el vehículo:", error);
             MySwal.fire({
-                text: "Error al eliminar el vehículo",
+                text: "Error al eliminar el vehículo.",
                 icon: "error",
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#3083FF",

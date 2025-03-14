@@ -60,7 +60,7 @@ export default function CategoryAddModal({ open, onClose, onUpdate }) {
             onClose();
             MySwal.fire({
                 icon: 'success',
-                title: 'Categoría creada exitosamente',
+                title: 'Categoría creada exitosamente.',
                 showConfirmButton: false,
                 timer: 1500
             });

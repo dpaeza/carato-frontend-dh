@@ -41,7 +41,7 @@ export default function CategoryEditModal({ open, onClose, categoria = {}, onUpd
             onClose();
             MySwal.fire({
                 icon: 'success',
-                title: 'Categoría editada exitosamente',
+                title: 'Categoría editada exitosamente.',
                 showConfirmButton: false,
                 timer: 1500
             });

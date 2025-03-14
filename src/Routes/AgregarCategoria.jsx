@@ -84,7 +84,7 @@ export default function AgregarCategoria() {
         try {
             await deleteCategory(id);
             MySwal.fire({
-                text: "Categoría eliminada correctamente",
+                text: "Categoría eliminada correctamente.",
                 icon: "success",
                 showConfirmButton: false,
                 timer: 1500
@@ -93,7 +93,7 @@ export default function AgregarCategoria() {
         } catch (error) {
             console.error("Error al eliminar la categoría:", error);
             MySwal.fire({
-                text: "Error al eliminar la categoría",
+                text: "Error al eliminar la categoría.",
                 icon: "error",
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#3083FF",
