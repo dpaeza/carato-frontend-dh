@@ -106,7 +106,7 @@ export default function Home() {
 					)}
 				</Box>
 				{
-					!isLoading && (
+					!isLoading && data?.data?.length>0 && (
 						<Pagination
 							count={data.totalPages}
 							page={data.currentPage}
