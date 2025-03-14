@@ -7,6 +7,8 @@ import {
     Box,
     Button,
     Checkbox,
+    Snackbar,
+    Alert
 } from "@mui/material";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -22,7 +24,7 @@ import { addFavorite, removeFavorite } from "../Services/favorites";
 import { useAuth } from "../Context/auth.context";
 import Login from "./Login";
 
-export default function CardCar({ car }) {
+export default function CardCar({ car, onFavorite = () => {} }) { 
     const {
         id,
         name,
@@ -40,6 +42,10 @@ export default function CardCar({ car }) {
     const { user } = useAuth();
     const MySwal = withReactContent(Swal);
 
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
     const handleFavorite = async (e) => {
         e.stopPropagation();
 
@@ -50,10 +56,19 @@ export default function CardCar({ car }) {
 
         try {
             if (favorite) {
-                await removeFavorite(id).then(() => setFavorite(false));
+                await removeFavorite(id)
+                setFavorite(false)
+                setSnackbarMessage(`${name} eliminado de tus favoritos.`);
+                setSnackbarSeverity("info");
+                onFavorite()
             } else {
-                await addFavorite(id).then(() => setFavorite(true));
+                await addFavorite(id)
+                setFavorite(true)
+                setSnackbarMessage(`${name} agregado a tus favoritos.`);
+                setSnackbarSeverity("success");
+                onFavorite()
             }
+            setSnackbarOpen(true);
         } catch (error) {
             console.error("Error al agregar/quitar favorito:", error);
             const message = favorite ? "eliminar" : "agregar";
@@ -199,17 +214,29 @@ export default function CardCar({ car }) {
             <Box
                 sx={{
                     position: "absolute",
-                    top: 0,
-                    right: 0,
-                    p: 1,
+                    top: 5,
+                    right: 5,
+                    p: '0.1px',
                     zIndex: 2,
+                    transition: "all 0.3s",
+                    backgroundColor: "rgba(255, 255, 255, 0.5)",
+                    borderRadius: "50%",
+                    boxShadow: "0px 2px 5px rgba(0,0,0,0.2)", 
+                    backdropFilter: "blur(4px)",
+                    "&:hover": {
+                        backgroundColor: "rgba(0,0,0,0.1)",
+                    },
                 }}
             >
                 <Checkbox
                     icon={<FavoriteBorder />}
                     checkedIcon={<Favorite />}
                     checked={favorite}
-                    sx={{ color: "var(--lightBlue)" }}
+                    sx={{ 
+                        color: "#FFBD3D", 
+                        padding: 0.8,
+                        '&.Mui-checked': { color: "#FFBD3D" }
+                    }}
                     onChange={handleFavorite}
                     onClick={(e) => e.stopPropagation()}
                 />
@@ -221,6 +248,20 @@ export default function CardCar({ car }) {
                     setOpenLogin(false);
                 }}
             />
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={3000}
+                onClose={() => setSnackbarOpen(false)}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            >
+                <Alert 
+                    onClose={() => setSnackbarOpen(false)} 
+                    severity={snackbarSeverity} 
+                    sx={{ width: "100%" }}
+                >
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </Card>
     );
 }

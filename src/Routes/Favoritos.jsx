@@ -1,19 +1,16 @@
-import React, {useState} from 'react'
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import React, {useState} from 'react';
 import Grid from '@mui/material/Grid2';
 import CardCar from '../Components/CardCar';
 import { useQuery } from '@tanstack/react-query';
-import queryString from 'query-string';
 import { getFavorites } from '../Services/favorites'
-import { Box, Typography, CircularProgress, Alert, Pagination } from '@mui/material';
+import { Box, Typography, CircularProgress, Alert, Pagination, Snackbar } from '@mui/material';
 
 export default function Favoritos() {
 
     const [ page, setPage ] = useState(1);
     const [error, setError] = useState(null);
 
-    const { data, isLoading } = useQuery({
+    const { data, isLoading, refetch } = useQuery({
         queryKey: ["cars", page],
         queryFn: () => getFavorites({page}),
         select: (data) => ({ ...data, data: data.data }),
@@ -21,7 +18,7 @@ export default function Favoritos() {
         staleTime: 60000,
         trowOnError: (error) => {
             console.error("Error al obtener favoritos:", error)
-            setError("Error al cargar lso favoritos. Por favor, intenta de nuevo más tarde.")
+            setError("Error al cargar los favoritos. Por favor, intenta de nuevo más tarde.")
         }
     })
 
@@ -64,7 +61,10 @@ export default function Favoritos() {
                                 size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
                                 sx={{ display: "flex", justifyContent: "center" }}
                             >
-                                <CardCar car={car} />
+                                <CardCar 
+                                    car={car}
+                                    onFavorite={refetch}
+                                />
                             </Grid>
                         ))}
                     </Grid>
