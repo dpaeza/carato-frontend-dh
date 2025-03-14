@@ -23,6 +23,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SettingsIcon from '@mui/icons-material/Settings';
 import NoCrashIcon from '@mui/icons-material/NoCrash';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import LogoCarato from "../assets/Logo-carato-slogan.svg";
 import Register from "./Register";
 import Login from "./Login";
@@ -62,6 +63,11 @@ export default function Navbar(props) {
         handleMenuClose();
         navigate('/cuenta');
     };
+
+    const handleClickFav = () => {
+        handleMenuClose();
+        navigate('/favoritos');
+    }
 
     const handleClickAdmin = () => {
         handleMenuClose();
@@ -122,6 +128,12 @@ export default function Navbar(props) {
                                 <PersonOutlineIcon fontSize="small" />
                             </ListItemIcon>
                             Mi cuenta
+                        </MenuItem>
+                        <MenuItem onClick={handleClickFav}>
+                            <ListItemIcon>
+                                <FavoriteIcon fontSize="small" />
+                            </ListItemIcon>
+                            Mis favoritos
                         </MenuItem>
                         <MenuItem>
                             <ListItemIcon>
@@ -197,6 +209,12 @@ export default function Navbar(props) {
                                             <PersonOutlineIcon fontSize="small" />
                                         </ListItemIcon>
                                         Mi cuenta
+                                    </MenuItem>
+                                    <MenuItem onClick={handleClickFav}>
+                                        <ListItemIcon>
+                                            <FavoriteIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        Mis favoritos
                                     </MenuItem>
                                     <MenuItem>
                                         <ListItemIcon>

@@ -13,6 +13,7 @@ import Usuarios from './Routes/Usuarios'
 import AgregarVehiculo from './Routes/AgregarVehiculo'
 import PrivateRoute from './PrivateRoute/PrivateRoute'
 import Cuenta from './Routes/Cuenta'
+import Favoritos from './Routes/Favoritos'
 
 function App() {
 
@@ -44,6 +45,13 @@ function App() {
             element={<PrivateRoute />} // No se requiere un rol específico
           >
             <Route index element={<Cuenta />} />
+          </Route>
+          {/* Ruta protegida para Favoritos */}
+          <Route
+            path="/favoritos"
+            element={<PrivateRoute />} // No se requiere un rol específico
+          >
+            <Route index element={<Favoritos />} />
           </Route>
         </Routes>
       </main>
