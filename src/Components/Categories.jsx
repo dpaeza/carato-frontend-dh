@@ -1,29 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import '../Styles/categories.css';
-import IconHibrido from '../assets/icons/Icon-hibrido.svg?react';
-import IconElectrico from '../assets/icons/Icon-electrico.svg?react';
-import IconLujo from '../assets/icons/Icon-lujo.svg?react';
-import IconCompacto from '../assets/icons/Icon-compacto.svg?react';
-import IconDeportivo from '../assets/icons/Icon-deportivo.svg?react';
-import IconFamiliar from '../assets/icons/Icon-familiar.svg?react';
 import { getCategories } from '../Services/categories';
 import { Box, Typography, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CleaningServicesOutlinedIcon from '@mui/icons-material/CleaningServicesOutlined';
-
-// Importaciones de Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-
-// Mapeo de nombres de categoría a íconos
-const iconMap = {
-    hibridos: IconHibrido,
-    electricos: IconElectrico,
-    lujo: IconLujo,
-    compactos: IconCompacto,
-    deportivos: IconDeportivo,
-    familiares: IconFamiliar,
-};
 
 export default function Categories({selectedCategoriesId, toggleCategoryById, filteredProducts, totalProducts}) {
     const [categories, setCategories] = useState([]);
@@ -41,19 +23,12 @@ export default function Categories({selectedCategoriesId, toggleCategoryById, fi
         fetchCategories();
     }, []);
 
-    // Función para normalizar el nombre de la categoría
-    const normalizeCategoryName = (name) => {
-        return name.toLowerCase().replace(/\s/g, ''); // Convierte a minúsculas y elimina espacios
-    };
-
     return (
         <section className="categories-component">
             {/* Versión de escritorio (cuadrícula) */}
             <div className='categories-container'>
                 <div className="desktop-categories">
-                    {categories.map(({ id, name }) => {
-                        const normalizedName = normalizeCategoryName(name); // Normaliza el nombre
-                        const Icon = iconMap[normalizedName]; // Obtiene el ícono correspondiente
+                    {categories.map(({ id, name, image }) => {
                         return (
                             <div
                                 key={id}
@@ -61,13 +36,22 @@ export default function Categories({selectedCategoriesId, toggleCategoryById, fi
                                 onClick={() => toggleCategoryById(id)}
                             >
                                 <div className="iconContainer">
-                                    {Icon ? (
-                                        <Icon
-                                            className="category-icon"
-                                            style={{ fill: selectedCategoriesId.includes(id) ? 'var(--darkBlue)' : 'var(--lightGrey)' }}
-                                        />
-                                    ) : (
-                                        <span>Ícono no encontrado</span> // Fallback en caso de que no haya ícono
+                                    { image.url ? (
+                                            <img 
+                                                src={image.url} 
+                                                alt={name} 
+                                                className="category-icon" 
+                                                style={{
+                                                    width: '50px',
+                                                    height: '50px',
+                                                    objectFit: 'contain',
+                                                    filter: selectedCategoriesId.includes(id) ? 
+                                                        'brightness(0) saturate(100%) invert(7%) sepia(6%) saturate(670%) hue-rotate(202deg) brightness(95%) contrast(92%)' 
+                                                        : 'brightness(0) saturate(100%) invert(74%) sepia(4%) saturate(95%) hue-rotate(198deg) brightness(89%) contrast(91%)'
+                                                }}
+                                            />
+                                        ) : (
+                                            <span>Ícono no encontrado</span>
                                     )}
                                 </div>
                                 <p>{name}</p>
@@ -199,9 +183,7 @@ export default function Categories({selectedCategoriesId, toggleCategoryById, fi
                         },
                     }}
                 >
-                    {categories.map(({ id, name }) => {
-                        const normalizedName = normalizeCategoryName(name); // Normaliza el nombre
-                        const Icon = iconMap[normalizedName]; // Obtiene el ícono correspondiente
+                    {categories.map(({ id, name, image }) => {
                         return (
                             <SwiperSlide key={id}>
                                 <div
@@ -209,13 +191,23 @@ export default function Categories({selectedCategoriesId, toggleCategoryById, fi
                                     onClick={() => toggleCategoryById(id)}
                                 >
                                     <div className="iconContainer">
-                                        {Icon ? (
-                                            <Icon
-                                                className="category-icon"
-                                                style={{ fill: selectedCategoriesId.includes(id) ? 'var(--darkBlue)' : 'var(--lightGrey)' }}
-                                            />
-                                        ) : (
-                                            <span>Ícono no encontrado</span> // Fallback en caso de que no haya ícono
+                                        { image.url ? (
+                                                <img 
+                                                    src={image.url} 
+                                                    alt={name} 
+                                                    className="category-icon" 
+                                                    style={{ 
+                                                        width: '50px',
+                                                        height: '50px',
+                                                        objectFit: 'contain',
+                                                        filter: selectedCategoriesId.includes(id) ? 
+                                                        'brightness(0) saturate(100%) invert(7%) sepia(6%) saturate(670%) hue-rotate(202deg) brightness(95%) contrast(92%)' 
+                                                        : 'brightness(0) saturate(100%) invert(74%) sepia(4%) saturate(95%) hue-rotate(198deg) brightness(89%) contrast(91%)'
+
+                                                    }}
+                                                />
+                                            ) : (
+                                                <span>Ícono no encontrado</span>
                                         )}
                                     </div>
                                     <p>{name}</p>
