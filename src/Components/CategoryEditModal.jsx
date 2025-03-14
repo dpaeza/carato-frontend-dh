@@ -184,7 +184,7 @@ export default function CategoryEditModal({ open, onClose, categoria = {}, onUpd
                                             : "Arrastra y suelta la imagen aquí, o haz clic para seleccionarla"
                                         }
                                     </Typography>
-                                    <Typography fontSize={14} color="error">
+                                    <Typography fontSize={12} color="error">
                                         (Solo archivos SVG permitidos)
                                     </Typography>
                                 </Box>
