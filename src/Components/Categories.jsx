@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import '../Styles/categories.css';
 import { getCategories } from '../Services/categories';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CleaningServicesOutlinedIcon from '@mui/icons-material/CleaningServicesOutlined';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -22,7 +22,7 @@ export default function Categories({ selectedCategoriesId, toggleCategoryById, f
     });
 
     // Mientras se cargan las categorías mostramos un loader
-    if (isLoading) return <div>Cargando categorías...</div>;
+    if (isLoading) return <Box display={"flex"} justifyContent={'center'} alignItems={'center'}><CircularProgress size="30px"/></Box>;
     if (error) return <div>Error al cargar las categorías: {error.message}</div>;
 
     return (
