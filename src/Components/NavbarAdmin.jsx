@@ -6,7 +6,7 @@ import Tab from '@mui/material/Tab';
 const routes = [
     { label: "Lista de productos", to: "/administracion/vehiculos" },
     { label: "Agregar producto", to: "/administracion/agregarvehiculo" },
-    // { label: "Agregar categoría", to: "/administracion/agregarcategoria" },
+    { label: "Categorías", to: "/administracion/agregarcategoria" },
     { label: "Usuarios", to: "/administracion/usuarios" }
 ];
 
@@ -33,12 +33,25 @@ export default function NavbarAdmin() {
             aria-label="nav tabs example"
             sx={{
                 '& .MuiTabs-indicator': { backgroundColor: 'var(--lightBlue)' },
-                '& .MuiTab-root': { color: 'gray' },
+                '& .MuiTab-root': { 
+                    color: 'gray', 
+                    fontSize: '15px',
+                    padding: '8px 15px',
+                    textTransform: 'none',
+                    marginRight: '5px',
+                    // backgroundColor: 'var(--lightGrey)',
+                    // color: 'var(--pureWhite)',
+                    // boxShadow: '0 0 5px rgba(0,0,0,0.1)',
+                    borderTopLeftRadius: '10px',
+                    borderTopRightRadius: '10px',
+                },
                 '& .Mui-selected': { 
                     backgroundColor: 'var(--lightBlue)',
                     color: 'white !important',
                     borderTopLeftRadius: '10px',
                     borderTopRightRadius: '10px',
+                    fontSize: '15px',
+                    padding: '8px 15px',
                 }
             }}
         >

@@ -48,7 +48,7 @@ export default function Usuarios() {
                 )
             );
             MySwal.fire({
-                text: `${name} ${lastname} ${newRole === "ADMIN" ? "es administrador" : "ya no es administrador"}.`,
+                text: `${name} ${lastname} ${newRole === "ADMIN" ? "es administrador." : "ya no es administrador."}.`,
                 icon: "success",
                 showConfirmButton: false,
                 timer: 1500
@@ -65,7 +65,7 @@ export default function Usuarios() {
 
     const handleSwitch = (id, currentRole, name, lastname) => {
         MySwal.fire({
-            text: `¿Estás seguro de querer realizar esta acción ?`,
+            text: `¿Estás seguro de querer realizar esta acción?`,
             icon: "question",
             showCancelButton: true,
             confirmButtonText: "Cancelar",

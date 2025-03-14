@@ -17,12 +17,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import IconHibrido from '../assets/icons/Icon-hibrido.svg?react';
-import IconElectrico from '../assets/icons/Icon-electrico.svg?react';
-import IconLujo from '../assets/icons/Icon-lujo.svg?react';
-import IconCompacto from '../assets/icons/Icon-compacto.svg?react';
-import IconDeportivo from '../assets/icons/Icon-deportivo.svg?react';
-import IconFamiliar from '../assets/icons/Icon-familiar.svg?react';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
@@ -30,7 +24,7 @@ import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Grid from "@mui/material/Grid2";
 import { getBrands, getFuelTypes, getTransmissions, getBrakeTypes } from '../Services/extras';
-import { Category } from '@mui/icons-material';
+import { getCategories } from '../Services/categories';
 import { updateCar } from '../Services/cars';
 import { useDropzone } from 'react-dropzone';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
@@ -43,6 +37,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
     const [gasolines, setGasolines] = useState([]);
     const [transmissions, setTransmissions] = useState([]);
     const [brakeSystems, setBrakeSystems] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const [newProduct, setNewProduct] = useState({
@@ -65,15 +60,6 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
 
     const [previews, setPreviews] = useState([]);
     const [errors, setErrors] = useState({});
-
-    const categories = [
-        { name: "Hibridos", icon: IconHibrido, id: 1 },
-        { name: "Electricos", icon: IconElectrico, id: 2 },
-        { name: "Lujo", icon: IconLujo, id: 3 },
-        { name: "Compactos", icon: IconCompacto, id: 4 },
-        { name: "Deportivos", icon: IconDeportivo, id: 5 },
-        { name: "Familiares", icon: IconFamiliar, id: 6 }
-    ];
 
     const hasAirCondition = [
         { name: "Sí", value: true },
@@ -160,6 +146,15 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
             setBrakeSystems(brakeSystems);
         } catch (error) {
             console.error("Error al obtener los tipos de frenos:", error);
+        }
+    };
+
+    const fetchCategories = async () => {
+        try {
+            const response = await getCategories();
+            setCategories(response);
+        } catch (error) {
+            console.error("Error al obtener las categorías:", error);
         }
     };
 
@@ -316,6 +311,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
         fetchGasolines();
         fetchTransmissions();
         fetchBrakeSystems();
+        fetchCategories();
     }, []);
 
     return (
@@ -383,6 +379,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                                 id="modelo"
                                                 label="Nombre*"
                                                 variant="standard"
+                                                margin="dense"
                                                 value={newProduct.name}
                                                 error={!!errors.name}
                                                 onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
@@ -414,8 +411,10 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                             >
                                                 {categories.map((category, index) => (
                                                     <MenuItem key={index} value={category.id}>
-                                                        <category.icon style={{ marginRight: 8, height: 15, width: 15 }} />
-                                                        {category.name}
+                                                        <Box display={'flex'} alignItems={'center'}>
+                                                            <img src={category.image.url} alt={category.name} style={{ height: 15, width: 15, marginRight: 8 }} />
+                                                            {category.name}
+                                                        </Box>
                                                     </MenuItem>
                                                 ))}
                                             </Select>
@@ -524,6 +523,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                         <TextField
                                             id="descripcion"
                                             label="Descripción"
+                                            margin="dense"
                                             error={!!errors.description}
                                             multiline
                                             minRows={6}
@@ -712,6 +712,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                                 variant="standard"
                                                 error={!!errors.horsePower}
                                                 type="number"
+                                                margin="dense"
                                                 value={newProduct.horsePower}
                                                 onChange={(e) => setNewProduct({ ...newProduct, horsePower: e.target.value })}
                                                 onKeyDown={(e) => {
@@ -740,6 +741,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                                 label="Año del modelo*"
                                                 variant="standard"
                                                 type="number"
+                                                margin="dense"
                                                 error={!!errors.year}
                                                 value={newProduct.year}
                                                 onChange={(e) => setNewProduct({ ...newProduct, year: e.target.value })}
@@ -769,6 +771,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                                 label="Kilometraje (Km)*"
                                                 variant="standard"
                                                 type="number"
+                                                margin="dense"
                                                 error={!!errors.mileage}
                                                 value={newProduct.mileage}
                                                 onChange={(e) => setNewProduct({ ...newProduct, mileage: e.target.value })}
@@ -814,6 +817,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                             label="Valor x día*"
                                             variant="standard"
                                             type="number"
+                                            margin="dense"
                                             error={!!errors.price}
                                             value={newProduct.price}
                                             onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}

@@ -51,7 +51,7 @@ const Register = React.memo(({ open, onClose }) => {
         if (field === "email") {
             const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
             if (!regex.test(value)) {
-                return "Formato de correo no válido";
+                return "Formato de correo no válido. Ejemplo: usuario@dominio.com";
             }
         }
         if (field === "password") {

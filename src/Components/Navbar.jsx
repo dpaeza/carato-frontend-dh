@@ -23,6 +23,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SettingsIcon from '@mui/icons-material/Settings';
 import NoCrashIcon from '@mui/icons-material/NoCrash';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import LogoCarato from "../assets/Logo-carato-slogan.svg";
 import Register from "./Register";
 import Login from "./Login";
@@ -62,6 +63,11 @@ export default function Navbar(props) {
         handleMenuClose();
         navigate('/cuenta');
     };
+
+    const handleClickFav = () => {
+        handleMenuClose();
+        navigate('/favoritos');
+    }
 
     const handleClickAdmin = () => {
         handleMenuClose();
@@ -123,6 +129,12 @@ export default function Navbar(props) {
                             </ListItemIcon>
                             Mi cuenta
                         </MenuItem>
+                        <MenuItem onClick={handleClickFav}>
+                            <ListItemIcon>
+                                <FavoriteIcon fontSize="small" />
+                            </ListItemIcon>
+                            Mis favoritos
+                        </MenuItem>
                         <MenuItem>
                             <ListItemIcon>
                                 <NoCrashIcon fontSize="small" />
@@ -174,28 +186,35 @@ export default function Navbar(props) {
                     </a>
                     <Box sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center" }}>
                         {user ? (
-                            <Box sx={{ display: "flex", alignItems: "center", borderRadius: "30px", border: "1px solid #fff", p: 1 }}>
-                                <Typography color="white" sx={{ marginRight: 1, textTransform: "capitalize" }}>
+                            <Box sx={{ display: "flex", alignItems: "center", borderRadius: "25px", border: "1px solid #fff", py: 0.8, px:1 }}>
+                                <Typography color="white" sx={{ marginRight: 1.5, textTransform: "capitalize", fontSize:"14px" }}>
                                     Hola {user.name}
                                 </Typography>
                                 <Avatar
                                     src={user.avatar}
                                     alt={user.name}
                                     onClick={handleMenuOpen}
-                                    sx={{ cursor: "pointer" }}
+                                    sx={{ cursor: "pointer", height:"30px", width:"30px" }}
+                                    
                                 />
                                 <Menu
                                     anchorEl={menuAnchor}
                                     open={Boolean(menuAnchor)}
                                     onClose={handleMenuClose}
                                     MenuListProps={{ autoFocusItem: false }}
-                                    sx={{ mt: '15px' }}
+                                    sx={{ mt: '22px' }}
                                 >
                                     <MenuItem onClick={handleClick}> 
                                         <ListItemIcon>
                                             <PersonOutlineIcon fontSize="small" />
                                         </ListItemIcon>
                                         Mi cuenta
+                                    </MenuItem>
+                                    <MenuItem onClick={handleClickFav}>
+                                        <ListItemIcon>
+                                            <FavoriteIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        Mis favoritos
                                     </MenuItem>
                                     <MenuItem>
                                         <ListItemIcon>

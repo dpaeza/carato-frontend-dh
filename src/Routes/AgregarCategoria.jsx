@@ -1,123 +1,178 @@
-import React, {useState} from 'react'
-import { Box, Accordion, AccordionSummary, Typography, AccordionDetails, TextField, Button } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import DescriptionIcon from '@mui/icons-material/Description';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import Grid from "@mui/material/Grid2";
+import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { Button, Typography } from '@mui/material';
+import DeatilModal from '../Components/CategoryModal';
+import CategoryEditModal from '../Components/CategoryEditModal';
+import CategoryAddModal from '../Components/CategoryAddModal';
+import { getCategories, deleteCategory } from '../Services/categories';
+
+const headers = [
+    "ID",
+    "Nombre",
+    "Acciones"
+];
 
 export default function AgregarCategoria() {
+    const [categorias, setCategorias] = useState([]);
 
-    const [categoria, setCategoria] = useState({
-        nombre: "",
-        imagen: "",
-        descripcion: ""
-    })
+    const [openDetail, setOpenDetail] = useState({
+        isOpen: false,
+        categoryData: null
+    });
+
+    const [ openEdit, setOpenEdit ] = useState({
+        isOpen: false,
+        categoryData: null
+    });
+
+    const [openAdd, setOpenAdd] = useState(false);
+    
+    const MySwal = withReactContent(Swal);
+
+    const handleOpenModal = (categoria) => {
+        setOpenDetail({
+            isOpen: true,
+            categoryData: categoria
+        });
+    };
+
+    const handleCloseModal = () => {
+        setOpenDetail({
+            isOpen: false,
+            categoryData: null
+        });
+    };
+
+    const handleDelete = (id, name) => {
+        MySwal.fire({
+            text: `¿Estás seguro de eliminar la categoría ${name}?`,
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "Eliminar",
+            confirmButtonText: "Cancelar",
+            cancelButtonColor: "#FF4F4F",
+            confirmButtonColor: "#B3B3BB",
+        }).then((result) => {
+            if (result.isDismissed) {
+                deleteCategoria(id);
+            }
+        });
+    };
+
+    const fetchCategories = async () => {
+        try {
+            const response = await getCategories();
+            setCategorias(response);
+        } catch (error) {
+            console.error("Error al obtener las categorías:", error);
+        }
+    };
+
+    const deleteCategoria = async (id) => {
+        try {
+            await deleteCategory(id);
+            MySwal.fire({
+                text: "Categoría eliminada correctamente.",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            fetchCategories();
+        } catch (error) {
+            console.error("Error al eliminar la categoría:", error);
+            MySwal.fire({
+                text: "Error al eliminar la categoría.",
+                icon: "error",
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#3083FF",
+            });
+        }
+    };
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", mx: "auto", maxWidth: 700, gap: 2 }}>
-            <Accordion defaultExpanded>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                    sx={{ backgroundColor: "var(--blue-purple)" }}
-                >
-                    <DescriptionIcon />
-                    <Typography component="span" ml={2}>Dato de categoría</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <Box component="form"
-                        noValidate
-                        autoComplete="off"
-                        mb={2}
-                    >
-                        <TextField 
-                            id="titulo"
-                            label="Título"
-                            variant='standard'
-                            value={categoria.nombre}
-                            onChange={(e) => setCategoria({...categoria, nombre: e.target.value})}
-                            slotProps={{
-                                inputLabel: {
-                                    shrink: true,
-                                },
-                            }}
-                        />
-                    </Box>
-                    <Button
-                        component="label"
-                        variant='contained'
-                        fullWidth
-                        startIcon={<CloudUploadIcon />}
-                    >
-                        Agrega una imagen para la categoría
-                        <input 
-                            type="file" 
-                            hidden 
-                            accept='.svg'
-                            onChange={(e) => setCategoria({...categoria, imagen: e.target.files[0]})}
-                            style={{
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                                width: "100%",
-                                height: "100%",
-                                opacity: 0,
-                                cursor: "pointer",
-                            }}
-                        />
-                    </Button>
-                    <Box
-                        component="form"
-                        sx={{ '& > :not(style)': { width: '100%' } }}
-                        noValidate
-                        autoComplete="off"
-                        mt={2}
-                    >
-                        <TextField 
-                            id="descripcion"
-                            label="Descripción"
-                            multiline
-                            minRows={6}
-                            value={categoria.descripcion}
-                            onChange={(e) => setCategoria({...categoria, descripcion: e.target.value})}
-                        />
-                    </Box>
-                </AccordionDetails>
-            </Accordion>
-            <Grid
-                sx={{
-                    display: "flex",
-                    gap: 2,
-                    justifyContent: "flex-end",
-                    width: "100%",
-                }}
-            >
+        <div>
+            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                <Typography variant='h1' color='var(--darkBlue)' fontFamily="var(--openSans)" fontWeight={700} fontSize={25}>
+                    Categorías
+                </Typography>
                 <Button
                     variant="contained"
-                    sx={{
-                        backgroundColor: "#B3B3BB",
-                        color: "var(--pureWhite)",
-                        width: "200px",
-                        textTransform: "capitalize",
-                        borderRadius: 2,
-                    }}
-                >
-                    Cancelar
-                </Button>
-                <Button
-                    variant="contained"
-                    sx={{
-                        backgroundColor: "var(--lightBlue)",
-                        color: "var(--pureWhite)",
-                        width: "200px",
-                        textTransform: "capitalize",
-                        borderRadius: 2,
-                    }}
+                    sx={{ backgroundColor: "var(--lightBlue)", color: "var(--pureWhite)", borderRadius: 2, textTransform: "none" }}
+                    onClick={() => setOpenAdd(true)}
                 >
                     Agregar categoría
                 </Button>
-            </Grid>
-        </Box>
+            </Box>
+            <TableContainer component={Paper} sx={{ bgcolor: "(--pureWhite)", my: 3, maxWidth: 750, mx: "auto" }}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            {headers.map((header, index) => (
+                                <TableCell key={index} align="center">{header}</TableCell>
+                            ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {categorias.map((categoria) => (
+                            <TableRow key={categoria.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                <TableCell align="center">{categoria.id}</TableCell>
+                                <TableCell align="center">{categoria.name}</TableCell>
+                                <TableCell align="center" sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
+                                    <Button
+                                        sx={{ color: "var(--darkBlue)", p: 0, minWidth: "auto" }}
+                                        onClick={() => handleOpenModal(categoria)}
+                                    >
+                                        <VisibilityIcon />
+                                    </Button>
+                                    <Button
+                                        sx={{ color: "var(--darkBlue)", p: 0, minWidth: "auto" }}
+                                        onClick={() => setOpenEdit({ isOpen: true, categoryData: categoria })}
+                                    >
+                                        <ModeEditIcon />
+                                    </Button>
+                                    <Button sx={{ color: "var(--red)", p: 0, minWidth: "auto" }}
+                                        onClick={() => handleDelete(categoria.id, categoria.name)}
+                                    >
+                                        <DeleteIcon />
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <DeatilModal 
+                open={openDetail.isOpen}
+                onClose={handleCloseModal}
+                categoria={openDetail.categoryData}
+            />
+            <CategoryEditModal 
+                open={openEdit.isOpen}
+                onClose={() => setOpenEdit({ isOpen: false, categoryData: null })}
+                categoria={openEdit.categoryData}
+                onUpdate={fetchCategories}
+            />
+            <CategoryAddModal 
+                open={openAdd}
+                onClose={() => setOpenAdd(false)}
+                onUpdate={fetchCategories}
+            />
+        </div>
     )
 }

@@ -1,50 +1,84 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Box, Typography, CircularProgress, Alert } from "@mui/material";
 import Search from '../Components/Search';
 import Categories from '../Components/Categories';
 import GridCar from '../Components/GridCar';
 import { getCars } from '../Services/cars';
 import Pagination from '@mui/material/Pagination';
+import { useQuery } from '@tanstack/react-query';
+import { shuffleArray, sortNumbers } from '../Utils/numbers';
+import { useSearchParams } from 'react-router-dom';
+import queryString from 'query-string';
 
 export default function Home() {
-	const [cars, setCars] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const [page, setPage] = useState(1);
-	const [totalPages, setTotalPages] = useState(1);
+	const [searchParams, setSearchParams] = useSearchParams();
+	const params = queryString.parse(searchParams.toString(), {
+		types: {
+			page: "number",
+			categoriesId: "string"
+		}
+	});
 
-	const getVehiculos = async () => {
-		try {
-			const response = await getCars(page);
-			console.log("Respuesta de la API:", response);
-			// Mezclar el array de autos de forma aleatoria
-            const shuffledCars = response.data.sort(() => Math.random() - 0.5);
-			setCars(shuffledCars);
-			setTotalPages(response.totalPages);
-		} catch (error) {
+	const validCategoriesId = /^\d*(,\d+)*$/.test(params.categoriesId);
+	const randomSeed = useMemo(() => Math.random(), []);
+
+	const page = params.page ?? 1;
+	const categoriesId = validCategoriesId ? params.categoriesId : "";
+
+	const categoriesIdArray = (categoriesId !== "")
+		? categoriesId.split(",").map(id => isNaN(id) ? null : parseInt(id)).filter(id => id !== null)
+		: [];
+
+	const [error, setError] = useState(null);
+	const { data, isLoading } = useQuery({
+		queryKey: ["cars", page, categoriesId],
+		queryFn: () => getCars({ page, categoriesId }),
+		select: (data) => ({ ...data, data: shuffleArray(data.data, randomSeed) }),
+		refetchOnWindowFocus: false,
+		staleTime: 60000,
+		throwOnError: (error) => {
 			console.error("Error al obtener los autos:", error);
 			setError("Error al cargar los autos. Por favor, intenta de nuevo más tarde.");
-		} finally {
-			setLoading(false);
 		}
-	};
+	});
 
-	useEffect(() => {
-		getVehiculos();
-	}, [page]);
+	const { data: totalData, isLoading: isTotalLoading } = useQuery({
+		queryKey: ["totalCars"],
+		queryFn: () => getCars({}),
+	});
+
+	const handleToggleCategoryById = (id) => {
+		const updatedCategories = categoriesIdArray.includes(id)
+			? categoriesIdArray.filter(categoryId => categoryId !== id)
+			: sortNumbers([...categoriesIdArray, id]);
+
+		setSearchParams(queryString.stringify({
+			...params,
+			page: undefined,
+			categoriesId: updatedCategories.length > 0 ? updatedCategories.join(",") : undefined,
+		}));
+	}
 
 	const handlePageChange = (event, value) => {
-        setPage(value);
-    };
+		setSearchParams(queryString.stringify({
+			...params,
+			page: (value !== 1) ? value : undefined,
+		}));
+	};
 
 	return (
 		<Box>
-			<Box sx={{ backgroundColor:"var(--pureWhite)" }}>
-				<Box sx={{ pt: 6, px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto"}}>
+			<Box sx={{ backgroundColor: "var(--pureWhite)" }}>
+				<Box sx={{ pt: 6, px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto" }}>
 					<Search />
 				</Box>
 				<Box sx={{ py: 3, px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto" }}>
-					<Categories />
+					<Categories 
+						selectedCategoriesId={categoriesIdArray} 
+						toggleCategoryById={handleToggleCategoryById}
+						filteredProducts={data?.data?.length || 0}
+						totalProducts={totalData?.totalElements || 0} 
+					/>
 				</Box>
 			</Box>
 			<Box sx={{ bgcolor: "#fafafa", pt: 6 }}>
@@ -52,7 +86,7 @@ export default function Home() {
 					<Typography
 						variant='h2'
 						fontFamily="var(--openSans)"
-						fontSize={24}
+						fontSize={22}
 						marginBottom={6}
 						fontWeight={700}
 						textAlign={"center"}
@@ -60,26 +94,30 @@ export default function Home() {
 					>
 						Recomendaciones
 					</Typography>
-					{loading ? (
+					{isLoading ? (
 						<Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
 							<CircularProgress />
 						</Box>
 					) : error ? (
 						<Alert severity="error">{error}</Alert>
-					) : (cars || []).length > 0 ? (
-						<GridCar cars={cars} />
+					) : (data.data.length > 0) ? (
+						<GridCar cars={data.data} />
 					) : (
 						<Typography textAlign="center">No se encontraron autos.</Typography>
 					)}
 				</Box>
-				<Pagination
-					count={totalPages}
-					page={page}
-					onChange={handlePageChange}
-					showFirstButton
-					showLastButton
-					sx={{ display: "flex", justifyContent: "center", pb: 4 }}
-				/>
+				{
+					!isLoading && data?.data?.length>0 && (
+						<Pagination
+							count={data.totalPages}
+							page={data.currentPage}
+							onChange={handlePageChange}
+							showFirstButton
+							showLastButton
+							sx={{ display: "flex", justifyContent: "center", pb: 4 }}
+						/>
+					)
+				}
 			</Box>
 		</Box>
 	);
