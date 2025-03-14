@@ -17,7 +17,7 @@ import AddRoadIcon from '@mui/icons-material/AddRoad';
 
 export default function Specifications({vehicle}) {
     return (
-        <Box sx={{ margin: "auto", padding: 2 }}>
+        <Box sx={{ margin: "auto", padding: 2,  maxWidth: "1200px" }}>
             <Typography variant="h5" gutterBottom fontFamily={"var(--openSans)"} fontWeight={500} color= "var(--darkBlue)">
             Caracteristicas técnicas
             </Typography>

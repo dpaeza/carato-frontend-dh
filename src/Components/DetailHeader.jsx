@@ -12,7 +12,7 @@ export default function DetailHeader({ model, category}) {
     };
 
     return (
-        <Grid container alignItems="center" justifyContent="space-between" sx={{ marginBottom: 2 }}>
+        <Grid container alignItems="center" justifyContent="space-between" sx={{ marginBottom: 2,  maxWidth: "1200px", margin: "auto" }}>
             <Grid>
                 <Typography variant="h2" component="span" textTransform={"uppercase"} fontFamily={"var(--openSans)"} fontWeight={700} sx={{ fontSize: 25, color: "var(--darkBlue)" }}>{model}</Typography>
                 <Typography variant="subtitle1" component="span" fontFamily={"var(--openSans)"} fontWeight={500} sx={{ marginLeft: 1, fontSize: 14, color: "var(--lightGrey)" }}>{category}</Typography>

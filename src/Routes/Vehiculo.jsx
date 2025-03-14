@@ -38,7 +38,7 @@ export default function Vehiculo() {
     return (
         <Box sx={{ backgroundColor: "var(--lightWhite)", px: 3, pt:5, pb:2 }}>
             <DetailHeader model={vehicle.name} category={vehicle.category} />
-            <Box sx={{ height: {xs:"70vh", sx:"50vh"}}}>
+            <Box sx={{ height: {xs:"70vh", sx:"50vh"},  maxWidth: "1200px", margin: "auto", mt:3}}>
                 <GridImage images={vehicle.images} />
             </Box>
             <Specifications vehicle={vehicle} />
