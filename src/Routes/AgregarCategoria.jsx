@@ -8,6 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
@@ -16,6 +17,7 @@ import Pagination from '@mui/material/Pagination';
 import { getCars, deleteCar } from '../Services/cars';
 import DeatilModal from '../Components/CategoryModal';
 import CategoryEditModal from '../Components/CategoryEditModal';
+import CategoryAddModal from '../Components/CategoryAddModal';
 import { getCategories, deleteCategory } from '../Services/categories';
 
 const headers = [
@@ -26,7 +28,7 @@ const headers = [
 
 export default function AgregarCategoria() {
     const [categorias, setCategorias] = useState([]);
-    
+
     const [openDetail, setOpenDetail] = useState({
         isOpen: false,
         categoryData: null
@@ -36,6 +38,8 @@ export default function AgregarCategoria() {
         isOpen: false,
         categoryData: null
     });
+
+    const [openAdd, setOpenAdd] = useState(false);
     
     const MySwal = withReactContent(Swal);
 
@@ -105,9 +109,18 @@ export default function AgregarCategoria() {
 
     return (
         <div>
-            <Typography variant='h1' color='var(--darkBlue)' fontFamily="var(--openSans)" fontWeight={700} fontSize={25}>
-                Categorías
-            </Typography>
+            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                <Typography variant='h1' color='var(--darkBlue)' fontFamily="var(--openSans)" fontWeight={700} fontSize={25}>
+                    Categorías
+                </Typography>
+                <Button
+                    variant="contained"
+                    sx={{ backgroundColor: "var(--lightBlue)", color: "var(--pureWhite)", borderRadius: 2, textTransform: "none" }}
+                    onClick={() => setOpenAdd(true)}
+                >
+                    Agregar categoría
+                </Button>
+            </Box>
             <TableContainer component={Paper} sx={{ bgcolor: "(--pureWhite)", my: 3, maxWidth: 750, mx: "auto" }}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
@@ -155,6 +168,11 @@ export default function AgregarCategoria() {
                 open={openEdit.isOpen}
                 onClose={() => setOpenEdit({ isOpen: false, categoryData: null })}
                 categoria={openEdit.categoryData}
+                onUpdate={fetchCategories}
+            />
+            <CategoryAddModal 
+                open={openAdd}
+                onClose={() => setOpenAdd(false)}
                 onUpdate={fetchCategories}
             />
         </div>

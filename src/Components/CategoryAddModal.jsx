@@ -1,32 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { Box, Accordion, AccordionSummary, Typography, AccordionDetails, TextField, Button, Dialog, DialogTitle, DialogContent, IconButton, Backdrop, CircularProgress } from '@mui/material'
+import {
+    Box, Accordion, AccordionSummary, Typography, AccordionDetails,
+    TextField, Button, Dialog, DialogTitle, DialogContent, IconButton,
+    Backdrop, CircularProgress
+} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DescriptionIcon from '@mui/icons-material/Description';
 import Grid from "@mui/material/Grid2";
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { editCategory } from '../Services/categories';
+import { addCategory } from '../Services/categories';
 import { useDropzone } from 'react-dropzone';
 
-export default function CategoryEditModal({ open, onClose, categoria = {}, onUpdate }) {
-
+export default function CategoryAddModal({ open, onClose, onUpdate }) {
     const [loading, setLoading] = useState(false);
     const [category, setCategory] = useState({
-        name: categoria?.name || "",
-        description: categoria?.description || "",
+        name: "",
+        description: "",
         image: null,
-        imagePreview: categoria?.image?.url || null
+        imagePreview: null
+    });
+
+    // Estado para controlar si el usuario ya interactuó con cada campo
+    const [touched, setTouched] = useState({
+        name: false,
+        description: false,
+        image: false,
     });
 
     const MySwal = withReactContent(Swal);
 
+    // La validación: todos los campos deben tener valor
     const isValid = category.name && category.description && category.imagePreview;
 
-    const handleUpdate = async () => {
-        if (!isValid) return;
+    const handleSubmit = async () => {
+        if (!isValid) {
+            // Si no es válido, marcamos todos los campos como "touched" para que se muestren los errores
+            setTouched({
+                name: true,
+                description: true,
+                image: true,
+            });
+            return;
+        }
 
         setLoading(true);
         try {
@@ -36,12 +55,12 @@ export default function CategoryEditModal({ open, onClose, categoria = {}, onUpd
             if (category.image) {
                 formData.append("image", category.image);
             }
-            await editCategory(categoria.id, formData);
+            await addCategory(formData);
             onUpdate();
             onClose();
             MySwal.fire({
                 icon: 'success',
-                title: 'Categoría editada exitosamente',
+                title: 'Categoría creada exitosamente',
                 showConfirmButton: false,
                 timer: 1500
             });
@@ -57,7 +76,7 @@ export default function CategoryEditModal({ open, onClose, categoria = {}, onUpd
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         accept: "image/svg+xml",
@@ -65,11 +84,10 @@ export default function CategoryEditModal({ open, onClose, categoria = {}, onUpd
         onDrop: (acceptedFiles) => {
             const file = acceptedFiles[0];
             const previewURL = URL.createObjectURL(file);
-
             setCategory((prev) => ({
                 ...prev,
                 image: file,
-                imagePreview: URL.createObjectURL(file)
+                imagePreview: previewURL
             }));
         }
     });
@@ -82,19 +100,10 @@ export default function CategoryEditModal({ open, onClose, categoria = {}, onUpd
         }));
     };
 
-    useEffect(() => {
-        setCategory({
-            name: categoria?.name || "",
-            description: categoria?.description || "",
-            image: null, // Se reseteará en cada cambio
-            imagePreview: categoria?.image?.url || null
-        });
-    }, [categoria]);
-
     return (
         <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
             <DialogTitle>
-                Editar categoría
+                Agregar categoría
                 <IconButton
                     onClick={onClose}
                     aria-label="close"
@@ -120,7 +129,8 @@ export default function CategoryEditModal({ open, onClose, categoria = {}, onUpd
                             <Typography component="span" ml={2}>Data de categoría</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Box component="form"
+                            <Box
+                                component="form"
                                 noValidate
                                 autoComplete="off"
                                 mb={2}
@@ -130,16 +140,12 @@ export default function CategoryEditModal({ open, onClose, categoria = {}, onUpd
                                     id="titulo"
                                     label="Nombre"
                                     variant='standard'
-                                    error={!category.name}
-                                    helperText={!category.name && "El nombre es requerido"}
-                                    value={category?.name || ''}
+                                    error={touched.name && !category.name}
+                                    helperText={touched.name && !category.name ? "El nombre es requerido" : ""}
+                                    value={category.name}
                                     onChange={(e) => setCategory({ ...category, name: e.target.value })}
-                                    slotProps={{
-                                        inputLabel: {
-                                            shrink: true,
-                                        },
-                                    }}
-                                    sx={{ width: "100%"}}
+                                    onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
+                                    sx={{ width: "100%" }}
                                 />
                             </Box>
                             <Box
@@ -152,17 +158,20 @@ export default function CategoryEditModal({ open, onClose, categoria = {}, onUpd
                                 <TextField
                                     id="descripcion"
                                     label="Descripción"
-                                    error={!category.description}
-                                    helperText={!category.description && "La descripción es requerida"}
+                                    error={touched.description && !category.description}
+                                    helperText={touched.description && !category.description ? "La descripción es requerida" : ""}
                                     multiline
                                     minRows={6}
-                                    value={category?.description || ''}
+                                    value={category.description}
                                     onChange={(e) => setCategory({ ...category, description: e.target.value })}
+                                    onBlur={() => setTouched((prev) => ({ ...prev, description: true }))}
                                 />
                             </Box>
                             <Box>
                                 <Box
-                                    {...getRootProps()}
+                                    {...getRootProps({
+                                        onClick: () => setTouched((prev) => ({ ...prev, image: true }))
+                                    })}
                                     sx={{
                                         border: `2px dashed ${isDragActive ? "#1976d2" : "#ccc"}`,
                                         backgroundColor: isDragActive ? "rgba(25, 118, 210, 0.1)" : "transparent",
@@ -188,19 +197,19 @@ export default function CategoryEditModal({ open, onClose, categoria = {}, onUpd
                                         (Solo archivos SVG permitidos)
                                     </Typography>
                                 </Box>
-                                {!category.imagePreview && (
+                                {/* Mostrar error solo si se ha interactuado con el dropzone */}
+                                {!category.imagePreview && touched.image && (
                                     <Typography variant="caption" color="error" sx={{ mt: 1 }}>
                                         La imagen es requerida
                                     </Typography>
                                 )}
-
                                 {/* Vista previa de la imagen */}
                                 {category.imagePreview && (
                                     <Box
                                         sx={{
-                                            position: "relative", 
-                                            display: "inline-block", 
-                                            width: "65px", 
+                                            position: "relative",
+                                            display: "inline-block",
+                                            width: "65px",
                                             textAlign: "center"
                                         }}
                                     >
@@ -225,7 +234,7 @@ export default function CategoryEditModal({ open, onClose, categoria = {}, onUpd
                                                 "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" }
                                             }}
                                         >
-                                            <DeleteIcon fontSize="12px" />
+                                            <DeleteIcon fontSize="small" />
                                         </Button>
                                     </Box>
                                 )}
@@ -255,19 +264,19 @@ export default function CategoryEditModal({ open, onClose, categoria = {}, onUpd
                             Cerrar
                         </Button>
                         <Button
-                                variant="contained"
-                                disabled={!isValid}
-                                sx={{
-                                    backgroundColor: "#3083FF",
-                                    color: "white",
-                                    width: "200px",
-                                    textTransform: "capitalize",
-                                    borderRadius: 2,
-                                    fontSize: 14,
-                                }}
-                                onClick={handleUpdate}
-                            >
-                                Guardar cambios
+                            variant="contained"
+                            disabled={!isValid}
+                            sx={{
+                                backgroundColor: "#3083FF",
+                                color: "white",
+                                width: "200px",
+                                textTransform: "capitalize",
+                                borderRadius: 2,
+                                fontSize: 14,
+                            }}
+                            onClick={handleSubmit}
+                        >
+                            Guardar cambios
                         </Button>
                     </Grid>
                 </Box>
@@ -282,5 +291,6 @@ export default function CategoryEditModal({ open, onClose, categoria = {}, onUpd
                 <CircularProgress color="inherit" />
             </Backdrop>
         </Dialog>
-    )
+    );
 }
+

@@ -53,3 +53,24 @@ export const editCategory = async (id, data) => {
         throw error;
     }
 };
+
+export const addCategory = async (data) => {
+    try {
+        const userData = JSON.parse(localStorage.getItem("auth"));
+        const token = userData ? userData.token : null;
+
+        const headers = {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+        };
+
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+        }
+        const response = await axios.post(API_URL, data, { headers });
+        return response.data;
+    } catch (error) {
+        console.error("Error al agregar la categoría:", error);
+        throw error;
+    }
+}
