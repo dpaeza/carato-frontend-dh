@@ -214,7 +214,13 @@ export default function CardCar({ car }) {
                     onClick={(e) => e.stopPropagation()}
                 />
             </Box>
-            <Login open={openLogin} onClose={() => setOpenLogin(false)} />
+            <Login 
+                open={openLogin}
+                onClose={(e) => {
+                    if (e) e.stopPropagation();
+                    setOpenLogin(false);
+                }}
+            />
         </Card>
     );
 }
