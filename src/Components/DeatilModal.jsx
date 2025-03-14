@@ -379,6 +379,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                                 id="modelo"
                                                 label="Nombre*"
                                                 variant="standard"
+                                                margin="dense"
                                                 value={newProduct.name}
                                                 error={!!errors.name}
                                                 onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
@@ -522,6 +523,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                         <TextField
                                             id="descripcion"
                                             label="Descripción"
+                                            margin="dense"
                                             error={!!errors.description}
                                             multiline
                                             minRows={6}
@@ -710,6 +712,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                                 variant="standard"
                                                 error={!!errors.horsePower}
                                                 type="number"
+                                                margin="dense"
                                                 value={newProduct.horsePower}
                                                 onChange={(e) => setNewProduct({ ...newProduct, horsePower: e.target.value })}
                                                 onKeyDown={(e) => {
@@ -738,6 +741,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                                 label="Año del modelo*"
                                                 variant="standard"
                                                 type="number"
+                                                margin="dense"
                                                 error={!!errors.year}
                                                 value={newProduct.year}
                                                 onChange={(e) => setNewProduct({ ...newProduct, year: e.target.value })}
@@ -767,6 +771,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                                 label="Kilometraje (Km)*"
                                                 variant="standard"
                                                 type="number"
+                                                margin="dense"
                                                 error={!!errors.mileage}
                                                 value={newProduct.mileage}
                                                 onChange={(e) => setNewProduct({ ...newProduct, mileage: e.target.value })}
@@ -812,6 +817,7 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                                             label="Valor x día*"
                                             variant="standard"
                                             type="number"
+                                            margin="dense"
                                             error={!!errors.price}
                                             value={newProduct.price}
                                             onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}

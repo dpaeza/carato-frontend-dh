@@ -329,6 +329,7 @@ export default function AgregarVehiculo() {
                                         id="modelo"
                                         label="Nombre*"
                                         variant="standard"
+                                        margin="dense"
                                         value={newProduct.name}
                                         error={!!errors.name}
                                         onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
@@ -452,6 +453,7 @@ export default function AgregarVehiculo() {
                                 <TextField
                                     id="descripcion"
                                     label="Descripción"
+                                    margin="dense"
                                     error={!!errors.description}
                                     multiline
                                     minRows={6}
@@ -631,6 +633,7 @@ export default function AgregarVehiculo() {
                                         id="potencia"
                                         label="Caballo de fuerza (HP)*"
                                         variant="standard"
+                                        margin="dense"
                                         error={!!errors.horsePower}
                                         type="number"
                                         value={newProduct.horsePower}
@@ -660,6 +663,7 @@ export default function AgregarVehiculo() {
                                         label="Año del modelo*"
                                         variant="standard"
                                         type="number"
+                                        margin="dense"
                                         error={!!errors.year}
                                         value={newProduct.year}
                                         onChange={(e) => setNewProduct({ ...newProduct, year: e.target.value })}
@@ -688,6 +692,7 @@ export default function AgregarVehiculo() {
                                         label="Kilometraje (Km)*"
                                         variant="standard"
                                         type="number"
+                                        margin="dense"
                                         error={!!errors.mileage}
                                         value={newProduct.mileage}
                                         onChange={(e) => setNewProduct({ ...newProduct, mileage: e.target.value })}
@@ -732,6 +737,7 @@ export default function AgregarVehiculo() {
                                     label="Valor x día*"
                                     variant="standard"
                                     type="number"
+                                    margin="dense"
                                     error={!!errors.price}
                                     value={newProduct.price}
                                     onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
