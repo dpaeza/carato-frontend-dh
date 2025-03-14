@@ -18,7 +18,7 @@ import AddRoadIcon from '@mui/icons-material/AddRoad';
 export default function Specifications({vehicle}) {
     return (
         <Box sx={{ margin: "auto", padding: 2,  maxWidth: "1200px" }}>
-            <Typography variant="h5" gutterBottom fontFamily={"var(--openSans)"} fontWeight={500} color= "var(--darkBlue)">
+            <Typography variant="h5" gutterBottom fontSize={20} fontFamily={"var(--openSans)"} fontWeight={500} color= "var(--darkBlue)">
             Caracteristicas técnicas
             </Typography>
             <Divider sx={{my:2}}/>
@@ -39,7 +39,7 @@ export default function Specifications({vehicle}) {
                 <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><AddRoadIcon />{vehicle.mileage} km</Grid>
                 <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><DateRangeIcon />Modelo {vehicle.year}</Grid>
             </Grid>
-            <Typography variant="h5" sx={{ mt: 4 }} fontFamily={"var(--openSans)"} fontWeight={500} color= "var(--darkBlue)">
+            <Typography variant="h5" sx={{ mt: 4 }} fontSize={20} fontFamily={"var(--openSans)"} fontWeight={600} color= "var(--darkBlue)">
                 Descripción
             </Typography>
             <Divider sx={{my:2}}/>
@@ -47,18 +47,33 @@ export default function Specifications({vehicle}) {
                 {vehicle.description}
             </Typography>
 
-            <List sx={{ mt: 3 }}>
+            <List sx={{ mt: 2 }}>
                 <ListItem>
-                    <ListItemIcon><EmojiEventsIcon /></ListItemIcon>
-                    <ListItemText primary="En los top 10 autos más económicos" secondary="Este auto triunfa en Carato por su rendimiento en ciudad." />
+                    <ListItemIcon><EmojiEventsIcon fontSize='large'/></ListItemIcon>
+                    <ListItemText 
+                        primary="En los top 10 autos más económicos" 
+                        secondary="Este auto triunfa en Carato por su rendimiento en ciudad."
+                        primaryTypographyProps={{ fontSize: 16, fontWeight: 600, fontFamily:"var(--openSans)" }}
+                        secondaryTypographyProps={{ fontSize: 14, fontFamily:"var(--lato)" }}
+                    />
                 </ListItem>
                 <ListItem>
-                    <ListItemIcon><StarIcon /></ListItemIcon>
-                    <ListItemText primary="Experiencia de retiro y devolución excepcional" secondary="Nuestros clientes valoraron con 5 estrellas la experiencia." />
+                    <ListItemIcon><StarIcon fontSize='large'/></ListItemIcon>
+                    <ListItemText 
+                        primary="Experiencia de retiro y devolución excepcional" 
+                        secondary="Nuestros clientes valoraron con 5 estrellas la experiencia."
+                        primaryTypographyProps={{ fontSize: 16, fontWeight: 600, fontFamily:"var(--openSans)" }}
+                        secondaryTypographyProps={{ fontSize: 14, fontFamily:"var(--lato)" }}
+                    />
                 </ListItem>
                 <ListItem>
-                    <ListItemIcon><LockOpenIcon /></ListItemIcon>
-                    <ListItemText primary="Cancelación gratuita antes del 20 de marzo" secondary="Si cambias de opinión, recibirás un reembolso total." />
+                    <ListItemIcon><LockOpenIcon fontSize='large'/></ListItemIcon>
+                    <ListItemText 
+                        primary="Cancelación gratuita antes del 20 de marzo" 
+                        secondary="Si cambias de opinión, recibirás un reembolso total."
+                        primaryTypographyProps={{ fontSize: 16, fontWeight: 600, fontFamily:"var(--openSans)" }}
+                        secondaryTypographyProps={{ fontSize: 14, fontFamily:"var(--lato)" }}
+                    />
                 </ListItem>
             </List>
         </Box>

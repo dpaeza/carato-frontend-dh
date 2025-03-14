@@ -4,6 +4,7 @@ import axios from 'axios';
 import DetailHeader from '../Components/DetailHeader';
 import GridImage from '../Components/GridImage';
 import Specifications from '../Components/Specifications';
+import Politics from '../Components/Politics';
 import { Card, CardMedia, Typography, Button, Box, Divider, FormControl, InputLabel } from "@mui/material";
 import { getCarByIdOrName } from '../Services/cars';
 import { useQuery } from '@tanstack/react-query';
@@ -42,6 +43,7 @@ export default function Vehiculo() {
                 <GridImage images={vehicle.images} />
             </Box>
             <Specifications vehicle={vehicle} />
+            <Politics />
         </Box>
     )
 }
