@@ -25,6 +25,7 @@
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
     "react-router-dom": "^6.29.0",
+    "rsuite": "^5.78.1",
     "sweetalert2": "^11.17.2",
     "sweetalert2-react-content": "^5.1.0",
     "swiper": "^11.2.4"
