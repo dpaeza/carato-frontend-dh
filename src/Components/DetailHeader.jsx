@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Typography, Button, Checkbox } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -6,13 +6,26 @@ import { useNavigate } from 'react-router-dom';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+import { useAuth } from "../Context/auth.context";
+import Login from "./Login";
 
 export default function DetailHeader({ model, category, isFavorite, onFavorite = () => {} }) {
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const [openLogin, setOpenLogin] = useState(false);
 
     const handleBackClick = () => {
         navigate("/");
     };
+
+    const handleFavorite = async () => {
+        if (!user) {
+            setOpenLogin(true);
+            return;
+        }
+
+        onFavorite();
+    }
 
     return (
         <Grid container alignItems="center" justifyContent="space-between" sx={{ marginBottom: 2,  maxWidth: "1200px", margin: "auto" }}>
@@ -49,7 +62,7 @@ export default function DetailHeader({ model, category, isFavorite, onFavorite =
                         gap: "5px",
                         '&:hover': { boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.3)" }
                     }}
-                    onClick={onFavorite}
+                    onClick={handleFavorite}
                 >
                     <Checkbox
                         icon={<FavoriteBorder />}
@@ -62,7 +75,6 @@ export default function DetailHeader({ model, category, isFavorite, onFavorite =
                             '&.Mui-checked': { color: "#0A0A25" },
                             '& .MuiSvgIcon-root': { fontSize: 18 }
                         }}
-                        onChange={onFavorite}
                     />
                     Guardar
                 </Button>
@@ -83,6 +95,13 @@ export default function DetailHeader({ model, category, isFavorite, onFavorite =
                 </Button>
                 
             </Grid>
+            <Login 
+                open={openLogin}
+                onClose={(e) => {
+                    if (e) e.stopPropagation();
+                    setOpenLogin(false);
+                }}
+            />
         </Grid>
     )
 }
