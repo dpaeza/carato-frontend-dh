@@ -85,6 +85,7 @@ export default function CardCar({ car, onFavorite = () => {} }) {
             sx={{
                 maxWidth: { xs: "100%", md: "100%", lg: 350 },
                 width: "100%",
+                minWidth: 300,
                 borderRadius: 4,
                 boxShadow: 3,
                 overflow: "hidden",
