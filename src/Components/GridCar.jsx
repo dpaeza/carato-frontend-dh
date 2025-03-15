@@ -12,10 +12,9 @@ export default function GridCar({ cars }) {
                     <Grid
                         key={index}
                         size={{ xs: 12, sm: 12, md: 6, lg: 6 }}
-                        sx={{ display: "flex", justifyContent: "center"}}>
-                        <Link to={`/vehiculo/${car.id}`} style={{ textDecoration: "none", color: "inherit" }}>
-                            <CardCar car={car} />
-                        </Link>
+                        sx={{ display: "flex", justifyContent: "center"}}
+                    >
+                        <CardCar car={car} />
                     </Grid>
                 ))}
             </Grid>

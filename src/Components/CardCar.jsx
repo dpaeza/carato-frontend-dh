@@ -23,6 +23,7 @@ import Favorite from '@mui/icons-material/Favorite';
 import { addFavorite, removeFavorite } from "../Services/favorites";
 import { useAuth } from "../Context/auth.context";
 import Login from "./Login";
+import { useNavigate } from "react-router-dom";
 
 export default function CardCar({ car, onFavorite = () => {} }) { 
     const {
@@ -36,6 +37,8 @@ export default function CardCar({ car, onFavorite = () => {} }) {
         price,
         isFavorite,
     } = car;
+
+    const navigate = useNavigate();
 
     const [ favorite, setFavorite ] = useState(isFavorite);
     const [openLogin, setOpenLogin] = useState(false);
@@ -90,7 +93,9 @@ export default function CardCar({ car, onFavorite = () => {} }) {
                 boxShadow: 3,
                 overflow: "hidden",
                 position: "relative",
+                cursor: "pointer",
             }}
+            onClick={() => navigate(`/vehiculo/${id}`)}
         >
             <CardMedia
                 component="img"
