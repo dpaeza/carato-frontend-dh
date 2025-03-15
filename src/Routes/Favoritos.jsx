@@ -31,7 +31,8 @@ export default function Favoritos() {
             sx={{ 
                 backgroundColor:"#FAFAF", 
                 minHeight: '100vh',
-                maxWidth: 1200, 
+                maxWidth: 1200,
+                margin: 'auto',
                 p: 6 
             }}
             display={{ xs: 'block', md: 'flex' }}
@@ -63,7 +64,7 @@ export default function Favoritos() {
                         {data.data.map((car) => (
                             <Grid 
                                 key={car.id}
-                                size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+                                size={{ xs: 12, sm: 6, md: 4, lg: 4 }}
                                 sx={{ display: "flex", justifyContent: "center" }}
                             >
                                 <CardCar 
@@ -83,16 +84,6 @@ export default function Favoritos() {
                     />
                 </Box>
             ) : (
-                // <Alert 
-                //     severity="info"
-                //     sx={{ 
-                //         maxWidth: 400,
-                //         margin: 'auto',
-                //         mt: 4
-                //     }}
-                // >
-                //     No tienes autos favoritos
-                // </Alert>
                 <Box
                     sx={{
                         display: 'flex',
