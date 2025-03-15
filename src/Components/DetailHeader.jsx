@@ -30,34 +30,66 @@ export default function DetailHeader({ model, category, isFavorite, onFavorite =
     return (
         <Grid container alignItems="center" justifyContent="space-between" sx={{ marginBottom: 2,  maxWidth: "1200px", margin: "auto" }}>
             <Grid>
-                <Typography variant="h2" component="span" textTransform={"uppercase"} fontFamily={"var(--openSans)"} fontWeight={700} sx={{ fontSize: 25, color: "var(--darkBlue)" }}>{model}</Typography>
-                <Typography variant="subtitle1" component="span" fontFamily={"var(--openSans)"} fontWeight={500} sx={{ marginLeft: 1, fontSize: 14, color: "var(--lightGrey)" }}>{category}</Typography>
+                <Typography 
+                    variant="h2" 
+                    component="span" 
+                    textTransform={"uppercase"} 
+                    fontFamily={"var(--openSans)"} 
+                    fontWeight={700} 
+                    sx={{ 
+                        fontSize: { xs: 18, sm: 25 }, 
+                        color: "var(--darkBlue)" 
+                    }}
+                >
+                    {model}
+                </Typography>
+                <Typography 
+                    variant="subtitle1" 
+                    component="span" 
+                    fontFamily={"var(--openSans)"} 
+                    fontWeight={500} 
+                    sx={{ 
+                        marginLeft: 1, 
+                        fontSize: { xs: 13, sm: 14 }, 
+                        color: "var(--lightGrey)" 
+                    }}
+                >
+                    {category}
+                </Typography>
             </Grid>
-            <Grid spacing={2} display={'flex'} gap={2}>
+            <Grid display={'flex'} gap={{xs:0.5, sm:2}}>
                 <Button
                     sx={{
                         textTransform: "none",
-                        backgroundColor: "#F5F5F5",
+                        backgroundColor: { xs: 'transparent', sm: "#F5F5F5" },
                         color: "#0A0A25",
-                        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                        padding: "0px 5px",
+                        boxShadow: { xs:"none" , sm: "0px 4px 4px rgba(0, 0, 0, 0.25)" },
+                        padding: { xs: "0px", sm: "0px 5px"},
                         minHeight: "30px",
+                        minWidth: { xs: "0px", sm: "auto" },
                         margin: "0px",
                         gap: "5px",
                         '&:hover': { boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.3)" }
                     }}
                 >
                     <ShareOutlinedIcon sx={{ color: "#0A0A25", fontSize: 18 }} />
-                    Compartir
+                    <Typography
+                        sx={{
+                            display: { xs: "none", sm: "block" },
+                        }}
+                    >
+                        Compartir
+                    </Typography>
                 </Button>
                 <Button
                     sx={{
                         textTransform: "none",
-                        backgroundColor: "#F5F5F5",
+                        backgroundColor: { xs: 'transparent', sm: "#F5F5F5" },
                         color: "#0A0A25",
-                        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                        padding: "0px 5px",
+                        boxShadow: { xs:"none" , sm: "0px 4px 4px rgba(0, 0, 0, 0.25)" },
+                        padding: { xs: "0px", sm: "0px 5px"},
                         minHeight: "30px",
+                        minWidth: { xs: "0px", sm: "auto" },
                         margin: "0px",
                         gap: "5px",
                         '&:hover': { boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.3)" }
@@ -76,7 +108,13 @@ export default function DetailHeader({ model, category, isFavorite, onFavorite =
                             '& .MuiSvgIcon-root': { fontSize: 18 }
                         }}
                     />
-                    Guardar
+                    <Typography
+                        sx={{
+                            display: { xs: "none", sm: "block" },
+                        }}
+                    >
+                        Guardar
+                    </Typography>
                 </Button>
                 <Button
                     variant="contained"
@@ -84,10 +122,11 @@ export default function DetailHeader({ model, category, isFavorite, onFavorite =
                         borderRadius: "50%",
                         padding: "0",
                         height: "35px",
-                        minWidth: "35px",
+                        minWidth: { xs: "0px", sm: "35px" },
                         width: "35px",
-                        border: "1px solid #D9D9D9",
-                        backgroundColor: "#FFFFFF",
+                        border: { xs:"none" , sm: "1px solid #F5F5F5" },
+                        boxShadow: { xs:"none" , sm: "0px 4px 4px rgba(0, 0, 0, 0.25)" },
+                        backgroundColor: { xs: 'transparent', sm: "#FFFFFF" }
                     }}
                     onClick={handleBackClick}
                 >
