@@ -214,17 +214,17 @@ export default function CardCar({ car, onFavorite = () => {} }) {
             <Box
                 sx={{
                     position: "absolute",
-                    top: 5,
-                    right: 5,
+                    top: 7,
+                    right: 7,
                     p: '0.1px',
                     zIndex: 2,
                     transition: "all 0.3s",
-                    backgroundColor: "rgba(255, 255, 255, 0.5)",
+                    backgroundColor: "rgba(0,0,0,0.2)",
                     borderRadius: "50%",
                     boxShadow: "0px 2px 5px rgba(0,0,0,0.2)", 
                     backdropFilter: "blur(4px)",
                     "&:hover": {
-                        backgroundColor: "rgba(0,0,0,0.1)",
+                        backgroundColor: "rgba(0,0,0,0.25)",
                     },
                 }}
             >
@@ -233,9 +233,10 @@ export default function CardCar({ car, onFavorite = () => {} }) {
                     checkedIcon={<Favorite />}
                     checked={favorite}
                     sx={{ 
-                        color: "#FFBD3D", 
+                        color: "#FFD888", 
                         padding: 0.8,
-                        '&.Mui-checked': { color: "#FFBD3D" }
+                        '&.Mui-checked': { color: "#FFD888" },
+                        '& .MuiSvgIcon-root': { fontSize: 20 }
                     }}
                     onChange={handleFavorite}
                     onClick={(e) => e.stopPropagation()}
