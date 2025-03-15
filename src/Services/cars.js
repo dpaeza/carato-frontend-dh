@@ -52,7 +52,23 @@ export const getRandomCars = async (limit = 10) => {
 
 export const getCarByIdOrName = async (value) => {
     try {
-        const response = await api.get(`/cars/${value}`);
+        const userData = JSON.parse(localStorage.getItem("auth"));
+        const token = userData ? userData.token : null;
+
+        const headers = {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+        };
+
+        let response = {};
+
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+            response = await axios.get(`${API_URL}/${value}`, { headers });
+        } else {
+            response = await api.get(`/cars/${value}`);
+        }
+        
         return response.data;
     } catch (error) {
         console.error("Error al obtener el auto:", error);
