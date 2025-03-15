@@ -61,15 +61,19 @@ export default function DetailHeader({ model, category, isFavorite, onFavorite =
                 <Button
                     sx={{
                         textTransform: "none",
-                        backgroundColor: { xs: 'transparent', sm: "#F5F5F5" },
+                        // backgroundColor: { xs: 'transparent', sm: "#F5F5F5" },
+                        backgroundColor: "transparent",
                         color: "#0A0A25",
-                        boxShadow: { xs:"none" , sm: "0px 4px 4px rgba(0, 0, 0, 0.25)" },
+                        // boxShadow: { xs:"none" , sm: "0px 4px 4px rgba(0, 0, 0, 0.25)" },
+                        boxShadow: "none",
                         padding: { xs: "0px", sm: "0px 5px"},
                         minHeight: "30px",
                         minWidth: { xs: "0px", sm: "auto" },
                         margin: "0px",
+                        border: "1px solid #F5F5F5",
                         gap: "5px",
-                        '&:hover': { boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.3)" }
+                        transition: "all 0.4s",
+                        '&:hover': { border: "1px solid #0A0A25" }
                     }}
                 >
                     <ShareOutlinedIcon sx={{ color: "#0A0A25", fontSize: 18 }} />
@@ -84,15 +88,19 @@ export default function DetailHeader({ model, category, isFavorite, onFavorite =
                 <Button
                     sx={{
                         textTransform: "none",
-                        backgroundColor: { xs: 'transparent', sm: "#F5F5F5" },
+                        // backgroundColor: { xs: 'transparent', sm: "#F5F5F5" },
+                        backgroundColor: "transparent",
                         color: "#0A0A25",
-                        boxShadow: { xs:"none" , sm: "0px 4px 4px rgba(0, 0, 0, 0.25)" },
+                        // boxShadow: { xs:"none" , sm: "0px 4px 4px rgba(0, 0, 0, 0.25)" },
+                        boxShadow: "none",
                         padding: { xs: "0px", sm: "0px 5px"},
                         minHeight: "30px",
                         minWidth: { xs: "0px", sm: "auto" },
                         margin: "0px",
+                        border: "1px solid #F5F5F5",
                         gap: "5px",
-                        '&:hover': { boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.3)" }
+                        transition: "all 0.4s",
+                        '&:hover': { border: "1px solid #0A0A25" }
                     }}
                     onClick={handleFavorite}
                 >
@@ -124,9 +132,14 @@ export default function DetailHeader({ model, category, isFavorite, onFavorite =
                         height: "35px",
                         minWidth: { xs: "0px", sm: "35px" },
                         width: "35px",
-                        border: { xs:"none" , sm: "1px solid #F5F5F5" },
-                        boxShadow: { xs:"none" , sm: "0px 4px 4px rgba(0, 0, 0, 0.25)" },
-                        backgroundColor: { xs: 'transparent', sm: "#FFFFFF" }
+                        // border: { xs:"none" , sm: "1px solid #F5F5F5" },
+                        border: "1px solid #F5F5F5",
+                        // boxShadow: { xs:"none" , sm: "0px 4px 4px rgba(0, 0, 0, 0.25)" },
+                        boxShadow: "none",
+                        // backgroundColor: { xs: 'transparent', sm: "#FFFFFF" }
+                        backgroundColor: "transparent",
+                        transition: "all 0.4s",
+                        '&:hover': { border: "1px solid #0A0A25", boxShadow: "none" }
                     }}
                     onClick={handleBackClick}
                 >
