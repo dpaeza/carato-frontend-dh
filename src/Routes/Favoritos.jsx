@@ -2,13 +2,17 @@ import React, {useState} from 'react';
 import Grid from '@mui/material/Grid2';
 import CardCar from '../Components/CardCar';
 import { useQuery } from '@tanstack/react-query';
-import { getFavorites } from '../Services/favorites'
-import { Box, Typography, CircularProgress, Alert, Pagination, Snackbar } from '@mui/material';
+import { getFavorites } from '../Services/favorites';
+import { useNavigate } from 'react-router-dom';
+import { Box, Typography, CircularProgress, Alert, Pagination, Button } from '@mui/material';
+import EmpyState from '../assets/EmptyState.svg?react';
 
 export default function Favoritos() {
 
     const [ page, setPage ] = useState(1);
     const [error, setError] = useState(null);
+
+    const navigate = useNavigate();
 
     const { data, isLoading, refetch } = useQuery({
         queryKey: ["cars", page],
@@ -39,6 +43,7 @@ export default function Favoritos() {
                 fontSize={24}
                 fontWeight={700}
                 color='var(--darkBlue)'
+                textAlign={'center'}
             >
                 Favoritos
             </Typography>
@@ -78,16 +83,65 @@ export default function Favoritos() {
                     />
                 </Box>
             ) : (
-                <Alert 
-                    severity="info"
-                    sx={{ 
-                        maxWidth: 400,
-                        margin: 'auto',
+                // <Alert 
+                //     severity="info"
+                //     sx={{ 
+                //         maxWidth: 400,
+                //         margin: 'auto',
+                //         mt: 4
+                //     }}
+                // >
+                //     No tienes autos favoritos
+                // </Alert>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexDirection: 'column',
                         mt: 4
                     }}
                 >
-                    No tienes autos favoritos
-                </Alert>
+                    <EmpyState
+                        sx={{
+                            display: 'block',
+                            margin: 'auto',
+                        }}
+                        minHeight={200}
+                    />
+                    <Typography
+                        variant="h5"
+                        fontFamily="var( --lato)"
+                        fontWeight={700}
+                        color='var(--lightGrey)'
+                        textAlign={'center'}
+                    >
+                        Aún no tienes autos favoritos
+                    </Typography>
+                    <Typography
+                        variant="body1"
+                        fontFamily="var( --lato)"
+                        fontWeight={500}
+                        color='var(--lightGrey)'
+                        textAlign={'center'}
+                    >
+                        Explora nuestra selección y guarda tus modelos preferidos para encontrarlos más rápido
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        sx={{
+                            mt: 4,
+                            textTransform: 'none',
+                            backgroundColor: 'var(--lightBlue)',
+                            color: 'var(--pureWhite)',
+                            '&:hover': {
+                                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'
+                            }
+                        }}
+                        onClick={() => navigate('/')}
+                    >
+                        Explorar autos
+                    </Button>
+                </Box>
             )}
         </Box>
     )
