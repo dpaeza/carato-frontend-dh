@@ -34,8 +34,11 @@ export default function DetailHeader({
     }
 
     return (
-        <Grid container alignItems="center" justifyContent="space-between" sx={{ marginBottom: 2,  maxWidth: "1200px", margin: "auto" }}>
-            <Grid>
+        <Grid container alignItems={{xs:'flex-start', sm:'center'}} justifyContent="space-between" sx={{ marginBottom: 2,  maxWidth: "1200px", margin: "auto" }}>
+            <Grid
+                display={{ xs: "flex", sm: "block" }}
+                flexDirection={{ xs: "column", sm: "row" }}
+            >
                 <Typography 
                     variant="h2" 
                     component="span" 
@@ -55,7 +58,7 @@ export default function DetailHeader({
                     fontFamily={"var(--openSans)"} 
                     fontWeight={500} 
                     sx={{ 
-                        marginLeft: 1, 
+                        marginLeft: { xs: 0, sm: 1 }, 
                         fontSize: { xs: 13, sm: 14 }, 
                         color: "var(--lightGrey)" 
                     }}
