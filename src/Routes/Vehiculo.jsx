@@ -9,6 +9,7 @@ import { Card, CardMedia, Typography, Button, Box, Divider, FormControl, InputLa
 import { getCarByIdOrName } from '../Services/cars';
 import { useQuery } from '@tanstack/react-query';
 import { addFavorite, removeFavorite } from "../Services/favorites";
+import ShareModel from '../Components/ShareModel';
 
 export default function Vehiculo() {
     const { id } = useParams();
@@ -16,6 +17,7 @@ export default function Vehiculo() {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+    const [ openShare, setOpenShare ] = useState(false);
 
     const handleFavorite = async () => {
         try {
@@ -36,6 +38,10 @@ export default function Vehiculo() {
             setSnackbarSeverity("error");
         }
         setSnackbarOpen(true);
+    }
+
+    const handleShare = () => {
+        setOpenShare(true);
     }
 
     const {data: vehicle} = useQuery({
@@ -78,6 +84,7 @@ export default function Vehiculo() {
                 category={vehicle.category} 
                 isFavorite={favorite}
                 onFavorite={handleFavorite}
+                onShare={handleShare}
             />
             <Box sx={{ height: {xs:"70vh", sx:"50vh"},  maxWidth: "1200px", margin: "auto", mt:3}}>
                 <GridImage images={vehicle.images} />
@@ -98,6 +105,11 @@ export default function Vehiculo() {
                     {snackbarMessage}
                 </Alert>
             </Snackbar>
+            <ShareModel 
+                open={openShare} 
+                onClose={() => setOpenShare(false)} 
+                vehicle={vehicle}
+            />
         </Box>
     )
 }

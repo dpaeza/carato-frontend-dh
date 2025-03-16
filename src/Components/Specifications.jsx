@@ -30,7 +30,7 @@ export default function Specifications({vehicle}) {
                     <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><SettingsSuggestIcon /> Automático</Grid>
                 )}
                 {vehicle.hasAirCondition && (
-                    <Grid size={{xs:6, sm:4}}><AcUnit /> Aire acondicionado</Grid>
+                    <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><AcUnit /> Aire acondicionado</Grid>
                 )}
                 <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><DoorFrontIcon />{vehicle.doors} Puertas</Grid>
                 <Grid size={{xs:6, sm:4}} display="flex" alignItems="center" gap="5px"><LocalGasStationIcon />{vehicle.gasoline}</Grid>
