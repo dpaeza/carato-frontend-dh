@@ -9,7 +9,13 @@ import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import { useAuth } from "../Context/auth.context";
 import Login from "./Login";
 
-export default function DetailHeader({ model, category, isFavorite, onFavorite = () => {} }) {
+export default function DetailHeader({ 
+    model, 
+    category, 
+    isFavorite, 
+    onFavorite = () => {}, 
+    onShare = () => {}
+}) {
     const navigate = useNavigate();
     const { user } = useAuth();
     const [openLogin, setOpenLogin] = useState(false);
@@ -75,6 +81,7 @@ export default function DetailHeader({ model, category, isFavorite, onFavorite =
                         transition: "all 0.4s",
                         '&:hover': { border: "1px solid #0A0A25" }
                     }}
+                    onClick={onShare}
                 >
                     <ShareOutlinedIcon sx={{ color: "#0A0A25", fontSize: 18 }} />
                     <Typography

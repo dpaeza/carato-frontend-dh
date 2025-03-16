@@ -3,37 +3,43 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { DateTimePicker } from '@mui/x-date-pickers';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateRangePicker } from 'rsuite';
+import { InputPicker } from 'rsuite';
 import dayjs from 'dayjs';
 import '../Styles/search.css';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-
-const cities = [
-    'Buenos Aires',
-];
+import { Typography, Button, Box } from '@mui/material';
+import 'rsuite/DateRangePicker/styles/index.css';
+import { getBrands } from '../Services/extras';
 
 export default function Search() {
-    const [location, setLocation] = useState(cities[0]);
-    const [startDate, setStartDate] = useState(dayjs());
-    const [endDate, setEndDate] = useState(dayjs().add(4, 'day'));
+    // Definir las fechas iniciales: hoy y 4 días después
+    const today = dayjs().startOf('day');
+    const defaultEndDate = today.add(4, 'day');
 
-    const handleChange = (event) => {
-        setLocation(event.target.value);
-    }
+    // Estado con valores iniciales
+    const [startDate, setStartDate] = useState(today.toDate());
+    const [endDate, setEndDate] = useState(defaultEndDate.toDate());
 
+    // Estado para almacenar las marcas
+    const [brands, setBrands] = useState([]);
+    const [selectedBrand, setSelectedBrand] = useState(null);
+
+    // Efecto para obtener las marcas
     useEffect(() => {
-        console.log(location);
-    }, [location]);
-
-    useEffect(() => {
-        console.log(startDate);
-    }, [startDate]);
-
-    useEffect(() => {
-        console.log(endDate);
-    }, [endDate]);
+        const fetchBrands = async () => {
+            try {
+                const response = await getBrands(); // Asume que getBrands() devuelve un array con objetos { id, name }
+                const formattedBrands = response.map(brand => ({
+                    label: brand.name,
+                    value: brand.id
+                }));
+                setBrands(formattedBrands);
+            } catch (error) {
+                console.error("Error al obtener las marcas:", error);
+            }
+        };
+        fetchBrands();
+    }, []);
 
     return (
         <section className='search-component'>
@@ -46,49 +52,58 @@ export default function Search() {
                 justifyContent: 'center',
                 width: '100%',
             }}>
-                <FormControl sx={{ width: { xs: '100%', sm: '200px' } }}>
-                    <Select
-                        displayEmpty
-                        value={location}
-                        onChange={handleChange}
-                        sx={{ 
-                            fontFamily: 'var(--lato)',
-                            width: '100%',
-                        }}
-                        size='small'
-                    >
-                        {cities.map((name) => (
-                            <MenuItem key={name} value={name}>
-                                {name}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DateTimePicker
-                        label="Fecha de retiro"
-                        value={startDate}
-                        onChange={(newValue) => setStartDate(newValue)}
-                        sx={{ 
-                            fontFamily: 'var(--lato)',
-                            width: { xs: '100%', sm: 'auto' },
-                        }}
-                        slotProps={{ textField: { size: 'small' } }}
-                    />
-                    <DateTimePicker
-                        label="Fecha de devolución"
-                        value={endDate}
-                        onChange={(newValue) => setEndDate(newValue)}
-                        sx={{ 
-                            fontFamily: 'var(--lato)',
-                            width: { xs: '100%', sm: 'auto' },
-                        }}
-                        slotProps={{ textField: { size: 'small' } }}
-                    />
-                </LocalizationProvider>
-                <Button 
+                <InputPicker
+                    appearance="default"
+                    placeholder="Selecciona una marca"
+                    data={brands}
+                    value={selectedBrand}
+                    onChange={setSelectedBrand}
+                    size="lg"
+                    style={{ width: 230 }}
+                    searchable={false}
+                    menuStyle={{
+                        padding: '8px', // Espaciado dentro del menú
+                        borderRadius: 8, // Bordes redondeados del menú
+                        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Sombra suave
+                    }}
+                    renderMenuItem={(label, item) => (
+                        <div
+                            style={{
+                                padding: '8px 12px',
+                                cursor: 'pointer',
+                                borderRadius: 6,
+                                transition: 'background 0.2s ease-in-out',
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0, 123, 255, 0.1)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                        >
+                            {label}
+                        </div>
+                    )}
+                />
+                <DateRangePicker
+                    appearance="default"
+                    placeholder="Fecha de retiro - Fecha de devolución"
+                    label="Fecha de retiro - Fecha de devolución"
+                    size="lg"
+                    style={{ width: 500 }}
+                    value={[startDate, endDate]}
+                    onChange={(range) => {
+                        // Verifica que range contenga las fechas seleccionadas
+                        if (range) {
+                            setStartDate(range[0]);
+                            setEndDate(range[1]);
+                        }
+                    }}
+                    shouldDisableDate={(date) => dayjs(date).isBefore(dayjs().startOf('day'))}
+                    defaultCalendarValue={[startDate, endDate]}
+                />
+
+
+
+                <Button
                     className='searchButton'
-                    sx={{ 
+                    sx={{
                         width: { xs: '100%', sm: 'auto' },
                         backgroundColor: 'var(--lightBlue)',
                         color: 'white',
