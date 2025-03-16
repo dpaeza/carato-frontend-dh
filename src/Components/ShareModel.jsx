@@ -38,6 +38,17 @@ export default function ShareModel({ open, onClose, vehicle }) {
             name: 'Facebook',
             icon: <FacebookIcon />,
             url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+            action: () => {
+                if (navigator.share) {
+                    navigator.share({
+                        title: "Mira esto",
+                        text: shareMessage,
+                        url: url
+                    }).catch(console.error);
+                } else {
+                    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+                }
+            }
         },
         {
             name: 'WhatsApp',
@@ -256,7 +267,7 @@ export default function ShareModel({ open, onClose, vehicle }) {
                                         variant="outlined"
                                         startIcon={link.icon}
                                         fullWidth
-                                        onClick={() => window.open(link.url, '_blank')}
+                                        onClick={() => link.action ? link.action() : window.open(link.url, '_blank')}
                                         sx={{
                                             textTransform: "none",
                                             color: "#0A0A25",
@@ -290,9 +301,9 @@ export default function ShareModel({ open, onClose, vehicle }) {
                 onClose={() => setSnackbarOpen(false)}
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             >
-                <Alert 
-                    onClose={() => setSnackbarOpen(false)} 
-                    severity={snackbarSeverity} 
+                <Alert
+                    onClose={() => setSnackbarOpen(false)}
+                    severity={snackbarSeverity}
                     sx={{ width: "100%" }}
                 >
                     {snackbarMessage}
