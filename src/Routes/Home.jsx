@@ -3,7 +3,7 @@ import { Box, Typography, CircularProgress, Alert } from "@mui/material";
 import Search from '../Components/Search';
 import Categories from '../Components/Categories';
 import GridCar from '../Components/GridCar';
-import { getCars } from '../Services/cars';
+import { getCars, getAllCarsCount } from '../Services/cars';
 import Pagination from '@mui/material/Pagination';
 import { useQuery } from '@tanstack/react-query';
 import { shuffleArray, sortNumbers } from '../Utils/numbers';
@@ -42,9 +42,10 @@ export default function Home() {
 		}
 	});
 
-	const { data: totalData, isLoading: isTotalLoading } = useQuery({
-		queryKey: ["totalCars"],
-		queryFn: () => getCars({}),
+	const { data: totalCars, isLoading: isTotalLoading } = useQuery({
+		queryKey: ["count"],
+		queryFn: () => getAllCarsCount(),
+		select: (data) => data.count
 	});
 
 	const handleToggleCategoryById = (id) => {
@@ -77,7 +78,7 @@ export default function Home() {
 						selectedCategoriesId={categoriesIdArray} 
 						toggleCategoryById={handleToggleCategoryById}
 						filteredProducts={data?.data?.length || 0}
-						totalProducts={totalData?.totalElements || 0} 
+						totalProducts={totalCars || 0} 
 					/>
 				</Box>
 			</Box>

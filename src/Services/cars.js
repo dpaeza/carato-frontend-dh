@@ -40,6 +40,16 @@ export const getCars = async ({
     }
 };
 
+export const getAllCarsCount = async () => {
+    try {
+        const response = await api.get("/cars/count");
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener la cantidad de autos:", error);
+        throw error;
+    }
+}
+
 export const getRandomCars = async (limit = 10) => {
     try {
         const response = await api.get("/cars/random", { params: { limit } });
