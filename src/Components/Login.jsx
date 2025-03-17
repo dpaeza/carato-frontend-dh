@@ -91,12 +91,12 @@ const Login = React.memo(({ open, onClose }) => {
             login(response);
             resetForm();
             onClose();
-            MySwal.fire({
-                icon: 'success',
-                title: '¡Bienvenido!',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(() => window.location.reload());
+            // MySwal.fire({
+            //     icon: 'success',
+            //     title: '¡Bienvenido!',
+            //     showConfirmButton: false,
+            //     timer: 1500
+            // }).then(() => window.location.reload());
         } catch (error) {
             const statusCode = error.status;
             const message = statusCode === 401

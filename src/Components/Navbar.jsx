@@ -57,7 +57,6 @@ export default function Navbar(props) {
     const handleLogout = () => {
         logout();
         handleMenuClose();
-        window.location.reload();
     };
 
     const handleClick = () => {
