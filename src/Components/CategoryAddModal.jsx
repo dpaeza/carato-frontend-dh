@@ -66,8 +66,8 @@ export default function CategoryAddModal({ open, onClose, onUpdate }) {
             });
         } catch (error) {
             const message = error.status === 409
-                        ? "El nombre de la categoría ya está registrada en nuestra base de datos. Por favor, utilice otro nombre."
-                        : error.response.data.message;
+                ? "El nombre de la categoría ya está registrada en nuestra base de datos. Por favor, utilice otro nombre."
+                : error.response.data.message;
 
             onClose();
             MySwal.fire({
@@ -83,12 +83,22 @@ export default function CategoryAddModal({ open, onClose, onUpdate }) {
     };
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        accept: "image/svg+xml",
+        accept: {
+            'image/svg+xml': ['.svg']
+        },
         multiple: false,
-        onDrop: (acceptedFiles) => {
+        onDrop: (acceptedFiles, fileRejections) => {
+            if (fileRejections.length > 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Archivo inválido',
+                    text: 'Solo se permiten archivos SVG'
+                });
+                return;
+            }
             const file = acceptedFiles[0];
             const previewURL = URL.createObjectURL(file);
-            setCategory((prev) => ({
+            setCategory(prev => ({
                 ...prev,
                 image: file,
                 imagePreview: previewURL
@@ -198,7 +208,7 @@ export default function CategoryAddModal({ open, onClose, onUpdate }) {
                                         }
                                     </Typography>
                                     <Typography fontSize={12} color="error">
-                                        (Solo archivos SVG permitidos)
+                                        Solo archivos SVG (preferiblemente negros)
                                     </Typography>
                                 </Box>
                                 {/* Mostrar error solo si se ha interactuado con el dropzone */}
