@@ -243,7 +243,7 @@ export default function CardCar({ car, onFavorite = () => {} }) {
                         '&.Mui-checked': { color: "#FFD888" },
                         '& .MuiSvgIcon-root': { fontSize: 20 }
                     }}
-                    onChange={handleFavorite}
+                    onChange={(e) => handleFavorite(e)}
                     onClick={(e) => e.stopPropagation()}
                 />
             </Box>

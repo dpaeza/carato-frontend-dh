@@ -139,7 +139,14 @@ const Login = React.memo(({ open, onClose }) => {
     }
 
     return (
-        <Dialog open={open} onClose={onClose} maxWidth="xs">
+        <Dialog 
+            open={open} 
+            onClose={onClose} 
+            maxWidth="xs"
+            PaperProps={{
+                onClick: (e) => e.stopPropagation(),
+            }}
+        >
             <DialogTitle>
                 Iniciar sesión
                 <IconButton
