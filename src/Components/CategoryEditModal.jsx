@@ -64,12 +64,21 @@ export default function CategoryEditModal({ open, onClose, categoria = {}, onUpd
     }
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        accept: "image/svg+xml",
+        accept: {
+            'image/svg+xml': ['.svg']
+        },
         multiple: false,
-        onDrop: (acceptedFiles) => {
+        onDrop: (acceptedFiles, fileRejections) => {
+            if (fileRejections.length > 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Archivo inválido',
+                    text: 'Solo se permiten archivos SVG'
+                });
+                return;
+            }
             const file = acceptedFiles[0];
             const previewURL = URL.createObjectURL(file);
-
             setCategory((prev) => ({
                 ...prev,
                 image: file,
