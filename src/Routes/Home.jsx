@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Box, Typography, Alert } from "@mui/material";
+import { Box, Typography, Alert, Skeleton } from "@mui/material";
 import Search from '../Components/Search';
 import Categories from '../Components/Categories';
 import GridCar from '../Components/GridCar';
@@ -85,23 +85,28 @@ export default function Home() {
 			</Box>
 			<Box sx={{ bgcolor: "#fafafa", pt: 6 }}>
 				<Box sx={{ px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto" }}>
-					<Typography
-						variant='h2'
-						fontFamily="var(--openSans)"
-						fontSize={22}
-						marginBottom={6}
-						fontWeight={700}
-						textAlign={"center"}
-						textTransform={"uppercase"}
-					>
-						Recomendaciones
-					</Typography>
 					{isLoading ? (
-						<GridCarSkeleton />
+						<Box sx={{ display:"flex", flexDirection: "column", alignItems:"center", gap:6}}>
+							<Skeleton variant="text" animation="wave" width={240} height={60}/>
+							<GridCarSkeleton />
+						</Box>
 					) : error ? (
 						<Alert severity="error">{error}</Alert>
 					) : (data.data.length > 0) ? (
-						<GridCar cars={data.data} />
+						<Box>
+							<Typography
+								variant='h2'
+								fontFamily="var(--openSans)"
+								fontSize={22}
+								marginBottom={6}
+								fontWeight={700}
+								textAlign={"center"}
+								textTransform={"uppercase"}
+							>
+								Recomendaciones
+							</Typography>
+							<GridCar cars={data.data} />
+						</Box>
 					) : (
 						<Typography textAlign="center">No se encontraron autos.</Typography>
 					)}
