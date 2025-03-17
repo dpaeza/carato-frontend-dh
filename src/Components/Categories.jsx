@@ -47,8 +47,8 @@ export default function Categories({ selectedCategoriesId, toggleCategoryById, f
                                             height: '50px',
                                             objectFit: 'contain',
                                             filter: selectedCategoriesId.includes(id)
-                                                ? 'brightness(0) saturate(100%) invert(7%) sepia(6%) saturate(670%) hue-rotate(202deg) brightness(95%) contrast(92%)'
-                                                : 'brightness(0) saturate(100%) invert(74%) sepia(4%) saturate(95%) hue-rotate(198deg) brightness(89%) contrast(91%)'
+                                                ? 'opacity(1)'
+                                                : 'opacity(0.35)'
                                         }}
                                     />
                                 ) : (

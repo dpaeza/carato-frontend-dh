@@ -34,7 +34,7 @@ export default function DetailHeader({
     }
 
     return (
-        <Grid container alignItems={{xs:'flex-start', sm:'center'}} justifyContent="space-between" sx={{ marginBottom: 2,  maxWidth: "1200px", margin: "auto" }}>
+        <Grid container alignItems={{xs:'flex-start', sm:'center'}} justifyContent="space-between" sx={{ marginBottom: 2,  maxWidth: "1100px", margin: "auto" }}>
             <Grid
                 display={{ xs: "flex", sm: "block" }}
                 flexDirection={{ xs: "column", sm: "row" }}

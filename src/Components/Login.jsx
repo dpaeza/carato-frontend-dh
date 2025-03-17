@@ -98,13 +98,18 @@ const Login = React.memo(({ open, onClose }) => {
                 timer: 1500
             });
         } catch (error) {
+            const statusCode = error.status;
+            const message = statusCode === 401
+                ? "El correo electrónico o la contraseña son incorrectos. Por favor, inténtelo nuevamente."
+                : error.response.data.message;
+
             console.error(error);
             resetForm();
             onClose();
             MySwal.fire({
                 icon: 'error',
                 confirmButtonColor : '#3083FF',
-                text: error.response.data.message
+                text: message
             });
         }
     }, [userData, onClose, resetForm]);
