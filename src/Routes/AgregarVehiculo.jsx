@@ -25,6 +25,7 @@ import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Grid from "@mui/material/Grid2";
 import { getBrands, getFuelTypes, getTransmissions, getBrakeTypes } from '../Services/extras';
+import { getCategories } from '../Services/categories';
 import { Category } from '@mui/icons-material';
 import { createCar } from '../Services/cars';
 import { ErrorCode, useDropzone } from 'react-dropzone';
@@ -38,6 +39,7 @@ export default function AgregarVehiculo() {
     const [gasolines, setGasolines] = useState([]);
     const [transmissions, setTransmissions] = useState([]);
     const [brakeSystems, setBrakeSystems] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const [newProduct, setNewProduct] = useState({
@@ -61,15 +63,6 @@ export default function AgregarVehiculo() {
     const [previews, setPreviews] = useState([]);
 
     const [errors, setErrors] = useState({});
-
-    const categories = [
-        { name: "Híbridos", icon: IconHibrido, id: 1 },
-        { name: "Eléctricos", icon: IconElectrico, id: 2 },
-        { name: "Lujo", icon: IconLujo, id: 3 },
-        { name: "Compactos", icon: IconCompacto, id: 4 },
-        { name: "Deportivos", icon: IconDeportivo, id: 5 },
-        { name: "Familiares", icon: IconFamiliar, id: 6 }
-    ];
 
     const hasAirCondition = [
         { name: "Sí", value: true },
@@ -113,6 +106,15 @@ export default function AgregarVehiculo() {
             console.error("Error al obtener los tipos de frenos:", error);
         }
     }
+
+    const fetchCategories = async () => {
+        try {
+            const response = await getCategories();
+            setCategories(response);
+        } catch (error) {
+            console.error("Error al obtener las categorías:", error);
+        }
+    };
 
     const resetForm = () => {
         setNewProduct({
@@ -283,6 +285,7 @@ export default function AgregarVehiculo() {
         fetchGasolines();
         fetchTransmissions();
         fetchBrakeSystems();
+        fetchCategories();
     }, []);
 
 
@@ -364,8 +367,10 @@ export default function AgregarVehiculo() {
                                     >
                                         {categories.map((category, index) => (
                                             <MenuItem key={index} value={category.id}>
-                                                <category.icon style={{ marginRight: 8, height: 15, width: 15 }} />
-                                                {category.name}
+                                                <Box display={'flex'} alignItems={'center'}>
+                                                    <img src={category.image.url} alt={category.name} style={{ height: 15, width: 15, marginRight: 8 }} />
+                                                    {category.name}
+                                                </Box>
                                             </MenuItem>
                                         ))}
                                     </Select>
