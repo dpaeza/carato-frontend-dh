@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Box, Typography, Alert, Skeleton } from "@mui/material";
 import Search from '../Components/Search';
+import SearchSkeleton from '../Components/SearchSkeleton';
 import Categories from '../Components/Categories';
 import GridCar from '../Components/GridCar';
 import GridCarSkeleton from '../Components/GridCarSkeleton';
@@ -72,22 +73,25 @@ export default function Home() {
 		<Box>
 			<Box sx={{ backgroundColor: "var(--pureWhite)" }}>
 				<Box sx={{ pt: 6, px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto" }}>
-					<Search />
+					{isTotalLoading 
+						? <SearchSkeleton />
+						:  <Search />
+					}
 				</Box>
 				<Box sx={{ py: 3, px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto" }}>
-					<Categories 
-						selectedCategoriesId={categoriesIdArray} 
+					<Categories
+						selectedCategoriesId={categoriesIdArray}
 						toggleCategoryById={handleToggleCategoryById}
 						filteredProducts={data?.data?.length || 0}
-						totalProducts={totalCars || 0} 
+						totalProducts={totalCars || 0}
 					/>
 				</Box>
 			</Box>
 			<Box sx={{ bgcolor: "#fafafa", pt: 6 }}>
 				<Box sx={{ px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto" }}>
 					{isLoading ? (
-						<Box sx={{ display:"flex", flexDirection: "column", alignItems:"center", gap:6}}>
-							<Skeleton variant="text" animation="wave" width={240} height={60}/>
+						<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+							<Skeleton variant="text" animation="wave" width={240} height={60} />
 							<GridCarSkeleton />
 						</Box>
 					) : error ? (
@@ -112,7 +116,7 @@ export default function Home() {
 					)}
 				</Box>
 				{
-					!isLoading && data?.data?.length>0 && (
+					!isLoading && data?.data?.length > 0 && (
 						<Pagination
 							count={data.totalPages}
 							page={data.currentPage}

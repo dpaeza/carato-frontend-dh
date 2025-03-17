@@ -98,9 +98,6 @@ export default function Search() {
                     shouldDisableDate={(date) => dayjs(date).isBefore(dayjs().startOf('day'))}
                     defaultCalendarValue={[startDate, endDate]}
                 />
-
-
-
                 <Button
                     className='searchButton'
                     sx={{
