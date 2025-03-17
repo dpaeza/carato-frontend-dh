@@ -27,7 +27,7 @@ import Grid from "@mui/material/Grid2";
 import { getBrands, getFuelTypes, getTransmissions, getBrakeTypes } from '../Services/extras';
 import { Category } from '@mui/icons-material';
 import { createCar } from '../Services/cars';
-import { useDropzone } from 'react-dropzone';
+import { ErrorCode, useDropzone } from 'react-dropzone';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Backdrop from '@mui/material/Backdrop';
@@ -159,28 +159,6 @@ export default function AgregarVehiculo() {
         return Object.keys(newErrors).length === 0; // Retorna true si no hay errores
     };
 
-    const getErrorMessage = (error) => {
-        // Verifica si el error tiene una respuesta
-        if (error.response) {
-            // Intenta obtener el mensaje de error desde error.response.data.message
-            if (error.response.data && error.response.data.message) {
-                return error.response.data.message;
-            }
-            // Si no, intenta obtener el mensaje desde error.response.data
-            else if (error.response.data) {
-                return error.response.data;
-            }
-            // Si no, usa el mensaje de error por defecto
-            else {
-                return error.response.statusText || "Error desconocido";
-            }
-        }
-        // Si no hay respuesta, usa el mensaje del error
-        else {
-            return error.message || "Error desconocido";
-        }
-    };
-
     const onSubmit = async () => {
         if (!validateForm()) {
             MySwal.fire({
@@ -206,12 +184,15 @@ export default function AgregarVehiculo() {
                 timer: 1500
             });
         } catch (error) {
+            const message = error.status === 409
+                        ? "El nombre del vehiculo ya está registrado en nuestra base de datos. Por favor, utilice otro nombre."
+                        : error.response.data.message;
+
             console.error(error)
-            const errorMessage = getErrorMessage(error);
             MySwal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: errorMessage,
+                text: message,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#3083FF",
             });
@@ -270,8 +251,32 @@ export default function AgregarVehiculo() {
         }));
     };
 
+    const handleDropzoneError = (fileRejections) => {
+        const errorCodes = new Set(fileRejections.map(fileRejection => fileRejection.errors.map(error => error.code)).flatMap(codes => codes));
+        const errorMessages = [];
+        
+        if(errorCodes.has(ErrorCode.FileTooLarge)) {
+            errorMessages.push("Solo se permiten imágenes de hasta 1 MB.");
+        }
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+        if(errorCodes.has(ErrorCode.TooManyFiles)) {
+            errorMessages.push("Solo se permiten 10 imágenes.");
+        }
+
+        if (errorMessages.length === 0) {
+            errorMessages.push("Se ha generado un error al recibir su imagen.")
+        }
+
+        MySwal.fire({
+            icon: 'error',
+            title: 'Error',
+            html: errorMessages.join("<br/>"),
+            confirmButtonText: "Aceptar",
+            confirmButtonColor: "#3083FF",
+        });
+    }
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, maxSize: 1048576, onDropRejected: handleDropzoneError, maxFiles: 10 });
 
     useEffect(() => {
         fetchBrands();
