@@ -96,7 +96,7 @@ const Login = React.memo(({ open, onClose }) => {
                 title: '¡Bienvenido!',
                 showConfirmButton: false,
                 timer: 1500
-            });
+            }).then(() => window.location.reload());
         } catch (error) {
             const statusCode = error.status;
             const message = statusCode === 401
