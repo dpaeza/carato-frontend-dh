@@ -779,6 +779,19 @@ export default function AgregarVehiculo() {
                 <Button
                     variant="contained"
                     sx={{
+                        backgroundColor: "#B3B3BB",
+                        color: "#FFFFFF",
+                        width: "200px",
+                        textTransform: "capitalize",
+                        borderRadius: 2,
+                    }}
+                    onClick={resetForm}
+                >
+                    Cancelar
+                </Button>
+                <Button
+                    variant="contained"
+                    sx={{
                         backgroundColor: "var(--lightBlue)",
                         color: "var(--pureWhite)",
                         width: "200px",
