@@ -241,11 +241,15 @@ export default function DeatilModal({ open, onClose, mode = "view", vehicleData,
                 timer: 1500
             });
         } catch (error) {
+            const message = error.status === 409
+                        ? "El nombre del vehiculo ya está registrado en nuestra base de datos. Por favor, utilice otro nombre."
+                        : error.response.data.message;
+
             console.error(error)
             MySwal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: error.response.data.message,
+                text: message,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#3083FF",
             });

@@ -145,12 +145,16 @@ const Register = React.memo(({ open, onClose }) => {
                 },
             });
         } catch (error) {
+            const message = error.status === 409
+                        ? "El correo electrónico ya está registrado en nuestra base de datos. Por favor, utilice otro."
+                        : error.response.data.message;
+
             console.error("Error al registrar el usuario:", error);
             resetForm();
             onClose();
             MySwal.fire({
                 title: "Error al registrarse",
-                text: error.response?.data?.message[0],
+                text: message,
                 icon: "error",
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: '#3083FF',
