@@ -1,11 +1,10 @@
 import React, {useState, useEffect} from 'react'
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import DetailHeader from '../Components/DetailHeader';
 import GridImage from '../Components/GridImage';
 import Specifications from '../Components/Specifications';
 import Politics from '../Components/Politics';
-import { Card, CardMedia, Typography, Button, Box, Divider, FormControl, InputLabel, Snackbar, Alert } from "@mui/material";
+import { Box, Snackbar, Alert } from "@mui/material";
 import { getCarByIdOrName } from '../Services/cars';
 import { useQuery } from '@tanstack/react-query';
 import { addFavorite, removeFavorite } from "../Services/favorites";
@@ -86,7 +85,7 @@ export default function Vehiculo() {
                 onFavorite={handleFavorite}
                 onShare={handleShare}
             />
-            <Box sx={{ height: {xs:"70vh", sx:"50vh"},  maxWidth: "1200px", margin: "auto", mt:3}}>
+            <Box sx={{ height: {xs:"70vh", sx:"50vh"},  maxWidth: "1100px", margin: "auto", mt:3}}>
                 <GridImage images={vehicle.images} />
             </Box>
             <Specifications vehicle={vehicle} />
