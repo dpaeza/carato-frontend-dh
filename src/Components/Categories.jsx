@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import '../Styles/categories.css';
 import { getCategories } from '../Services/categories';
-import { Box, Typography, Button, CircularProgress, Skeleton } from '@mui/material';
+import { Box, Typography, Button, Skeleton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CleaningServicesOutlinedIcon from '@mui/icons-material/CleaningServicesOutlined';
 import { Swiper, SwiperSlide } from 'swiper/react';

@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { Box, Typography, CircularProgress, Alert } from "@mui/material";
+import { Box, Typography, Alert } from "@mui/material";
 import Search from '../Components/Search';
 import Categories from '../Components/Categories';
 import GridCar from '../Components/GridCar';
+import GridCarSkeleton from '../Components/GridCarSkeleton';
 import { getCars, getAllCarsCount } from '../Services/cars';
 import Pagination from '@mui/material/Pagination';
 import { useQuery } from '@tanstack/react-query';
@@ -96,9 +97,7 @@ export default function Home() {
 						Recomendaciones
 					</Typography>
 					{isLoading ? (
-						<Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
-							<CircularProgress />
-						</Box>
+						<GridCarSkeleton />
 					) : error ? (
 						<Alert severity="error">{error}</Alert>
 					) : (data.data.length > 0) ? (
