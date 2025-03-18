@@ -259,6 +259,7 @@ export default function CardCar({ car, onFavorite = () => {} }) {
                 autoHideDuration={3000}
                 onClose={() => setSnackbarOpen(false)}
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                onClick={(e) => e.stopPropagation()}
             >
                 <Alert 
                     onClose={() => setSnackbarOpen(false)} 
