@@ -80,6 +80,8 @@ export default function ShareModel({ open, onClose, vehicle }) {
                     fontFamily={"var(--openSans)"}
                     fontWeight={700}
                     color="var(--darkBlue)"
+                    fontSize={{ xs: 20, md: 24 }}
+                    sx={{ marginRight: 2 }}
                 >
                     Comparte este vehículo con tus amigos
                 </Typography>
