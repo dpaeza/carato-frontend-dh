@@ -18,6 +18,7 @@ export default function CardCarSkeleton() {
                 <Grid container spacing={2} my={1}>
                     {Array.from({ length: 4 }).map((_, index) => (
                         <Grid
+                            key={index}
                             size={6}
                             sx={{ display: "flex", alignItems: "center", gap: 1 }}
                         >
