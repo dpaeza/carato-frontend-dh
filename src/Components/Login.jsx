@@ -91,12 +91,12 @@ const Login = React.memo(({ open, onClose }) => {
             login(response);
             resetForm();
             onClose();
-            MySwal.fire({
-                icon: 'success',
-                title: '¡Bienvenido!',
-                showConfirmButton: false,
-                timer: 1500
-            });
+            // MySwal.fire({
+            //     icon: 'success',
+            //     title: '¡Bienvenido!',
+            //     showConfirmButton: false,
+            //     timer: 1500
+            // }).then(() => window.location.reload());
         } catch (error) {
             const statusCode = error.status;
             const message = statusCode === 401
@@ -139,7 +139,14 @@ const Login = React.memo(({ open, onClose }) => {
     }
 
     return (
-        <Dialog open={open} onClose={onClose} maxWidth="xs">
+        <Dialog 
+            open={open} 
+            onClose={onClose} 
+            maxWidth="xs"
+            PaperProps={{
+                onClick: (e) => e.stopPropagation(),
+            }}
+        >
             <DialogTitle>
                 Iniciar sesión
                 <IconButton

@@ -1,22 +1,66 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Grid from '@mui/material/Grid2';
 import CardCar from '../Components/CardCar';
 import { useQuery } from '@tanstack/react-query';
-import { getFavorites } from '../Services/favorites';
+import { getFavorites, addFavorite, removeFavorite } from '../Services/favorites';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, CircularProgress, Alert, Pagination, Button } from '@mui/material';
+import { Box, Typography, CircularProgress, Alert, Pagination, Button, Checkbox, Snackbar } from '@mui/material';
 import EmpyState from '../assets/EmptyState.svg?react';
 
 export default function Favoritos() {
 
-    const [ page, setPage ] = useState(1);
+    const [page, setPage] = useState(1);
     const [error, setError] = useState(null);
 
     const navigate = useNavigate();
 
+    //Snackbar
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
+    // Estado para almacenar el último favorito eliminado (para deshacer)
+    const [lastRemoved, setLastRemoved] = useState(null);
+
+    const handleFavorite = async (isFavorite, id, name) => {
+        if (isFavorite) {
+            await removeFavorite(id);
+            refetch();
+            setSnackbarMessage(`${name} eliminado de tus favoritos.`);
+            setSnackbarSeverity("info");
+            setSnackbarOpen(true);
+            setLastRemoved({ id, name });
+        } else {
+            await addFavorite(id);
+            refetch();
+            setSnackbarMessage(`${name} agregado a tus favoritos.`);
+            setSnackbarSeverity("success");
+            setSnackbarOpen(true);
+            setLastRemoved(null);
+        }
+    }
+
+    const handleUndo = async () => {
+        if (lastRemoved) {
+            try {
+                await addFavorite(lastRemoved.id);
+                refetch();
+                setSnackbarMessage(`${lastRemoved.name} agregado nuevamente a tus favoritos.`);
+                setSnackbarSeverity("success");
+                setSnackbarOpen(true);
+                setLastRemoved(null);
+            } catch (error) {
+                console.error("Error al deshacer la acción de favorito:", error);
+                setSnackbarMessage("Error al deshacer la acción de favorito. Por favor, intenta de nuevo más tarde.");
+                setSnackbarSeverity("error");
+                setSnackbarOpen(true);
+            }
+        }
+    };
+
     const { data, isLoading, refetch } = useQuery({
         queryKey: ["cars", page],
-        queryFn: () => getFavorites({page}),
+        queryFn: () => getFavorites({ page }),
         select: (data) => ({ ...data, data: data.data }),
         refetchOnWindowFocus: false,
         staleTime: 60000,
@@ -27,13 +71,13 @@ export default function Favoritos() {
     })
 
     return (
-        <Box 
-            sx={{ 
-                backgroundColor:"#FAFAF", 
+        <Box
+            sx={{
+                backgroundColor: "#FAFAF",
                 minHeight: '100vh',
                 maxWidth: 1200,
                 margin: 'auto',
-                p: 6 
+                p: 6
             }}
             display={{ xs: 'block', md: 'flex' }}
             flexDirection="column"
@@ -62,19 +106,19 @@ export default function Favoritos() {
                         sx={{ mt: 4 }}
                     >
                         {data.data.map((car) => (
-                            <Grid 
+                            <Grid
                                 key={car.id}
                                 size={{ xs: 12, sm: 6, md: 4, lg: 4 }}
                                 sx={{ display: "flex", justifyContent: "center" }}
                             >
-                                <CardCar 
+                                <CardCar
                                     car={car}
-                                    onFavorite={refetch}
+                                    onFavoriteChange={() => handleFavorite(car.isFavorite, car.id, car.name)}
                                 />
                             </Grid>
                         ))}
                     </Grid>
-                    <Pagination 
+                    <Pagination
                         count={data.totalPages}
                         page={data.currentPage}
                         onChange={(event, value) => setPage(value)}
@@ -96,8 +140,8 @@ export default function Favoritos() {
                         sx={{
                             display: 'block',
                             margin: 'auto',
+                            minHeight: 200,
                         }}
-                        minHeight={200}
                     />
                     <Typography
                         variant="h5"
@@ -134,6 +178,37 @@ export default function Favoritos() {
                     </Button>
                 </Box>
             )}
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={3000}
+                onClose={() => setSnackbarOpen(false)}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            >
+                <Alert
+                    onClose={() => setSnackbarOpen(false)}
+                    severity={snackbarSeverity}
+                    sx={{ width: "100%" }}
+                    action={
+                        <>
+                            {snackbarSeverity === "info" && (
+                                <Button
+                                    color="inherit"
+                                    size="small"
+                                    onClick={handleUndo}
+                                    sx={{ textTransform: "none", fontWeight: 600, minWidth: 20 }}
+                                >
+                                    Deshacer
+                                </Button>
+                            )}
+                            <Button color="inherit" size="small" sx={{minWidth:20}} onClick={() => setSnackbarOpen(false)}>
+                                ✖
+                            </Button>
+                        </>
+                    }
+                >
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }

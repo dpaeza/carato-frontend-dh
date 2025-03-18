@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import '../Styles/categories.css';
 import { getCategories } from '../Services/categories';
-import { Box, Typography, Button, CircularProgress } from '@mui/material';
+import { Box, Typography, Button, Skeleton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CleaningServicesOutlinedIcon from '@mui/icons-material/CleaningServicesOutlined';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -21,8 +21,6 @@ export default function Categories({ selectedCategoriesId, toggleCategoryById, f
         refetchOnWindowFocus: false
     });
 
-    // Mientras se cargan las categorías mostramos un loader
-    if (isLoading) return <Box display={"flex"} justifyContent={'center'} alignItems={'center'}><CircularProgress size="30px"/></Box>;
     if (error) return <div>Error al cargar las categorías: {error.message}</div>;
 
     return (
@@ -30,34 +28,42 @@ export default function Categories({ selectedCategoriesId, toggleCategoryById, f
             {/* Versión de escritorio (cuadrícula) */}
             <div className="categories-container">
                 <div className="desktop-categories">
-                    {categories.map(({ id, name, image }) => (
-                        <div
-                            key={id}
-                            className={`category ${selectedCategoriesId.includes(id) ? 'selected' : ''}`}
-                            onClick={() => toggleCategoryById(id)}
-                        >
-                            <div className="iconContainer">
-                                {image.url ? (
-                                    <img
-                                        src={image.url}
-                                        alt={name}
-                                        className="category-icon"
-                                        style={{
-                                            width: '50px',
-                                            height: '50px',
-                                            objectFit: 'contain',
-                                            filter: selectedCategoriesId.includes(id)
-                                                ? 'opacity(1)'
-                                                : 'opacity(0.35)'
-                                        }}
-                                    />
-                                ) : (
-                                    <span>Ícono no encontrado</span>
-                                )}
+                    {isLoading 
+                        ? Array.from({ length: 6 }).map((_, index) => (
+                            <Box key={index} display="flex" flexDirection="column" alignItems="center">
+                                <Skeleton variant="circular" animation="wave" width={50} height={50} />
+                                <Skeleton variant="text" animation="wave" width={80} height={20} sx={{ marginTop: 1 }} />
+                            </Box>
+                        ))
+                        :categories.map(({ id, name, image }) => (
+                            <div
+                                key={id}
+                                className={`category ${selectedCategoriesId.includes(id) ? 'selected' : ''}`}
+                                onClick={() => toggleCategoryById(id)}
+                            >
+                                <div className="iconContainer">
+                                    {image.url ? (
+                                        <img
+                                            src={image.url}
+                                            alt={name}
+                                            className="category-icon"
+                                            style={{
+                                                width: '50px',
+                                                height: '50px',
+                                                objectFit: 'contain',
+                                                filter: selectedCategoriesId.includes(id)
+                                                    ? 'opacity(1)'
+                                                    : 'opacity(0.35)'
+                                            }}
+                                        />
+                                    ) : (
+                                        <span>Ícono no encontrado</span>
+                                    )}
+                                </div>
+                                <p>{name}</p>
                             </div>
-                            <p>{name}</p>
-                        </div>
-                    ))}
+                        ))
+                    }
                 </div>
                 {selectedCategoriesId.length > 0 && (
                     <Box>
@@ -178,35 +184,45 @@ export default function Categories({ selectedCategoriesId, toggleCategoryById, f
                         }
                     }}
                 >
-                    {categories.map(({ id, name, image }) => (
-                        <SwiperSlide key={id}>
-                            <div
-                                className={`category ${selectedCategoriesId.includes(id) ? 'selected' : ''}`}
-                                onClick={() => toggleCategoryById(id)}
-                            >
-                                <div className="iconContainer">
-                                    {image.url ? (
-                                        <img
-                                            src={image.url}
-                                            alt={name}
-                                            className="category-icon"
-                                            style={{
-                                                width: '50px',
-                                                height: '50px',
-                                                objectFit: 'contain',
-                                                filter: selectedCategoriesId.includes(id)
-                                                    ? 'brightness(0) saturate(100%) invert(7%) sepia(6%) saturate(670%) hue-rotate(202deg) brightness(95%) contrast(92%)'
-                                                    : 'brightness(0) saturate(100%) invert(74%) sepia(4%) saturate(95%) hue-rotate(198deg) brightness(89%) contrast(91%)'
-                                            }}
-                                        />
-                                    ) : (
-                                        <span>Ícono no encontrado</span>
-                                    )}
+                    { isLoading 
+                        ? Array.from({ length: 6 }).map((_, index) => (
+                                <SwiperSlide key={index}>
+                                    <Box display="flex" flexDirection="column" alignItems="center">
+                                        <Skeleton variant="circular" animation="wave" width={50} height={50} />
+                                        <Skeleton variant="text" animation="wave" width={80} height={20} sx={{ marginTop: 1 }} />
+                                    </Box>
+                                </SwiperSlide>
+                            ))
+                        : categories.map(({ id, name, image }) => (
+                            <SwiperSlide key={id}>
+                                <div
+                                    className={`category ${selectedCategoriesId.includes(id) ? 'selected' : ''}`}
+                                    onClick={() => toggleCategoryById(id)}
+                                >
+                                    <div className="iconContainer">
+                                        {image.url ? (
+                                            <img
+                                                src={image.url}
+                                                alt={name}
+                                                className="category-icon"
+                                                style={{
+                                                    width: '50px',
+                                                    height: '50px',
+                                                    objectFit: 'contain',
+                                                    filter: selectedCategoriesId.includes(id)
+                                                        ? 'opacity(1)'
+                                                        : 'opacity(0.35)'
+                                                }}
+                                            />
+                                        ) : (
+                                            <span>Ícono no encontrado</span>
+                                        )}
+                                    </div>
+                                    <p>{name}</p>
                                 </div>
-                                <p>{name}</p>
-                            </div>
-                        </SwiperSlide>
-                    ))}
+                            </SwiperSlide>
+                        ))
+                    }
                 </Swiper>
             </div>
         </section>
