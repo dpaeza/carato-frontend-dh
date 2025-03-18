@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Helmet } from 'react-helmet';
 import { useParams } from 'react-router-dom';
 import DetailHeader from '../Components/DetailHeader';
 import DetailHeaderSkeleton from '../Components/DetailHeaderSkeleton';
@@ -60,6 +61,13 @@ export default function Vehiculo() {
 
     return (
         <Box sx={{ backgroundColor: "var(--lightWhite)", px: 3, pt: 5, pb: 2 }}>
+            <Helmet>
+                <meta property="og:title" content={vehicle?.name} />
+                <meta property="og:description" content="🚗 ¡Mirá este auto en Carato! 🔥 Ideal para tu próximo viaje. #Carato #AlquilerDeAutos" />
+                <meta property="og:image" content={vehicle?.images[0]?.url} />
+                <meta property="og:url" content={window.location.href} />
+                <meta name="twitter:card" content="summary_large_image" />
+            </Helmet>
             {isLoading
                 ?   <Box>
                         <DetailHeaderSkeleton />
