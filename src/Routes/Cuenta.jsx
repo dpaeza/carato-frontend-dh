@@ -20,8 +20,18 @@ export default function Cuenta() {
             <Box sx={{ p: 2, maxWidth: 800, margin: 'auto', backgroundColor: 'white', boxShadow: 1, borderRadius: 1 }}>
                 <Typography variant="h3" fontFamily="var(--openSans)" fontSize={24} fontWeight={700} color='var(--darkBlue)'>Perfil de usuario</Typography>
                 <Typography fontFamily="var(--lato)" fontSize={16} fontWeight={500} color='var(--darkBlue)'>Consulta tus datos personales y tu seguridad</Typography>
-                <Box sx={{ display: 'flex', gap: 6, mt: 4 }}>
-                    <Box>
+                <Box 
+                    sx={{ 
+                        display: 'flex',
+                        flexDirection: { xs: 'column', md: 'row' },
+                        gap: 6, 
+                        mt: 4 
+                    }}>
+                    <Box 
+                        display={{ xs: 'flex', md: 'block' }}
+                        alignItems='center'
+                        justifyContent='center'
+                    >
                         <Avatar
                             src={user.avatar}
                             alt={user.name}
