@@ -1,5 +1,6 @@
 import api from "./api";
 import axios from "axios";
+import dayjs from 'dayjs';
 
 const API_URL = import.meta.env.VITE_API_BASE_URL + "/cars";
 
@@ -21,6 +22,11 @@ export const getCars = async ({
             "Content-Type": "multipart/form-data",
             Accept: "application/json",
         };
+
+        if (brandId && (!startDate || !endDate)) {
+            startDate = dayjs().format("YYYY-MM-DD");
+            endDate = dayjs().add(2, "year").format("YYYY-MM-DD");
+        }
 
         let response = [];
 
