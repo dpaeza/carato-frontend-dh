@@ -130,6 +130,7 @@ export default function Search({onSearch = () => {}}) {
                             className="date-range-picker"
                             style={{ width: '100%' }}
                             cleanable
+                            ranges={[]}
                             value={startDate && endDate ? [startDate, endDate] : null}
                             onChange={(range) => {
                                 if (range) {
