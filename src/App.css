@@ -39,31 +39,27 @@ main {
   z-index: 1300;
 }
 
+.MuiDateCalendar-root {
+  height: auto !important;
+}
+
 .MuiPickersCalendarHeader-root{
   display: none !important;
 }
 
-.Mui-selected{
+.MuiDateCalendar-root .Mui-selected{
   color: rgba(0, 0, 0, 0.87) !important;
   background-color: transparent !important;
   opacity: 1 !important;
 }
 
-.MuiPickersDay-today {
+.MuiDateCalendar-root .MuiPickersDay-today {
   color: #fff !important;
   background-color: #1976d2 !important;
   font-weight: 500 !important;
 }
 
-.Mui-disabled {
+.MuiDateCalendar-root .Mui-disabled {
   color: rgba(0, 0, 0, 0.38) !important;
   text-decoration: line-through !important;
-}
-
-/* .css-4k4mmf-MuiButtonBase-root-MuiPickersDay-root {
-  color: rgba(0, 0, 0, 0.87) !important;
-} */
-
-.MuiDateCalendar-root {
-  height: auto !important;
 }
