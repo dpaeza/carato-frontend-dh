@@ -14,10 +14,14 @@ import queryString from 'query-string';
 
 export default function Home() {
 	const [searchParams, setSearchParams] = useSearchParams();
+
 	const params = queryString.parse(searchParams.toString(), {
 		types: {
 			page: "number",
-			categoriesId: "string"
+			categoriesId: "string",
+			brandId: "number",
+			startDate: "string",
+			endDate: "string",
 		}
 	});
 
@@ -26,6 +30,9 @@ export default function Home() {
 
 	const page = params.page ?? 1;
 	const categoriesId = validCategoriesId ? params.categoriesId : "";
+	const brandId = params.brandId ?? "";
+	const startDate = params.startDate ?? "";
+	const endDate = params.endDate ?? "";
 
 	const categoriesIdArray = (categoriesId !== "")
 		? categoriesId.split(",").map(id => isNaN(id) ? null : parseInt(id)).filter(id => id !== null)
@@ -33,8 +40,8 @@ export default function Home() {
 
 	const [error, setError] = useState(null);
 	const { data, isLoading } = useQuery({
-		queryKey: ["cars", page, categoriesId],
-		queryFn: () => getCars({ page, categoriesId }),
+		queryKey: ["cars", page, categoriesId, brandId, startDate, endDate],
+		queryFn: () => getCars({ page, categoriesId, brandId, startDate, endDate }),
 		select: (data) => ({ ...data, data: shuffleArray(data.data, randomSeed) }),
 		refetchOnWindowFocus: false,
 		staleTime: 60000,
@@ -69,13 +76,23 @@ export default function Home() {
 		}));
 	};
 
+	const handleSearch = ({ brand, startDate, endDate }) => {
+		setSearchParams(queryString.stringify({
+			...params,
+			page: undefined,
+			brandId: brand ? brand : undefined,
+			startDate: startDate ? startDate : undefined,
+			endDate: endDate ? endDate : undefined,
+		}));
+	}
+
 	return (
 		<Box>
 			<Box sx={{ backgroundColor: "var(--pureWhite)" }}>
 				<Box sx={{ pt: 6, px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto" }}>
 					{isTotalLoading 
 						? <SearchSkeleton />
-						:  <Search />
+						:  <Search onSearch={handleSearch}/>
 					}
 				</Box>
 				<Box sx={{ py: 3, px: { xs: 2, sm: 8, md: 16, lg: 16 }, maxWidth: "1200px", mx: "auto" }}>
