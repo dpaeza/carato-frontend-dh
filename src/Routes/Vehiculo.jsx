@@ -12,6 +12,7 @@ import { getCarByIdOrName } from '../Services/cars';
 import { useQuery } from '@tanstack/react-query';
 import { addFavorite, removeFavorite } from "../Services/favorites";
 import ShareModel from '../Components/ShareModel';
+import DoubleCalendar from '../Components/DoubleCalendar';
 
 export default function Vehiculo() {
     const { id } = useParams();
@@ -58,6 +59,21 @@ export default function Vehiculo() {
         }
     }, [vehicle]);
 
+    const dates = [
+        {
+            "id": 2,
+            "startDate": "2025-04-20",
+            "endDate": "2025-05-22",
+            "totalPrice": 45000.0
+        },
+        {
+            "id": 3,
+            "startDate": "2025-05-23",
+            "endDate": "2025-06-19",
+            "totalPrice": 45000.0
+        }
+    ]
+
     return (
         <Box sx={{ backgroundColor: "var(--lightWhite)", px: 3, pt: 5, pb: 2 }}>
             {isLoading
@@ -74,6 +90,7 @@ export default function Vehiculo() {
                         <GridImage images={vehicle?.images} />
                     </Box>
                     <Specifications vehicle={vehicle} />
+                    <DoubleCalendar reservations={dates}/>
                     <Politics />
                     <Snackbar
                         open={snackbarOpen}
