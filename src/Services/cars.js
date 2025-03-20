@@ -30,7 +30,7 @@ export const getCars = async ({
             
         } else {
             response = await api.get("/cars", {
-                params: { page, size, query, categoriesId, brandId, startDate, endDate },
+                params: { page, size, categoriesId, brandId, startDate, endDate },
             });
         }
         
