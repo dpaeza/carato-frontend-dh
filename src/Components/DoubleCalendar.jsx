@@ -64,7 +64,7 @@ export default function DoubleCalendar({ reservations }) {
                 }}
             >
                 <Box
-                    py={2}
+                    pt={2}
                 >
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
                         <Box
