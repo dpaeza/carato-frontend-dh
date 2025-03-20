@@ -66,6 +66,7 @@ export default function Politics() {
                                 variant="body1"
                                 fontSize={14}
                                 fontFamily="var(--lato)"
+                                textAlign={"justify"}
                             >
                                 {policy.description}
                             </Typography>
