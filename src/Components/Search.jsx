@@ -7,15 +7,18 @@ import 'rsuite/DateRangePicker/styles/index.css';
 import SearchIcon from '@mui/icons-material/Search';
 import { getBrands } from '../Services/extras';
 import Grid from '@mui/material/Grid2';
+import { set } from 'rsuite/esm/internals/utils/date';
 
-export default function Search() {
+export default function Search({onSearch = () => {}}) {
     // Definir las fechas iniciales: hoy y 4 días después
     const today = dayjs().startOf('day');
     const defaultEndDate = today.add(4, 'day');
 
     // Estados para las fechas
-    const [startDate, setStartDate] = useState(today.toDate());
-    const [endDate, setEndDate] = useState(defaultEndDate.toDate());
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+
+    const [isDateTouched, setIsDateTouched] = useState(false);
 
     // Estados para las marcas
     const [brands, setBrands] = useState([]);
@@ -37,6 +40,27 @@ export default function Search() {
         };
         fetchBrands();
     }, []);
+
+    const handleSearch = () => {
+        let onSearchObject = {};
+
+        if (startDate && endDate) {
+            // Se formatean las fechas a "YYYY-MM-DD"
+            const formattedStartDate = dayjs(startDate).format('YYYY-MM-DD');
+            const formattedEndDate = dayjs(endDate).format('YYYY-MM-DD');
+            onSearchObject = {
+                startDate: formattedStartDate,
+                endDate: formattedEndDate
+            };
+        }
+        
+        if (onSearch) {
+            onSearch({
+                ...onSearchObject,
+                brand: selectedBrand
+            });
+        }
+    }
 
     return (
         <Box
@@ -128,17 +152,29 @@ export default function Search() {
                             size="lg"
                             className="date-range-picker"
                             style={{ width: '100%' }}
-                            value={[startDate, endDate]}
+                            cleanable
+                            value={startDate && endDate ? [startDate, endDate] : null}
                             onChange={(range) => {
                                 if (range) {
                                     setStartDate(range[0]);
                                     setEndDate(range[1]);
+                                } else {
+                                    setStartDate(null);
+                                    setEndDate(null);
+                                    setIsDateTouched(false);
+                                }
+                            }}
+                            onOpen={() => {
+                                if (!isDateTouched) {
+                                    setStartDate(today.toDate());
+                                    setEndDate(defaultEndDate.toDate());
+                                    setIsDateTouched(true);
                                 }
                             }}
                             shouldDisableDate={(date) =>
                                 dayjs(date).isBefore(dayjs().startOf('day'))
                             }
-                            defaultCalendarValue={[startDate, endDate]}
+                            // defaultCalendarValue={[startDate, endDate]}
                         />
                     </Grid>
                     <Grid size={{xs:12, sm:12, md:2}}>
@@ -156,6 +192,7 @@ export default function Search() {
                                 color: 'white',
                                 boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
                             }}
+                            onClick={handleSearch}
                         >
                             Buscar
                         </Button>
@@ -165,4 +202,3 @@ export default function Search() {
         </Box>
     );
 }
-

@@ -8,6 +8,9 @@ export const getCars = async ({
     size = 10,
     query = "",
     categoriesId = "",
+    brandId = "",
+    startDate = "",
+    endDate = "",
 }) => {
     try {
 
@@ -23,7 +26,7 @@ export const getCars = async ({
 
         if (token) {
             headers.Authorization = `Bearer ${token}`;
-            response = await axios.get(API_URL, { headers, params: { page, size, query, categoriesId } });
+            response = await axios.get(API_URL, { headers, params: { page, size, categoriesId, brandId, startDate, endDate } });
             
         } else {
             response = await api.get("/cars", {
