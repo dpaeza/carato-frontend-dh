@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import '../Styles/search.css';
 import { Box, Typography } from '@mui/material';
 import 'rsuite/DateRangePicker/styles/index.css';
+import 'rsuite/InputPicker/styles/index.css';
 import SearchIcon from '@mui/icons-material/Search';
 import { getBrands } from '../Services/extras';
 import Grid from '@mui/material/Grid2';
@@ -115,30 +116,6 @@ export default function Search({onSearch = () => {}}) {
                             onChange={setSelectedBrand}
                             size="lg"
                             block
-                            searchable={false}
-                            menuStyle={{
-                                padding: '8px',
-                                borderRadius: 8,
-                                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-                            }}
-                            renderMenuItem={(label, item) => (
-                                <div
-                                    style={{
-                                        padding: '8px 12px',
-                                        cursor: 'pointer',
-                                        borderRadius: 6,
-                                        transition: 'background 0.2s ease-in-out',
-                                    }}
-                                    onMouseEnter={(e) =>
-                                        (e.currentTarget.style.background = 'rgba(0, 123, 255, 0.1)')
-                                    }
-                                    onMouseLeave={(e) =>
-                                        (e.currentTarget.style.background = 'transparent')
-                                    }
-                                >
-                                    {label}
-                                </div>
-                            )}
                         />
                     </Grid>
                     <Grid size={{xs:12, sm:12, md:7, lg:7 }}>
