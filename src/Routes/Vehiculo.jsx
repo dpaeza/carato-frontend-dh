@@ -7,12 +7,13 @@ import GridImageSkeleton from '../Components/GridImageSkeleton';
 import Specifications from '../Components/Specifications';
 import SpecificationsSkeleton from '../Components/SpecificationsSkeleton';
 import Politics from '../Components/Politics';
-import { Box, Snackbar, Alert } from "@mui/material";
+import { Box, Snackbar, Alert, Typography, Divider, CircularProgress } from "@mui/material";
 import { getCarByIdOrName } from '../Services/cars';
 import { useQuery } from '@tanstack/react-query';
 import { addFavorite, removeFavorite } from "../Services/favorites";
 import ShareModel from '../Components/ShareModel';
 import DoubleCalendar from '../Components/DoubleCalendar';
+import { getVehicleReservations } from '../Services/reservations';
 
 export default function Vehiculo() {
     const { id } = useParams();
@@ -53,44 +54,55 @@ export default function Vehiculo() {
         refetchOnWindowFocus: false,
     });
 
+    const { data: reservations, isLoading: loadingReservations } = useQuery({
+        queryKey: ["reservations", id],
+        queryFn: () => getVehicleReservations(id),
+        refetchOnWindowFocus: false,
+    });
+
     useEffect(() => {
         if (vehicle) {
             setFavorite(vehicle.isFavorite);
         }
     }, [vehicle]);
 
-    const dates = [
-        {
-            "id": 2,
-            "startDate": "2025-04-20",
-            "endDate": "2025-05-22",
-            "totalPrice": 45000.0
-        },
-        {
-            "id": 3,
-            "startDate": "2025-05-23",
-            "endDate": "2025-06-19",
-            "totalPrice": 45000.0
-        }
-    ]
-
     return (
         <Box sx={{ backgroundColor: "var(--lightWhite)", px: 3, pt: 5, pb: 2 }}>
             {isLoading
-                ?   <Box>
-                        <DetailHeaderSkeleton />
-                        <Box sx={{ height: { xs: "70vh", sx: "50vh" }, maxWidth: "1100px", margin: "auto", mt: 3 }}>
-                            <GridImageSkeleton />
-                        </Box>
-                        <SpecificationsSkeleton />
+                ? <Box>
+                    <DetailHeaderSkeleton />
+                    <Box sx={{ height: { xs: "70vh", sx: "50vh" }, maxWidth: "1100px", margin: "auto", mt: 3 }}>
+                        <GridImageSkeleton />
                     </Box>
+                    <SpecificationsSkeleton />
+                </Box>
                 : <Box>
                     <DetailHeader model={vehicle.name} category={vehicle.category} isFavorite={favorite} onFavorite={handleFavorite} onShare={handleShare} />
                     <Box sx={{ height: { xs: "70vh", sx: "50vh" }, maxWidth: "1100px", margin: "auto", mt: 3 }}>
                         <GridImage images={vehicle?.images} />
                     </Box>
                     <Specifications vehicle={vehicle} />
-                    <DoubleCalendar reservations={dates}/>
+                    <Box sx={{ maxWidth: "1100px", margin: "auto", px: 2 }}>
+                        <Typography
+                            variant="h5"
+                            gutterBottom
+                            fontSize={20}
+                            fontFamily="var(--openSans)"
+                            fontWeight={600}
+                            color="var(--darkBlue)"
+                        >
+                            Disponibilidad
+                        </Typography>
+                        <Divider sx={{ my: 2 }} />
+                    </Box>
+                    {loadingReservations ? (
+                        <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+                            <CircularProgress />
+                        </Box>
+                    ) : (
+                        <DoubleCalendar reservations={reservations} />
+                    )}
+                    {/* <DoubleCalendar reservations={dates}/> */}
                     <Politics />
                     <Snackbar
                         open={snackbarOpen}

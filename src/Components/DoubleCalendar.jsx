@@ -47,26 +47,20 @@ export default function DoubleCalendar({ reservations }) {
         if (date.isBefore(today)) return true;
 
         // Deshabilitar fechas dentro de las reservas
-        return reservations.some(reservation => {
-            const startDate = dayjs(reservation.startDate);
-            const endDate = dayjs(reservation.endDate);
-            return date.isSame(startDate, 'day') || date.isSame(endDate, 'day') || (date.isAfter(startDate, 'day') && date.isBefore(endDate, 'day'));
-        });
+        if (!reservations || reservations.length === 0) {
+            return false;
+        } else {
+            return reservations.some(reservation => {
+                const startDate = dayjs(reservation.startDate);
+                const endDate = dayjs(reservation.endDate);
+                return date.isSame(startDate, 'day') || date.isSame(endDate, 'day') || (date.isAfter(startDate, 'day') && date.isBefore(endDate, 'day'));
+            });
+        }
     };
 
     return (
         <Box sx={{ maxWidth: "1100px", margin: "auto", px: 2, mb: 3 }}>
-            <Typography
-                variant="h5"
-                gutterBottom
-                fontSize={20}
-                fontFamily="var(--openSans)"
-                fontWeight={600}
-                color="var(--darkBlue)"
-            >
-                Disponibilidad
-            </Typography>
-            <Divider sx={{ my: 2 }} />
+            
             <Box
                 sx={{
                     border: '1px solid #ccc',
