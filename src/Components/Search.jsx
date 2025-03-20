@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DateRangePicker, InputPicker, Button } from 'rsuite';
 import dayjs from 'dayjs';
+import { useSearchParams } from 'react-router-dom';
 import '../Styles/search.css';
 import { Box, Typography } from '@mui/material';
 import 'rsuite/DateRangePicker/styles/index.css';
@@ -10,7 +11,7 @@ import { getBrands } from '../Services/extras';
 import Grid from '@mui/material/Grid2';
 import { set } from 'rsuite/esm/internals/utils/date';
 
-export default function Search({onSearch = () => {}}) {
+export default function Search({ onSearch = () => { } }) {
     // Definir las fechas iniciales: hoy y 4 días después
     const today = dayjs().startOf('day');
     const defaultEndDate = today.add(4, 'day');
@@ -25,22 +26,34 @@ export default function Search({onSearch = () => {}}) {
     const [brands, setBrands] = useState([]);
     const [selectedBrand, setSelectedBrand] = useState(null);
 
-    // Obtener marcas
-    useEffect(() => {
-        const fetchBrands = async () => {
-            try {
-                const response = await getBrands(); // Se espera un array con objetos { id, name }
-                const formattedBrands = response.map(brand => ({
-                    label: brand.name,
-                    value: brand.id
-                }));
-                setBrands(formattedBrands);
-            } catch (error) {
-                console.error("Error al obtener las marcas:", error);
-            }
+    const [searchParams] = useSearchParams();
+
+    const getPageParams = () => {
+        const params = {
+            brand: searchParams.get('brandId'),
+            start: searchParams.get('startDate'),
+            end: searchParams.get('endDate'),
         };
-        fetchBrands();
-    }, []);
+
+        const isValidDate = (date) => dayjs(date, 'YYYY-MM-DD', true).isValid();
+
+        if (params.brand) setSelectedBrand(parseInt(params.brand));
+        if (isValidDate(params.start)) setStartDate(dayjs(params.start).toDate());
+        if (isValidDate(params.end)) setEndDate(dayjs(params.end).toDate());
+    }
+
+    const fetchBrands = async () => {
+        try {
+            const response = await getBrands(); // Se espera un array con objetos { id, name }
+            const formattedBrands = response.map(brand => ({
+                label: brand.name,
+                value: brand.id
+            }));
+            setBrands(formattedBrands);
+        } catch (error) {
+            console.error("Error al obtener las marcas:", error);
+        }
+    };
 
     const handleSearch = () => {
         let onSearchObject = {};
@@ -62,6 +75,11 @@ export default function Search({onSearch = () => {}}) {
             });
         }
     }
+
+    useEffect( () => {
+        fetchBrands();
+        getPageParams();
+    }, []);
 
     return (
         <Box
@@ -96,15 +114,15 @@ export default function Search({onSearch = () => {}}) {
                     width: '100%',
                 }}
             >
-                <Grid 
-                    container 
+                <Grid
+                    container
                     spacing={2}
                     direction={{ xs: 'column', sm: 'row' }}
                     alignItems="flex-end"
                     justifyContent={{ xs: 'center', sm: 'space-between' }}
                     width={'100%'}
                 >
-                    <Grid size={{xs:12, sm:12, md:3, lg:3 }}>
+                    <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3 }}>
                         <label htmlFor="brand-picker" className="input-label">
                             Marca
                         </label>
@@ -118,7 +136,7 @@ export default function Search({onSearch = () => {}}) {
                             block
                         />
                     </Grid>
-                    <Grid size={{xs:12, sm:12, md:7, lg:7 }}>
+                    <Grid size={{ xs: 12, sm: 12, md: 7, lg: 7 }}>
                         <label htmlFor="date-range" className="input-label">
                             Fecha de retiro - Fecha de devolución
                         </label>
@@ -152,12 +170,12 @@ export default function Search({onSearch = () => {}}) {
                             shouldDisableDate={(date) =>
                                 dayjs(date).isBefore(dayjs().startOf('day'))
                             }
-                            // defaultCalendarValue={[startDate, endDate]}
+                        // defaultCalendarValue={[startDate, endDate]}
                         />
                     </Grid>
-                    <Grid size={{xs:12, sm:12, md:2}}>
+                    <Grid size={{ xs: 12, sm: 12, md: 2 }}>
                         <Button
-                            startIcon={<SearchIcon fontSize='small'/>}
+                            startIcon={<SearchIcon fontSize='small' />}
                             style={{
                                 width: '100%',
                                 fontFamily: '(var(--lato))',
