@@ -57,10 +57,6 @@ main {
   color: rgba(0, 0, 0, 0.87) !important;
 }
 
-.css-5wchs2-MuiDateCalendar-root {
+.MuiDateCalendar-root {
   height: auto !important;
 }
-
-/* .css-1deag3q-MuiDayCalendar-slideTransition {
-  min-height: 0 !important;
-} */
