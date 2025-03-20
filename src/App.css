@@ -42,3 +42,25 @@ main {
 .MuiPickersCalendarHeader-root{
   display: none !important;
 }
+
+.css-4k4mmf-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+  background-color: transparent !important;
+  opacity: 1 !important;
+}
+
+.css-4k4mmf-MuiButtonBase-root-MuiPickersDay-root.Mui-disabled {
+  color: rgba(0, 0, 0, 0.38) !important;
+  text-decoration: line-through !important;
+}
+
+.css-4k4mmf-MuiButtonBase-root-MuiPickersDay-root {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+
+.css-5wchs2-MuiDateCalendar-root {
+  height: auto !important;
+}
+
+/* .css-1deag3q-MuiDayCalendar-slideTransition {
+  min-height: 0 !important;
+} */

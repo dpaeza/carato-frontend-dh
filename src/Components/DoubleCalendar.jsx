@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
+import 'dayjs/locale/es'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers'
 import { Box, Typography, IconButton, Divider } from '@mui/material'
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Grid from '@mui/material/Grid2';
 
+dayjs.locale('es')
+
 export default function DoubleCalendar({ reservations }) {
-    // Inicializamos leftDate con la fecha actual
+
     const initialLeftDate = dayjs();
-    // Inicializamos rightDate con el mes siguiente
     const initialRightDate = initialLeftDate.add(1, 'month');
 
     const [leftDate, setLeftDate] = useState(initialLeftDate)
@@ -25,16 +27,6 @@ export default function DoubleCalendar({ reservations }) {
     const handleNextMonth = () => {
         setLeftDate(prev => prev.add(1, 'month'));
         setRightDate(prev => prev.add(1, 'month'));
-    };
-
-    const handleLeftDateChange = (newDate) => {
-        setLeftDate(newDate);
-        setRightDate(newDate.add(1, 'month'));
-    };
-
-    const handleRightDateChange = (newDate) => {
-        setRightDate(newDate);
-        setLeftDate(newDate.subtract(1, 'month'));
     };
 
     const isDateDisabled = (date) => {
@@ -52,8 +44,8 @@ export default function DoubleCalendar({ reservations }) {
     };
 
     return (
-        <Box sx={{maxWidth: "1100px", margin: "auto", px: 2, mb:3}}>
-            <Typography 
+        <Box sx={{ maxWidth: "1100px", margin: "auto", px: 2, mb: 3 }}>
+            <Typography
                 variant="h5"
                 gutterBottom
                 fontSize={20}
@@ -67,88 +59,95 @@ export default function DoubleCalendar({ reservations }) {
             <Box
                 sx={{
                     border: '1px solid #ccc',
-                    borderRadius: 1,
-                    display:'inline-block',
-                    padding: 2,
+                    borderRadius: 3,
+                    display: 'inline-block',
                 }}
             >
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <Box 
-                        display="flex" 
-                        flexDirection={{xs:'column', md:'row'}}
-                        justifyContent="center"
-                    >
-                        <Box>
-                            <Grid container>
-                                <Grid size={1}>
-                                    <IconButton onClick={handlePrevMonth}>
-                                        <ArrowBackIosIcon fontSize='small' sx={{color:'var(--lightGrey)'}}/>
-                                    </IconButton>
-                                </Grid>
-                                <Grid size={10}
+                <Box
+                    py={2}
+                >
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
+                        <Box
+                            display="flex"
+                            flexDirection={{ xs: 'column', md: 'row' }}
+                            justifyContent="center"
+                        >
+                            <Box>
+                                <Grid container
                                     sx={{
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center'
                                     }}
                                 >
-                                    <Typography 
-                                        variant="h6" 
-                                        gutterBottom
-                                        fontFamily={'var(--lato)'}
-                                        fontSize={16}
-                                        color='var(--darkBlue)'
+                                    <Grid size={1}>
+                                        <IconButton onClick={handlePrevMonth}>
+                                            <KeyboardArrowLeftIcon fontSize='medium' sx={{ color: 'var(--lightGrey)' }} />
+                                        </IconButton>
+                                    </Grid>
+                                    <Grid size={10}
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }}
                                     >
-                                        {leftDate.format('MMMM YYYY')}
-                                    </Typography>
+                                        <Typography
+                                            variant="h6"
+                                            gutterBottom
+                                            fontFamily={'var(--lato)'}
+                                            fontSize={16}
+                                            color='var(--darkBlue)'
+                                            textTransform={'capitalize'}
+                                        >
+                                            {leftDate.format('MMMM YYYY')}
+                                        </Typography>
+                                    </Grid>
                                 </Grid>
-                                <Grid size={1}>
-                                </Grid>
-                            </Grid>
-                            <DateCalendar
-                                readOnly={true}
-                                value={leftDate}
-                                onChange={handleLeftDateChange}
-                                shouldDisableDate={isDateDisabled}
-                            />
-                        </Box>
-                        <Divider orientation="vertical" flexItem />
-                        <Box>
-                            <Grid container>
-                                <Grid size={1}>
-                                </Grid>
-                                <Grid size={10}
-                                    sx={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <Typography 
-                                        variant="h6" 
-                                        gutterBottom
-                                        fontFamily={'var(--lato)'}
-                                        fontSize={16}
-                                        color='var(--darkBlue)'
+                                <DateCalendar
+                                    readOnly={true}
+                                    value={leftDate}
+                                    shouldDisableDate={isDateDisabled}
+                                />
+                            </Box>
+                            <Divider orientation="vertical" flexItem />
+                            <Box>
+                                <Grid container >
+                                    <Grid size={1}>
+                                    </Grid>
+                                    <Grid size={9}
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }}
                                     >
-                                    {rightDate.format('MMMM YYYY')}
-                                    </Typography>
+                                        <Typography
+                                            variant="h6"
+                                            gutterBottom
+                                            fontFamily={'var(--lato)'}
+                                            fontSize={16}
+                                            color='var(--darkBlue)'
+                                            textTransform={'capitalize'}
+                                        >
+                                            {rightDate.format('MMMM YYYY')}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid size={2}>
+                                        <IconButton onClick={handleNextMonth}>
+                                            <KeyboardArrowRightIcon fontSize='medium' sx={{ color: 'var(--lightGrey)' }} />
+                                        </IconButton>
+                                    </Grid>
                                 </Grid>
-                                <Grid size={1}>
-                                    <IconButton onClick={handleNextMonth}>
-                                        <ArrowForwardIosIcon fontSize='small' sx={{color:'var(--lightGrey)'}} />
-                                    </IconButton>
-                                </Grid>
-                            </Grid>
-                            <DateCalendar
-                                value={rightDate}
-                                onChange={handleRightDateChange}
-                                shouldDisableDate={isDateDisabled}
-                                readOnly={true}
-                            />
+                                <DateCalendar
+                                    readOnly={true}
+                                    value={rightDate}
+                                    shouldDisableDate={isDateDisabled}
+                                />
+                            </Box>
                         </Box>
-                    </Box>
-                </LocalizationProvider>
+                    </LocalizationProvider>
+                </Box>
             </Box>
         </Box>
     )
