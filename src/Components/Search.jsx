@@ -10,7 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { getBrands } from '../Services/extras';
 import Grid from '@mui/material/Grid2';
 import { set } from 'rsuite/esm/internals/utils/date';
-import esAR from 'rsuite/locales/es_ar';
+import esAR from 'rsuite/locales/es_AR';
 
 export default function Search({ onSearch = () => { } }) {
     // Definir las fechas iniciales: hoy y 4 días después
