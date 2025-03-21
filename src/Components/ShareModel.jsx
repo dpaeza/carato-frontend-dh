@@ -52,7 +52,7 @@ export default function ShareModel({ open, onClose, vehicle }) {
     ];
 
     const handleCopyClick = () => {
-        navigator.clipboard.writeText(`${shareMessage} ${url}`)
+        navigator.clipboard.writeText(url)
             .then(() => {
                 setSnackbarMessage("¡Enlace copiado!");
                 setSnackbarSeverity("success");
