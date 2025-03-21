@@ -56,6 +56,12 @@ export default function Search({ onSearch = () => { } }) {
         }
     };
 
+    const handleKeyDown = (event) => {
+        if (event.key.length === 1 && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]$/.test(event.key)) {
+            event.preventDefault();
+        }
+    };
+
     const handleSearch = () => {
         let onSearchObject = {};
 
@@ -134,6 +140,7 @@ export default function Search({ onSearch = () => { } }) {
                                 data={brands}
                                 value={selectedBrand}
                                 onChange={setSelectedBrand}
+                                onKeyDown={handleKeyDown}
                                 size="lg"
                                 block
                             />
