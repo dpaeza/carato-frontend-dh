@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DateRangePicker, InputPicker, Button } from 'rsuite';
+import { DateRangePicker, InputPicker, Button, CustomProvider } from 'rsuite';
 import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
 import '../Styles/search.css';
@@ -10,6 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { getBrands } from '../Services/extras';
 import Grid from '@mui/material/Grid2';
 import { set } from 'rsuite/esm/internals/utils/date';
+import esAR from 'rsuite/locales/es_ar';
 
 export default function Search({ onSearch = () => { } }) {
     // Definir las fechas iniciales: hoy y 4 días después
@@ -67,7 +68,7 @@ export default function Search({ onSearch = () => { } }) {
                 endDate: formattedEndDate
             };
         }
-        
+
         if (onSearch) {
             onSearch({
                 ...onSearchObject,
@@ -76,7 +77,7 @@ export default function Search({ onSearch = () => { } }) {
         }
     }
 
-    useEffect( () => {
+    useEffect(() => {
         fetchBrands();
         getPageParams();
     }, []);
@@ -105,96 +106,98 @@ export default function Search({ onSearch = () => { } }) {
             >
                 Alquila tu vehículo
             </Typography>
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: { xs: 'column', sm: 'row' },
-                    gap: 2,
-                    alignItems: 'center',
-                    width: '100%',
-                }}
-            >
-                <Grid
-                    container
-                    spacing={2}
-                    direction={{ xs: 'column', sm: 'row' }}
-                    alignItems="flex-end"
-                    justifyContent={{ xs: 'center', sm: 'space-between' }}
-                    width={'100%'}
+            <CustomProvider locale={esAR}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', sm: 'row' },
+                        gap: 2,
+                        alignItems: 'center',
+                        width: '100%',
+                    }}
                 >
-                    <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3 }}>
-                        <label htmlFor="brand-picker" className="input-label">
-                            Marca
-                        </label>
-                        <InputPicker
-                            id="brand-picker"
-                            placeholder="Selecciona una marca"
-                            data={brands}
-                            value={selectedBrand}
-                            onChange={setSelectedBrand}
-                            size="lg"
-                            block
-                        />
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 12, md: 7, lg: 7 }}>
-                        <label htmlFor="date-range" className="input-label">
-                            Fecha de retiro - Fecha de devolución
-                        </label>
-                        <DateRangePicker
-                            id="date-range"
-                            appearance="default"
-                            placeholder="Selecciona fechas"
-                            size="lg"
-                            className="date-range-picker"
-                            style={{ width: '100%' }}
-                            cleanable
-                            ranges={[]}
-                            value={startDate && endDate ? [startDate, endDate] : null}
-                            onChange={(range) => {
-                                if (range) {
-                                    setStartDate(range[0]);
-                                    setEndDate(range[1]);
-                                } else {
-                                    setStartDate(null);
-                                    setEndDate(null);
-                                    setIsDateTouched(false);
+                    <Grid
+                        container
+                        spacing={2}
+                        direction={{ xs: 'column', sm: 'row' }}
+                        alignItems="flex-end"
+                        justifyContent={{ xs: 'center', sm: 'space-between' }}
+                        width={'100%'}
+                    >
+                        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3 }}>
+                            <label htmlFor="brand-picker" className="input-label">
+                                Marca
+                            </label>
+                            <InputPicker
+                                id="brand-picker"
+                                placeholder="Selecciona una marca"
+                                data={brands}
+                                value={selectedBrand}
+                                onChange={setSelectedBrand}
+                                size="lg"
+                                block
+                            />
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 12, md: 7, lg: 7 }}>
+                            <label htmlFor="date-range" className="input-label">
+                                Fecha de retiro - Fecha de devolución
+                            </label>
+                            <DateRangePicker
+                                id="date-range"
+                                appearance="default"
+                                placeholder="Selecciona fechas"
+                                size="lg"
+                                className="date-range-picker"
+                                style={{ width: '100%' }}
+                                cleanable
+                                ranges={[]}
+                                value={startDate && endDate ? [startDate, endDate] : null}
+                                onChange={(range) => {
+                                    if (range) {
+                                        setStartDate(range[0]);
+                                        setEndDate(range[1]);
+                                    } else {
+                                        setStartDate(null);
+                                        setEndDate(null);
+                                        setIsDateTouched(false);
+                                    }
+                                }}
+                                onOpen={() => {
+                                    if (!isDateTouched) {
+                                        setStartDate(today.toDate());
+                                        setEndDate(defaultEndDate.toDate());
+                                        setIsDateTouched(true);
+                                    }
+                                }}
+                                shouldDisableDate={(date) =>
+                                    dayjs(date).isBefore(dayjs().startOf('day'))
                                 }
-                            }}
-                            onOpen={() => {
-                                if (!isDateTouched) {
-                                    setStartDate(today.toDate());
-                                    setEndDate(defaultEndDate.toDate());
-                                    setIsDateTouched(true);
-                                }
-                            }}
-                            shouldDisableDate={(date) =>
-                                dayjs(date).isBefore(dayjs().startOf('day'))
-                            }
-                        // defaultCalendarValue={[startDate, endDate]}
-                        />
+                            // defaultCalendarValue={[startDate, endDate]}
+                            />
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 12, md: 2 }}>
+                            <Button
+                                startIcon={<SearchIcon fontSize='small' />}
+                                style={{
+                                    width: '100%',
+                                    fontFamily: '(var(--lato))',
+                                    fontWeight: 500,
+                                    padding: '10px',
+                                    borderRadius: '8px',
+                                    fontSize: '15px',
+                                    fontWeight: 'bold',
+                                    backgroundColor: '#3083FF',
+                                    color: 'white',
+                                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                                }}
+                                onClick={handleSearch}
+                            >
+                                Buscar
+                            </Button>
+                        </Grid>
                     </Grid>
-                    <Grid size={{ xs: 12, sm: 12, md: 2 }}>
-                        <Button
-                            startIcon={<SearchIcon fontSize='small' />}
-                            style={{
-                                width: '100%',
-                                fontFamily: '(var(--lato))',
-                                fontWeight: 500,
-                                padding: '10px',
-                                borderRadius: '8px',
-                                fontSize: '15px',
-                                fontWeight: 'bold',
-                                backgroundColor: '#3083FF',
-                                color: 'white',
-                                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-                            }}
-                            onClick={handleSearch}
-                        >
-                            Buscar
-                        </Button>
-                    </Grid>
-                </Grid>
-            </Box>
+                </Box>
+            </CustomProvider>
         </Box>
     );
 }
