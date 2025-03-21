@@ -25,7 +25,7 @@ export const getCars = async ({
 
         if (brandId && (!startDate || !endDate)) {
             startDate = dayjs().format("YYYY-MM-DD");
-            endDate = dayjs().add(2, "year").format("YYYY-MM-DD");
+            endDate = dayjs().add(2, "day").format("YYYY-MM-DD");
         }
 
         let response = [];
