@@ -28,7 +28,7 @@ import LogoCarato from "../assets/Logo-carato-slogan.svg";
 import Register from "./Register";
 import Login from "./Login";
 import { useAuth } from "../Context/auth.context";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -107,7 +107,7 @@ export default function Navbar(props) {
                             backgroundColor: "var(--darkBlue)",
                         }}
                     >
-                        <a href="/">
+                        <Link to="/">
                             <img
                                 src={LogoCarato}
                                 alt="Logo"
@@ -115,7 +115,7 @@ export default function Navbar(props) {
                                 height="70"
                                 style={{ marginRight: "1rem" }}
                             />
-                        </a>
+                        </Link>
                     </Box>
                 )
             }
@@ -181,9 +181,9 @@ export default function Navbar(props) {
             <CssBaseline />
             <AppBar component="nav" position="fixed" sx={{ backgroundColor: "var(--darkBlue)" }}>
                 <Toolbar sx={{ justifyContent: "space-between" }}>
-                    <a href="/">
+                    <Link to="/">
                         <img src={LogoCarato} alt="Logo" height="70" />
-                    </a>
+                    </Link>
                     <Box sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center" }}>
                         {user ? (
                             <Box sx={{ display: "flex", alignItems: "center", borderRadius: "25px", border: "1px solid #fff", py: 0.8, px:1 }}>
