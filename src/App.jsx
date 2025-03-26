@@ -14,6 +14,7 @@ import AgregarVehiculo from './Routes/AgregarVehiculo'
 import PrivateRoute from './PrivateRoute/PrivateRoute'
 import Cuenta from './Routes/Cuenta'
 import Favoritos from './Routes/Favoritos'
+import FloatButtonWpp from './Components/FloatButtonWpp'
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
           </Route>
         </Routes>
       </main>
+      <FloatButtonWpp />
       <Footer />
     </>
   )
