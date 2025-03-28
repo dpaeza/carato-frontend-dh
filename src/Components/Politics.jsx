@@ -5,6 +5,8 @@ import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
 import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
 import TaxiAlertIcon from '@mui/icons-material/TaxiAlert';
 import GppGoodIcon from '@mui/icons-material/GppGood';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import LockIcon from '@mui/icons-material/Lock';
 
 const policies = [
     {
@@ -27,6 +29,16 @@ const policies = [
         title: "Seguro y cobertura",
         description: "Todos los vehículos incluyen seguro básico, con opciones de cobertura ampliada.",
     },
+    {
+        icon: <CalendarMonthIcon fontSize='medium' />,
+        title: "Modificaciones y cancelaciones",
+        description: "Los cambios o cancelaciones están sujetos a disponibilidad y pueden generar costos adicionales.",
+    },
+    {
+        icon: <LockIcon fontSize='medium' />,
+        title: "Privacidad y seguridad",
+        description: "Garantizamos la privacidad y seguridad de tu información al utilizar WhatsApp como canal de comunicación.",
+    },
 ];
 
 export default function Politics() {
@@ -47,10 +59,10 @@ export default function Politics() {
                 {policies.map((policy, index) => (
                     <Grid
                         key={index}
-                        size={{ xs: 12, sm: 6, md: 3, lg: 3 }}
+                        size={{ xs: 12, sm: 6, md: 4, lg: 4 }}
                         sx={{ display: "flex", justifyContent: "center" }}
                     >
-                        <Grid size={2.3}>
+                        <Grid size={1.7}>
                             {policy.icon}
                         </Grid>
                         <Grid size={10}>
