@@ -134,10 +134,10 @@ export default function Vehiculo() {
                         spacing={3}
                         sx={{ maxWidth: "1100px", margin: "auto", pt: 4 }}
                     >
-                        <Grid size={{xs:8}}>
+                        <Grid size={{xs:12, md:7, lg:8}}>
                             <Specifications vehicle={vehicle} />
                         </Grid>
-                        <Grid size={{xs:4}}>
+                        <Grid size={{xs:12, md:5, lg:4}} mb={3}>
                             {loadingReservations ? (
                                 <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
                                     <CircularProgress />
