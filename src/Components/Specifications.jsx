@@ -28,7 +28,7 @@ function obtenerProximoViernes() {
 
 export default function Specifications({ vehicle }) {
     return (
-        <Box sx={{ margin: "auto", padding: 2, maxWidth: "1100px" }}>
+        <Box>
             <Typography variant="h5" gutterBottom fontSize={20} fontFamily={"var(--openSans)"} fontWeight={500} color="var(--darkBlue)">
                 Caracteristicas técnicas
             </Typography>

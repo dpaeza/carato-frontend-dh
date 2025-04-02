@@ -15,6 +15,7 @@ import PrivateRoute from './PrivateRoute/PrivateRoute'
 import Cuenta from './Routes/Cuenta'
 import Favoritos from './Routes/Favoritos'
 import FloatButtonWpp from './Components/FloatButtonWpp'
+import Reserva from './Routes/Reserva'
 
 function App() {
 
@@ -53,6 +54,13 @@ function App() {
             element={<PrivateRoute />} // No se requiere un rol específico
           >
             <Route index element={<Favoritos />} />
+          </Route>
+          {/* Ruta protegida para Reserva */}
+          <Route
+            path="/reserva/:id"
+            element={<PrivateRoute />} // No se requiere un rol específico
+          >
+            <Route index element={<Reserva />} />
           </Route>
         </Routes>
       </main>

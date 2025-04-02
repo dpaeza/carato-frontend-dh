@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate  } from 'react-router-dom';
 import DetailHeader from '../Components/DetailHeader';
 import DetailHeaderSkeleton from '../Components/DetailHeaderSkeleton';
 import GridImage from '../Components/GridImage';
@@ -14,12 +14,17 @@ import { getCarByIdOrName } from '../Services/cars';
 import { useQuery } from '@tanstack/react-query';
 import { addFavorite, removeFavorite } from "../Services/favorites";
 import ShareModel from '../Components/ShareModel';
-import DoubleCalendar from '../Components/DoubleCalendar';
+import CardReserva from '../Components/CardReserva';
 import { getVehicleReservations } from '../Services/reservations';
 import { set } from 'rsuite/esm/internals/utils/date';
+import Grid from '@mui/material/Grid2';
+import Login from '../Components/Login';
+import { useAuth } from '../Context/auth.context';
 
 export default function Vehiculo() {
     const { id } = useParams();
+    const { user } = useAuth();
+    const navigate = useNavigate();
     const [favorite, setFavorite] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -28,6 +33,7 @@ export default function Vehiculo() {
     const [ reservations, setReservations ] = useState([]);
     const [ loadingReservations, setLoadingReservations ] = useState(false);
     const [ errorReservations, setErrorReservations ] = useState(false);
+    const [openLogin, setOpenLogin] = useState(false);
 
     const handleFavorite = async () => {
         try {
@@ -90,6 +96,14 @@ export default function Vehiculo() {
         });
     }
 
+    const handleBook = () => {
+        if (!user) {
+            setOpenLogin(true);
+        } else {
+            navigate(`/reservar/${id}`);
+        }
+    }
+
     useEffect(() => {
         if (vehicle) {
             setFavorite(vehicle.isFavorite);
@@ -115,8 +129,60 @@ export default function Vehiculo() {
                     <Box sx={{ height: { xs: "70vh", sx: "50vh" }, maxWidth: "1100px", margin: "auto", mt: 3 }}>
                         <GridImage images={vehicle?.images} />
                     </Box>
-                    <Specifications vehicle={vehicle} />
-                    <Box sx={{ maxWidth: "1100px", margin: "auto", px: 2 }}>
+                    <Grid
+                        container
+                        spacing={3}
+                        sx={{ maxWidth: "1100px", margin: "auto", pt: 4 }}
+                    >
+                        <Grid size={{xs:8}}>
+                            <Specifications vehicle={vehicle} />
+                        </Grid>
+                        <Grid size={{xs:4}}>
+                            {loadingReservations ? (
+                                <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+                                    <CircularProgress />
+                                </Box>
+                            ) : errorReservations ? (
+                                <Box sx={{ maxWidth: "1100px", margin: "auto", px: 2, pb:2 }}>
+                                    <Alert severity="error">
+                                        Ocurrió un error al cargar las reservas.
+                                        <Button
+                                            onClick={fetchReservations}
+                                            variant="contained"
+                                            color="#3083FF"
+                                            sx={{ 
+                                                ml: 2,
+                                                minHeight: 0,
+                                                minWidth: 0,
+                                                padding: 0,
+                                                borbder: 'none',
+                                                boxShadow: 'none',
+                                                textTransform: 'none',
+                                                color: "#d32f2f",
+                                                fontWeight: 600,
+                                                "&:hover": {
+                                                    backgroundColor: "transparent",
+                                                    color: "red",
+                                                    boxShadow: 'none',
+                                                    border: 'none'
+                                                }
+                                            }}
+                                        >
+                                            Reintentar
+                                        </Button>
+                                    </Alert>
+                                </Box>
+                            ) : (
+                                <CardReserva 
+                                    price={vehicle.price} 
+                                    reservations={reservations}
+                                    onBook={handleBook}
+                                />
+                            )}
+                        </Grid>
+                    </Grid>
+                    
+                    {/* <Box sx={{ maxWidth: "1100px", margin: "auto", px: 2 }}>
                         <Typography
                             variant="h5"
                             gutterBottom
@@ -128,45 +194,8 @@ export default function Vehiculo() {
                             Disponibilidad
                         </Typography>
                         <Divider sx={{ my: 2 }} />
-                    </Box>
-                    {loadingReservations ? (
-                        <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
-                            <CircularProgress />
-                        </Box>
-                    ) : errorReservations ? (
-                        <Box sx={{ maxWidth: "1100px", margin: "auto", px: 2, pb:2 }}>
-                            <Alert severity="error">
-                                Ocurrió un error al cargar las reservas.
-                                <Button
-                                    onClick={fetchReservations}
-                                    variant="contained"
-                                    color="#3083FF"
-                                    sx={{ 
-                                        ml: 2,
-                                        minHeight: 0,
-                                        minWidth: 0,
-                                        padding: 0,
-                                        borbder: 'none',
-                                        boxShadow: 'none',
-                                        textTransform: 'none',
-                                        color: "#d32f2f",
-                                        fontWeight: 600,
-                                        "&:hover": {
-                                            backgroundColor: "transparent",
-                                            color: "red",
-                                            boxShadow: 'none',
-                                            border: 'none'
-                                        }
-                                    }}
-                                >
-                                    Reintentar
-                                </Button>
-                            </Alert>
-                        </Box>
-                    ) : (
-                        <DoubleCalendar reservations={reservations} />
-                    )}
-                    {/* <DoubleCalendar reservations={dates}/> */}
+                    </Box> */}
+                    
                     <Politics />
                     <Snackbar
                         open={snackbarOpen}
@@ -189,6 +218,11 @@ export default function Vehiculo() {
                     />
                 </Box>
             }
+            <Login 
+                open={openLogin} 
+                onClose={() => 
+                setOpenLogin(false)} 
+            />
         </Box>
     )
 }

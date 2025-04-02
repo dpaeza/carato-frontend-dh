@@ -5,10 +5,11 @@ import Login from './Login';
 import Grid from '@mui/material/Grid2';
 import { addFavorite, removeFavorite } from '../Services/favorites';
 import { useAuth } from '../Context/auth.context';
+import { useNavigate  } from 'react-router-dom';
 
 export default function GridCar({ cars }) {
     const { user } = useAuth();
-
+    const navigate = useNavigate();
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
@@ -66,6 +67,14 @@ export default function GridCar({ cars }) {
         }
     };
 
+    const handleBook = (id) => {
+        if (!user) {
+            setOpenLogin(true);
+        } else {
+            navigate(`/reserva/${id}`);
+        }
+    }
+
     return (
         <Box sx={{ width: "100%", textAlign: "center", bgcolor: "#fafafa" }}>
             <Grid container spacing={2} sx={{ mb: 3 }}>
@@ -78,6 +87,7 @@ export default function GridCar({ cars }) {
                         <CardCar
                             car={car}
                             onFavoriteChange={() => handleFavorite(car.isFavorite, car.id, car.name)}
+                            onBook={() => handleBook(car.id)}
                         />
                     </Grid>
                 ))}
