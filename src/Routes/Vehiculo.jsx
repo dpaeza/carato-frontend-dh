@@ -21,6 +21,7 @@ import Grid from '@mui/material/Grid2';
 import Login from '../Components/Login';
 import Register from '../Components/Register';
 import { useAuth } from '../Context/auth.context';
+import ListDescription from '../Components/ListDescription';
 
 export default function Vehiculo() {
     const { id } = useParams();
@@ -99,12 +100,12 @@ export default function Vehiculo() {
         });
     }
 
-    const handleBook = () => {
+    const handleBook = (startDate, endDate) => {
         if (!user) {
             setLoginMessage("Inicia sesión para reservar un vehículo.");
             setOpenLogin(true);
         } else {
-            navigate(`/reservar/${id}`);
+            navigate(`/reservar/${id}`, { state: { startDate, endDate } });
         }
     }
 
@@ -150,6 +151,7 @@ export default function Vehiculo() {
                     >
                         <Grid size={{xs:12, md:7, lg:8}}>
                             <Specifications vehicle={vehicle} />
+                            <ListDescription />
                         </Grid>
                         <Grid size={{xs:12, md:5, lg:4}} mb={3}>
                             {loadingReservations ? (

@@ -44,10 +44,9 @@ export default function CardReserva({price, reservations, onBook = () => {}}) {
                             color="var(--darkBlue)"
                             textAlign={"center"}
                         >
-                        $<span>{price}</span> ARG <span style={{color: "#747A91", fontSize: "13px"}}>día</span> 
+                        $<span>{price.toLocaleString("es-AR")}</span> ARS <span style={{color: "#747A91", fontSize: "13px"}}>día</span>
                     </Typography>}
                 />
-                        
                 <CardContent
                     sx={{
                         display: "flex",
@@ -130,7 +129,7 @@ export default function CardReserva({price, reservations, onBook = () => {}}) {
                             fontSize={18}
                             fontWeight={600}
                         >
-                            $<span>{total}</span> ARG
+                            {`$${total.toLocaleString("es-AR")} ARS`}
                         </Typography>
                     </Box>
                 </CardContent>
