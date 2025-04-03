@@ -30,6 +30,7 @@ export default function Vehiculo() {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+    const [loginMessage, setLoginMessage] = useState("");
     const [openShare, setOpenShare] = useState(false);
     const [ reservations, setReservations ] = useState([]);
     const [ loadingReservations, setLoadingReservations ] = useState(false);
@@ -100,6 +101,7 @@ export default function Vehiculo() {
 
     const handleBook = () => {
         if (!user) {
+            setLoginMessage("Inicia sesión para reservar un vehículo.");
             setOpenLogin(true);
         } else {
             navigate(`/reservar/${id}`);
@@ -193,21 +195,6 @@ export default function Vehiculo() {
                             )}
                         </Grid>
                     </Grid>
-                    
-                    {/* <Box sx={{ maxWidth: "1100px", margin: "auto", px: 2 }}>
-                        <Typography
-                            variant="h5"
-                            gutterBottom
-                            fontSize={20}
-                            fontFamily="var(--openSans)"
-                            fontWeight={600}
-                            color="var(--darkBlue)"
-                        >
-                            Disponibilidad
-                        </Typography>
-                        <Divider sx={{ my: 2 }} />
-                    </Box> */}
-                    
                     <Politics />
                     <Snackbar
                         open={snackbarOpen}
@@ -239,6 +226,7 @@ export default function Vehiculo() {
                 open={openLogin} 
                 onClose={() => setOpenLogin(false)}
                 onRegister={() => handleRegister()}
+                message={loginMessage}
             />
         </Box>
     )

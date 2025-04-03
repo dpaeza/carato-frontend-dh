@@ -19,6 +19,7 @@ export default function DetailHeader({
 }) {
     const navigate = useNavigate();
     const { user } = useAuth();
+    const [loginMessage, setLoginMessage] = useState("");
     const [openLogin, setOpenLogin] = useState(false);
     const [openRegister, setOpenRegister] = useState(false);
 
@@ -28,6 +29,7 @@ export default function DetailHeader({
 
     const handleFavorite = async () => {
         if (!user) {
+            setLoginMessage("Inicia sesión para agregar a favoritos.");
             setOpenLogin(true);
             return;
         }
@@ -184,6 +186,7 @@ export default function DetailHeader({
                     setOpenLogin(false);
                 }}
                 onRegister={() => handleRegister()}
+                message={loginMessage}
             />
         </Grid>
     )

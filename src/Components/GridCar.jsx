@@ -14,6 +14,7 @@ export default function GridCar({ cars }) {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+    const [loginMessage, setLoginMessage] = useState("");
     const [openLogin, setOpenLogin] = useState(false);
     const [openRegister, setOpenRegister] = useState(false);
     const [lastRemoved, setLastRemoved] = useState(null);
@@ -30,6 +31,7 @@ export default function GridCar({ cars }) {
     const handleFavorite = async (isFavorite, id, name) => {
 
         if (!user) {
+            setLoginMessage("Inicia sesión para agregar a favoritos.");
             setOpenLogin(true);
             return;
         }
@@ -71,6 +73,8 @@ export default function GridCar({ cars }) {
 
     const handleBook = (id) => {
         if (!user) {
+            console.log("No user");
+            setLoginMessage("Inicia sesión para reservar un vehículo.");
             setOpenLogin(true);
         } else {
             navigate(`/reserva/${id}`);
@@ -113,6 +117,7 @@ export default function GridCar({ cars }) {
                 open={openLogin} 
                 onClose={() => setOpenLogin(false)}
                 onRegister={() => handleRegister()}
+                message={loginMessage}
             />
             <Snackbar
                 open={snackbarOpen}
