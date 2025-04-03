@@ -62,7 +62,7 @@ export default function Reservar() {
                 showCloseButton: false,
                 timer: 2000,
             }).then(() => {
-                navigate("/mis-reservas");
+                navigate("/reservas");
             });
         } catch (error) {
             MySwal.fire({
@@ -100,7 +100,16 @@ export default function Reservar() {
             }}
         >
             {isLoading ? (
-                <CircularProgress />
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100vh'
+                    }}
+                >
+                    <CircularProgress />
+                </Box>
             ) : (
                 <>
                     <Grid container spacing={3}>

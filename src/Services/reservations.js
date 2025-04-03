@@ -39,3 +39,29 @@ export const createReservation = async (data) => {
         throw error;
     }
 }
+
+export const getUserReservations = async () => {
+    try {
+        const userData = JSON.parse(localStorage.getItem("auth"));
+        const token = userData ? userData.token : null;
+
+        const headers = {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        };
+
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+        }
+
+        const response = await axios.get(
+            `${API_URL}/reservations`,
+            { headers }
+        );
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener las reservas del usuario:", error);
+        throw error;
+    }
+}

@@ -74,6 +74,11 @@ export default function Navbar(props) {
         navigate('/administracion');
     }
 
+    const handleClickReservas = () => {
+        handleMenuClose();
+        navigate('/reservas');
+    }
+
     const handleRegister = () => {
         setOpenLogin(false);
         setOpenRegister(true);
@@ -145,7 +150,7 @@ export default function Navbar(props) {
                             </ListItemIcon>
                             Mis favoritos
                         </MenuItem>
-                        <MenuItem>
+                        <MenuItem onClick={handleClickReservas}>
                             <ListItemIcon>
                                 <NoCrashIcon fontSize="small" />
                             </ListItemIcon>
@@ -226,7 +231,7 @@ export default function Navbar(props) {
                                         </ListItemIcon>
                                         Mis favoritos
                                     </MenuItem>
-                                    <MenuItem>
+                                    <MenuItem onClick={handleClickReservas}>
                                         <ListItemIcon>
                                             <NoCrashIcon fontSize="small" />
                                         </ListItemIcon>
