@@ -60,7 +60,7 @@ export default function CardReserva({price, reservations, onBook = () => {}}) {
                         fontSize={14} 
                         fontFamily={"var(--openSans)"} 
                         fontWeight={500} 
-                        color="var(--darkBlue)"
+                        color="var(--mediumGrey)"
                     >
                         Fecha de reserva
                     </Typography>
@@ -70,7 +70,7 @@ export default function CardReserva({price, reservations, onBook = () => {}}) {
                         appearance="default"
                         className="date-range-picker"
                         placeholder="Selecciona fechas"
-                        style={{ width: '100%' }}
+                        style={{ width: '100%', marginBottom: 15 }}
                         cleanable
                         ranges={[]}
                         value={[startDate, endDate]}
