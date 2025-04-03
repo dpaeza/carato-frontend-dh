@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { Box, Alert, Snackbar, Button } from "@mui/material";
 import CardCar from './CardCar';
 import Login from './Login';
+import Register from './Register';
 import Grid from '@mui/material/Grid2';
 import { addFavorite, removeFavorite } from '../Services/favorites';
 import { useAuth } from '../Context/auth.context';
@@ -14,6 +15,7 @@ export default function GridCar({ cars }) {
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
     const [openLogin, setOpenLogin] = useState(false);
+    const [openRegister, setOpenRegister] = useState(false);
     const [lastRemoved, setLastRemoved] = useState(null);
 
     const updateCars = (id, isFavorite) => {
@@ -75,6 +77,16 @@ export default function GridCar({ cars }) {
         }
     }
 
+    const handleRegister = () => {
+        setOpenLogin(false);
+        setOpenRegister(true);
+    };
+
+    const handleLogin = () => {
+        setOpenRegister(false);
+        setOpenLogin(true);
+    };
+
     return (
         <Box sx={{ width: "100%", textAlign: "center", bgcolor: "#fafafa" }}>
             <Grid container spacing={2} sx={{ mb: 3 }}>
@@ -92,10 +104,15 @@ export default function GridCar({ cars }) {
                     </Grid>
                 ))}
             </Grid>
+            <Register 
+                open={openRegister} 
+                onClose={() => setOpenRegister(false)}
+                onLogin={() => handleLogin()} 
+            />
             <Login 
                 open={openLogin} 
-                onClose={() => 
-                setOpenLogin(false)} 
+                onClose={() => setOpenLogin(false)}
+                onRegister={() => handleRegister()}
             />
             <Snackbar
                 open={snackbarOpen}

@@ -19,6 +19,7 @@ import { getVehicleReservations } from '../Services/reservations';
 import { set } from 'rsuite/esm/internals/utils/date';
 import Grid from '@mui/material/Grid2';
 import Login from '../Components/Login';
+import Register from '../Components/Register';
 import { useAuth } from '../Context/auth.context';
 
 export default function Vehiculo() {
@@ -34,6 +35,7 @@ export default function Vehiculo() {
     const [ loadingReservations, setLoadingReservations ] = useState(false);
     const [ errorReservations, setErrorReservations ] = useState(false);
     const [openLogin, setOpenLogin] = useState(false);
+    const [openRegister, setOpenRegister] = useState(false);
 
     const handleFavorite = async () => {
         try {
@@ -103,6 +105,16 @@ export default function Vehiculo() {
             navigate(`/reservar/${id}`);
         }
     }
+
+    const handleRegister = () => {
+        setOpenLogin(false);
+        setOpenRegister(true);
+    };
+
+    const handleLogin = () => {
+        setOpenRegister(false);
+        setOpenLogin(true);
+    };
 
     useEffect(() => {
         if (vehicle) {
@@ -218,10 +230,15 @@ export default function Vehiculo() {
                     />
                 </Box>
             }
+            <Register 
+                open={openRegister} 
+                onClose={() => setOpenRegister(false)}
+                onLogin={() => handleLogin()} 
+            />
             <Login 
                 open={openLogin} 
-                onClose={() => 
-                setOpenLogin(false)} 
+                onClose={() => setOpenLogin(false)}
+                onRegister={() => handleRegister()}
             />
         </Box>
     )
