@@ -18,7 +18,7 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import { Link } from "react-router-dom";
 
-export default function CardCar({ car, onFavoriteChange = () => {} }) { 
+export default function CardCar({ car, onFavoriteChange = () => {}, onBook = () => {} }) { 
     const {
         id,
         name,
@@ -34,6 +34,12 @@ export default function CardCar({ car, onFavoriteChange = () => {} }) {
     const handleFavorite = (e) => {
         e.stopPropagation();
         onFavoriteChange();
+    }
+
+    const handleBook = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        onBook();
     }
     
     return (
@@ -163,6 +169,7 @@ export default function CardCar({ car, onFavoriteChange = () => {} }) {
                                     borderRadius: 2,
                                     width: "100%",
                                 }}
+                                onClick={(e) => handleBook(e)}
                             >
                                 Alquilar
                             </Button>

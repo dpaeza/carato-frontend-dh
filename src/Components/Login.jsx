@@ -8,13 +8,15 @@ import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import { Alert } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { loginUser } from '../Services/auth';
 import { useAuth } from '../Context/auth.context';
 
-const Login = React.memo(({ open, onClose }) => {
+const Login = React.memo(({ open, onClose, onRegister= () => {}, message },) => {
     const [userData, setUserData] = useState({
         email: '',
         password: ''
@@ -162,6 +164,7 @@ const Login = React.memo(({ open, onClose }) => {
                 </IconButton>
             </DialogTitle>
             <DialogContent>
+                {message && <Alert severity="info" sx={{ mb: 2 }}>{message}</Alert>}
                 <TextField
                     inputRef={emailRef}
                     name="email"
@@ -222,6 +225,27 @@ const Login = React.memo(({ open, onClose }) => {
                 >
                     Iniciar sesión
                 </Button>
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    flexDirection="column"
+                    sx={{ mt: 2 }}
+                >
+                    <Button
+                        onClick={() => onRegister()}
+                        variant="text"
+                        sx={{
+                            textTransform: 'none',
+                            fontSize: 13,
+                            fontWeight: 500,
+                            color: '#3083FF',
+                            mt: 1
+                        }}
+                    >
+                        ¿No tienes una cuenta? Regístrate
+                    </Button>
+                </Box>
             </DialogContent>
         </Dialog>
     )

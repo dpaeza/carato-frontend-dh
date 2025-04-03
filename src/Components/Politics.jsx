@@ -43,7 +43,7 @@ const policies = [
 
 export default function Politics() {
     return (
-        <Box sx={{maxWidth: "1100px", margin: "auto", px: 2}}>
+        <Box sx={{maxWidth: "1100px", margin: "auto"}}>
             <Typography
                 variant="h5"
                 gutterBottom

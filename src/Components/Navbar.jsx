@@ -74,6 +74,21 @@ export default function Navbar(props) {
         navigate('/administracion');
     }
 
+    const handleClickReservas = () => {
+        handleMenuClose();
+        navigate('/reservas');
+    }
+
+    const handleRegister = () => {
+        setOpenLogin(false);
+        setOpenRegister(true);
+    };
+
+    const handleLogin = () => {
+        setOpenRegister(false);
+        setOpenLogin(true);
+    };
+
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
 
@@ -135,7 +150,7 @@ export default function Navbar(props) {
                             </ListItemIcon>
                             Mis favoritos
                         </MenuItem>
-                        <MenuItem>
+                        <MenuItem onClick={handleClickReservas}>
                             <ListItemIcon>
                                 <NoCrashIcon fontSize="small" />
                             </ListItemIcon>
@@ -216,7 +231,7 @@ export default function Navbar(props) {
                                         </ListItemIcon>
                                         Mis favoritos
                                     </MenuItem>
-                                    <MenuItem>
+                                    <MenuItem onClick={handleClickReservas}>
                                         <ListItemIcon>
                                             <NoCrashIcon fontSize="small" />
                                         </ListItemIcon>
@@ -297,8 +312,16 @@ export default function Navbar(props) {
             <Box sx={{ width: "100%" }}>
                 <Toolbar />
             </Box>
-            <Register open={openRegister} onClose={() => setOpenRegister(false)} />
-            <Login open={openLogin} onClose={() => setOpenLogin(false)} />
+            <Register 
+                open={openRegister} 
+                onClose={() => setOpenRegister(false)}
+                onLogin={() => handleLogin()} 
+            />
+            <Login 
+                open={openLogin} 
+                onClose={() => setOpenLogin(false)} 
+                onRegister={() => handleRegister()}
+            />
         </Box>
     );
 }

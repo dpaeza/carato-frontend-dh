@@ -11,9 +11,10 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Box from '@mui/material/Box';
 import { registerUser, sendConfirmationEmail } from '../Services/auth';
 
-const Register = React.memo(({ open, onClose }) => {
+const Register = React.memo(({ open, onClose, onLogin= () => {} }) => {
     const [registerData, setRegisterData] = useState({
         name: '',
         lastname: '',
@@ -192,7 +193,7 @@ const Register = React.memo(({ open, onClose }) => {
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 3,
+                    gap: 2,
                 }}
             >
                 <TextField
@@ -321,10 +322,29 @@ const Register = React.memo(({ open, onClose }) => {
                     fullWidth
                     onClick={handleSubmit}
                     disabled={Object.values(errors).some(err => err !== "") || Object.values(registerData).some(value => !value.trim())}
-                    sx={{ backgroundColor: Object.values(errors).every(err => err === "") && Object.values(registerData).every(value => value.trim()) ? '#3083FF' : 'grey', mt: 4 }}
+                    sx={{ backgroundColor: Object.values(errors).every(err => err === "") && Object.values(registerData).every(value => value.trim()) ? '#3083FF' : 'grey', mt: 2 }}
                 >
                     Registrarse
                 </Button>
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    flexDirection="column"
+                >
+                    <Button
+                        onClick={() => onLogin()}
+                        variant="text"
+                        sx={{
+                            textTransform: 'none',
+                            fontSize: 13,
+                            fontWeight: 500,
+                            color: '#3083FF',
+                        }}
+                    >
+                        ¿Ya tienes una cuenta? Inicia sesión
+                    </Button>
+                </Box>
             </DialogContent>
         </Dialog>
     );

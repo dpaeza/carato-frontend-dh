@@ -8,6 +8,7 @@ import Favorite from '@mui/icons-material/Favorite';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import { useAuth } from "../Context/auth.context";
 import Login from "./Login";
+import Register from './Register';
 
 export default function DetailHeader({ 
     model, 
@@ -18,7 +19,9 @@ export default function DetailHeader({
 }) {
     const navigate = useNavigate();
     const { user } = useAuth();
+    const [loginMessage, setLoginMessage] = useState("");
     const [openLogin, setOpenLogin] = useState(false);
+    const [openRegister, setOpenRegister] = useState(false);
 
     const handleBackClick = () => {
         navigate("/");
@@ -26,12 +29,23 @@ export default function DetailHeader({
 
     const handleFavorite = async () => {
         if (!user) {
+            setLoginMessage("Inicia sesión para agregar a favoritos.");
             setOpenLogin(true);
             return;
         }
 
         onFavorite();
     }
+
+    const handleRegister = () => {
+        setOpenLogin(false);
+        setOpenRegister(true);
+    };
+
+    const handleLogin = () => {
+        setOpenRegister(false);
+        setOpenLogin(true);
+    };
 
     return (
         <Grid container alignItems={{xs:'flex-start', sm:'center'}} justifyContent="space-between" sx={{ marginBottom: 2,  maxWidth: "1100px", margin: "auto" }}>
@@ -157,12 +171,22 @@ export default function DetailHeader({
                 </Button>
                 
             </Grid>
+            <Register 
+                open={openRegister} 
+                onClose={(e) => {
+                    if (e) e.stopPropagation();
+                    setOpenRegister(false);
+                }}
+                onLogin={() => handleLogin()} 
+            />
             <Login 
                 open={openLogin}
                 onClose={(e) => {
                     if (e) e.stopPropagation();
                     setOpenLogin(false);
                 }}
+                onRegister={() => handleRegister()}
+                message={loginMessage}
             />
         </Grid>
     )
