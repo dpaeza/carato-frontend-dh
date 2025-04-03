@@ -85,6 +85,7 @@ export default function CardReserva({price, reservations, onBook = () => {}}) {
                             }
                         }}
                         shouldDisableDate={(date) => isDateDisabled(dayjs(date))}
+                        placement="bottomEnd"
                     />
                     <Button 
                         appearance="primary"
