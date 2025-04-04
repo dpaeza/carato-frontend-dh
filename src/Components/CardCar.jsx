@@ -17,6 +17,7 @@ import Door from "../assets/icons/door.svg?react";
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import { Link } from "react-router-dom";
+import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
 
 export default function CardCar({ car, onFavoriteChange = () => {}, onBook = () => {} }) { 
     const {
@@ -29,6 +30,7 @@ export default function CardCar({ car, onFavoriteChange = () => {}, onBook = () 
         doors,
         price,
         isFavorite,
+        rating,
     } = car;
 
     const handleFavorite = (e) => {
@@ -66,16 +68,48 @@ export default function CardCar({ car, onFavoriteChange = () => {}, onBook = () 
                     }}
                 />
                 <CardContent>
-                    <Typography
-                        variant="h6"
-                        fontFamily="var(--loto)"
-                        fontWeight={700}
-                        color="var(--darkBlue)"
-                        textAlign={"initial"}
-                        sx={{ textDecoration: "none" }}
+                    <Box
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            mb: 1,
+                        }}
                     >
-                        {name}
-                    </Typography>
+                        <Typography
+                            variant="h6"
+                            fontFamily="var(--loto)"
+                            fontWeight={700}
+                            color="var(--darkBlue)"
+                            textAlign={"initial"}
+                            sx={{ textDecoration: "none" }}
+                        >
+                            {name}
+                        </Typography>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 0.5,
+                            }}
+                        >
+                            <StarOutlinedIcon 
+                                sx={{
+                                    color: "#FFBD3D",
+                                    fontSize: 18,
+                                }}
+                            />
+                            <Typography
+                                variant="body2"
+                                fontFamily="var(--loto)"
+                                fontWeight={500}
+                                color="var(--darkBlue)"
+                            >
+                                {rating}
+                            </Typography>
+                        </Box>
+                    </Box>
+                    
                     <Grid container spacing={2} my={1}>
                         <Grid
                             size={6}

@@ -22,6 +22,10 @@ import Login from '../Components/Login';
 import Register from '../Components/Register';
 import { useAuth } from '../Context/auth.context';
 import ListDescription from '../Components/ListDescription';
+import CarRating from '../Components/CarRating';
+import { getReviews } from '../Services/reviews';
+import CardReview from '../Components/CardReview';
+import { Card } from 'rsuite';
 
 export default function Vehiculo() {
     const { id } = useParams();
@@ -38,6 +42,7 @@ export default function Vehiculo() {
     const [ errorReservations, setErrorReservations ] = useState(false);
     const [openLogin, setOpenLogin] = useState(false);
     const [openRegister, setOpenRegister] = useState(false);
+    const [reviews, setReviews] = useState([]);
 
     const handleFavorite = async () => {
         try {
@@ -84,6 +89,15 @@ export default function Vehiculo() {
         }
     }
 
+    const fetchReviews = async () => {
+        try {
+            const response = await getReviews(id);
+            setReviews(response.data);
+        } catch (error) {
+            console.error("Error al obtener las reseñas:", error);
+        }
+    }
+
     const handlePopUp = () => {
         Swal.fire({
             icon: 'warning',
@@ -127,6 +141,7 @@ export default function Vehiculo() {
 
     useEffect(() => {
         fetchReservations();
+        fetchReviews();
     }, []);
 
     return (
@@ -150,6 +165,9 @@ export default function Vehiculo() {
                         sx={{ maxWidth: "1100px", margin: "auto", pt: 4 }}
                     >
                         <Grid size={{xs:12, md:7, lg:8}}>
+                            <CarRating 
+                                rating={vehicle.rating} 
+                                noReviews={reviews.length} />
                             <Specifications vehicle={vehicle} />
                             <ListDescription />
                         </Grid>
@@ -197,6 +215,7 @@ export default function Vehiculo() {
                             )}
                         </Grid>
                     </Grid>
+                    {reviews.length > 0 && <CardReview reviews={reviews} />}
                     <Politics />
                     <Snackbar
                         open={snackbarOpen}
