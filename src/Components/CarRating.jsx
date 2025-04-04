@@ -52,7 +52,7 @@ export default function CarRating({ rating, noReviews }) {
                     textAlign={"center"}
                     sx={{ ml: 1 }}
                 >
-                    {rating.toFixed(1)}
+                    {Number.isInteger(rating) ? rating : rating.toFixed(1)}
                 </Typography>
                 <Rating
                     value={rating}
