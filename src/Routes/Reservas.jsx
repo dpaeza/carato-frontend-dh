@@ -57,7 +57,7 @@ export default function Reservas() {
                         }}
                     >
                         {reservations?.data?.map((car) => (
-                            <Link key={car.reservation.id} to={`/vehiculo/${car.reservation.id}`} style={{ textDecoration: "none" }}>
+                            <Link key={car.reservation.id} to={`/vehiculo/${car.car.id}`} style={{ textDecoration: "none" }}>
                                 <CardHistorial car={car} />
                             </Link>
                         ))}
