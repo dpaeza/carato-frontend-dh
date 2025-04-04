@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Rating, Divider } from "@mui/material";
-import Hoja from "../assets/hoja.svg?react";
+import Hoja from "../assets/Hoja.svg?react";
 import HojaRight from "../assets/HojaRight.svg?react";
 
 export default function CarRating({ rating, noReviews }) {
