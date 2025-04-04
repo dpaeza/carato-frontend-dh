@@ -184,7 +184,7 @@ export default function AsideReserva({
                     fontWeight={600}
                     color="var(--darkBlue)"
                 >
-                    Reglas a considerar
+                    Acuerdos y condiciones
                 </Typography>
                 {
                     rules.map((rule, index) => (
