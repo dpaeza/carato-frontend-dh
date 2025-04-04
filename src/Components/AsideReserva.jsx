@@ -3,6 +3,7 @@ import { Box, Typography, Divider, Checkbox, FormControlLabel, FormGroup, Button
 import { DateRangePicker, CustomProvider } from 'rsuite';
 import esAR from 'rsuite/locales/es_AR';
 import dayjs from 'dayjs';
+import { useMediaQuery, useTheme } from "@mui/material";
 
 const rules = [
     "Debes tener al menos 21 años para alquilar un vehículo.",
@@ -29,6 +30,9 @@ export default function AsideReserva({
     const [accepted, setAccepted] = useState(false);
     const [startDate, setStartDate] = useState(today.toDate());
     const [endDate, setEndDate] = useState(defaultEndDate.toDate());
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const isDateDisabled = (date) => {
         // Deshabilitar fechas pasadas
@@ -87,6 +91,7 @@ export default function AsideReserva({
                         style={{ width: '100%', marginBottom: 15 }}
                         cleanable
                         ranges={[]}
+                        showOneCalendar={isMobile}
                         value={[startDate, endDate]}
                         onChange={(range) => {
                             if (range) {

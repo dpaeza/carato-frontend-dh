@@ -3,6 +3,7 @@ import { Card, Typography, CardHeader, CardContent, Divider, Box } from '@mui/ma
 import { DateRangePicker, Button, CustomProvider } from 'rsuite';
 import esAR from 'rsuite/locales/es_AR';
 import dayjs from 'dayjs';
+import { useMediaQuery, useTheme } from "@mui/material";
 
 export default function CardReserva({price, reservations, onBook = () => {}}) {
     const today = dayjs().startOf('day');
@@ -11,6 +12,9 @@ export default function CardReserva({price, reservations, onBook = () => {}}) {
     // Estados para las fechas
     const [startDate, setStartDate] = useState(today.toDate());
     const [endDate, setEndDate] = useState(defaultEndDate.toDate());
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const isDateDisabled = (date) => {
         // Deshabilitar fechas pasadas
@@ -72,6 +76,7 @@ export default function CardReserva({price, reservations, onBook = () => {}}) {
                         style={{ width: '100%', marginBottom: 15 }}
                         cleanable
                         ranges={[]}
+                        showOneCalendar={isMobile}
                         value={[startDate, endDate]}
                         onChange={(range) => {
                             if (range) {
