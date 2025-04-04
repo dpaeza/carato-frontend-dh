@@ -13,6 +13,7 @@ export default function FloatButtonWpp() {
                 position: 'fixed',
                 bottom: 16,
                 right: 16,
+                zIndex: 100,
             }}
         >
             <Tooltip title="Comunícate con Carato." placement="left">
