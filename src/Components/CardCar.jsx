@@ -105,7 +105,7 @@ export default function CardCar({ car, onFavoriteChange = () => {}, onBook = () 
                                 fontWeight={500}
                                 color="var(--darkBlue)"
                             >
-                                {rating}
+                                {rating.toFixed(1)}
                             </Typography>
                         </Box>
                     </Box>
