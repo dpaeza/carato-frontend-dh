@@ -25,6 +25,7 @@ export default function Reservas() {
     });
 
     const handleReview = () => {
+        console.log("Reseña enviada");
         MySwal.fire({
             icon: 'success',
             title: 'Reseña enviada',

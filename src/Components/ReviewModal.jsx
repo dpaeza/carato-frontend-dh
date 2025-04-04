@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import {addReview} from '../Services/reviews';
 
 export default function ReviewModal({ open, onClose, id, onSuccess= () => {}}) {
+
     const [reviewData, setReviewData] = useState({
         carId: id,
         rating: 0,
@@ -17,9 +18,7 @@ export default function ReviewModal({ open, onClose, id, onSuccess= () => {}}) {
         try {
             console.log(reviewData);
             const response = await addReview(reviewData);
-            if (response.status === 200) {
-                onSuccess();
-            }
+            onSuccess();
         } catch (error) {
             Swal.fire({
                 icon: 'error',
