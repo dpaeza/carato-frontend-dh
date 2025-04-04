@@ -94,9 +94,11 @@ export default function Reservar() {
         <Box
             sx={{
                 backgroundColor: "#FAFAF",
-                maxWidth: 1200,
+                maxWidth: 1100,
                 margin: 'auto',
-                p: 6
+                px: 3,
+                pt: 5,
+                pb:4,
             }}
         >
             {isLoading ? (
