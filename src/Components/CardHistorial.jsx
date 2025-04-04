@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardContent, Typography, Chip, Box, Divider} from '@mui/material';
+import { Card, CardContent, Typography, Chip, Box, Divider, Button} from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
@@ -8,7 +8,7 @@ import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 
 dayjs.extend(isBetween);
 
-export default function CardHistorial({car}) {
+export default function CardHistorial({car, onReview= () => {}}) {
     const today = dayjs().startOf('day');
     const startDate = dayjs(car.reservation.startDate);
     const endDate = dayjs(car.reservation.endDate);
@@ -104,6 +104,31 @@ export default function CardHistorial({car}) {
                                 }}
                                 size="small"
                             />
+                            {status.label === "Completada" && (
+                                <Button
+                                    variant="outlined"
+                                    sx={{
+                                        backgroundColor: "var(--lightBlue)",
+                                        color: "white",
+                                        fontWeight: 600,
+                                        fontSize: 13,
+                                        padding: "5px 10px",
+                                        borderRadius: "8px",
+                                        textTransform: "none",
+                                        "&:hover": {
+                                            backgroundColor: "var(--lightBlue)",
+                                            opacity: 0.8,
+                                        },
+                                    }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        e.preventDefault();
+                                        onReview()
+                                    } }
+                                >
+                                    Califica
+                                </Button>
+                            )}
                         </Box>
                     </Grid>
                 </Grid>

@@ -1,20 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import { Box, CircularProgress, Typography, Alert, Button } from '@mui/material';
 import CardHistorial from '../Components/CardHistorial';
 import { getUserReservations } from '../Services/reservations';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import EmptyStateBooking from '../assets/EmptyStateBooking.svg?react';
+import ReviewModal from '../Components/ReviewModal';
 
 export default function Reservas() {
     const navigate = useNavigate();
 
+    const [openReviewModal, setOpenReviewModal] = useState(false);
+    const [id, setId] = useState(null);
+
+    const MySwal = withReactContent(Swal);
+
     const { data: reservations, isLoading, error } = useQuery({
         queryKey: ["userReservations"],
-        queryFn: () =>  getUserReservations(),
+        queryFn: () => getUserReservations(),
         refetchOnWindowFocus: false,
         throwOnError: true,
     });
+
+    const handleReview = () => {
+        console.log("Reseña enviada");
+        MySwal.fire({
+            icon: 'success',
+            title: 'Reseña enviada',
+            text: 'Gracias por tu opinión',
+            timer: 2000,
+            showConfirmButton: false,
+        });
+        setOpenReviewModal(false);
+    }
 
     return (
         <Box
@@ -58,7 +78,14 @@ export default function Reservas() {
                     >
                         {reservations?.data?.map((car) => (
                             <Link key={car.reservation.id} to={`/vehiculo/${car.car.id}`} style={{ textDecoration: "none" }}>
-                                <CardHistorial car={car} />
+                                <CardHistorial
+                                    car={car}
+                                    onReview={() => {
+                                        setOpenReviewModal(true);
+                                        setId(car.car.id);
+                                        console.log(car.car.id);
+                                    }}
+                                />
                             </Link>
                         ))}
                     </Box>
@@ -95,7 +122,7 @@ export default function Reservas() {
                         color='var(--lightGrey)'
                         textAlign={'center'}
                     >
-                        Encuentra el auto ideal para tu próximo viaje y resérvalo en minutos. 
+                        Encuentra el auto ideal para tu próximo viaje y resérvalo en minutos.
                     </Typography>
                     <Button
                         variant="contained"
@@ -114,6 +141,12 @@ export default function Reservas() {
                     </Button>
                 </Box>
             )}
+            <ReviewModal
+                open={openReviewModal}
+                onClose={() => setOpenReviewModal(false)}
+                id={id}
+                onSuccess={handleReview}
+            />
         </Box>
     )
 }
