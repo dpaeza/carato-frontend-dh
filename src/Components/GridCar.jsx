@@ -77,7 +77,7 @@ export default function GridCar({ cars }) {
             setLoginMessage("Inicia sesión para reservar un vehículo.");
             setOpenLogin(true);
         } else {
-            navigate(`/reserva/${id}`);
+            navigate(`/reservar/${id}`);
         }
     }
 

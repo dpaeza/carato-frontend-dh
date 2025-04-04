@@ -11,6 +11,7 @@ import { getBrands } from '../Services/extras';
 import Grid from '@mui/material/Grid2';
 import { set } from 'rsuite/esm/internals/utils/date';
 import esAR from 'rsuite/locales/es_AR';
+import { useMediaQuery, useTheme } from "@mui/material";
 
 export default function Search({ onSearch = () => { } }) {
     // Definir las fechas iniciales: hoy y 4 días después
@@ -22,6 +23,9 @@ export default function Search({ onSearch = () => { } }) {
     const [endDate, setEndDate] = useState(null);
 
     const [isDateTouched, setIsDateTouched] = useState(false);
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     // Estados para las marcas
     const [brands, setBrands] = useState([]);
@@ -158,6 +162,7 @@ export default function Search({ onSearch = () => { } }) {
                                 style={{ width: '100%' }}
                                 cleanable
                                 ranges={[]}
+                                showOneCalendar={isMobile}
                                 value={startDate && endDate ? [startDate, endDate] : null}
                                 onChange={(range) => {
                                     if (range) {

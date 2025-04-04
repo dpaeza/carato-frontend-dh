@@ -94,9 +94,11 @@ export default function Reservar() {
         <Box
             sx={{
                 backgroundColor: "#FAFAF",
-                maxWidth: 1200,
+                maxWidth: 1100,
                 margin: 'auto',
-                p: 6
+                px: 3,
+                pt: 5,
+                pb:4,
             }}
         >
             {isLoading ? (
@@ -118,6 +120,7 @@ export default function Reservar() {
                             display={"flex"}
                             gap={1}
                             alignItems={"center"}
+                            sx={{order:0}}
                         >
                             <ArrowBackIcon
                                 onClick={() => navigate(-1)}
@@ -140,7 +143,7 @@ export default function Reservar() {
                                 Detalle de reserva
                             </Typography>
                         </Grid>
-                        <Grid size={{ xs: 12, md: 7 }}>
+                        <Grid size={{ xs: 12, md: 7 }} sx={{order:{xs: 2, md:1}}}>
                             <AsideReserva
                                 user={user}
                                 reservations={reservations}
@@ -151,7 +154,7 @@ export default function Reservar() {
                                 onEndDateChange={(date) => setEndDate(date)}
                             />
                         </Grid>
-                        <Grid size={{ xs: 12, md: 5 }}>
+                        <Grid size={{ xs: 12, md: 5 }} sx={{ order: { xs: 1, md: 2 } }}>
                             <CardCarReserva
                                 car={vehicle}
                                 total={total}
